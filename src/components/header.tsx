@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -11,16 +11,40 @@ import {
   UserCircleIcon,
   Cog6ToothIcon,
   ArrowRightOnRectangleIcon,
+  SunIcon,
+  MoonIcon,
+  ComputerDesktopIcon,
 } from "@heroicons/react/24/outline";
 import { cn } from "@/lib/utils";
 import { useNotificationStore } from "@/lib/store";
+import { useThemeStore, applyTheme } from "@/lib/theme";
 
 export function Header() {
   const { data: session } = useSession();
   const router = useRouter();
   const { unreadCount } = useNotificationStore();
+  const { theme, setTheme } = useThemeStore();
   const [searchQuery, setSearchQuery] = useState("");
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [isThemeMenuOpen, setIsThemeMenuOpen] = useState(false);
+  const themeMenuRef = useRef<HTMLDivElement>(null);
+
+  // Close theme menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        themeMenuRef.current &&
+        !themeMenuRef.current.contains(event.target as Node)
+      ) {
+        setIsThemeMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,6 +55,25 @@ export function Header() {
 
   const handleSignOut = () => {
     signOut({ callbackUrl: "/" });
+  };
+
+  const handleThemeChange = (newTheme: "light" | "dark" | "system") => {
+    setTheme(newTheme);
+    applyTheme(newTheme);
+    setIsThemeMenuOpen(false);
+  };
+
+  const getThemeIcon = () => {
+    switch (theme) {
+      case "light":
+        return <SunIcon className="h-5 w-5" />;
+      case "dark":
+        return <MoonIcon className="h-5 w-5" />;
+      case "system":
+        return <ComputerDesktopIcon className="h-5 w-5" />;
+      default:
+        return <SunIcon className="h-5 w-5" />;
+    }
   };
 
   return (
@@ -97,6 +140,55 @@ export function Header() {
 
             {/* Actions */}
             <div className="flex items-center gap-2">
+              {/* Theme Toggle */}
+              <div className="relative" ref={themeMenuRef}>
+                <button
+                  onClick={() => setIsThemeMenuOpen(!isThemeMenuOpen)}
+                  className="p-2 text-gray-600 dark:text-gray-300 hover:text-primary transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
+                  title="Toggle theme"
+                >
+                  {getThemeIcon()}
+                </button>
+
+                {isThemeMenuOpen && (
+                  <div className="absolute right-0 mt-2 w-40 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1 z-50">
+                    <button
+                      onClick={() => handleThemeChange("light")}
+                      className={`w-full flex items-center gap-3 px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors ${
+                        theme === "light"
+                          ? "text-primary bg-primary/10"
+                          : "text-gray-700 dark:text-gray-300"
+                      }`}
+                    >
+                      <SunIcon className="h-4 w-4" />
+                      Light
+                    </button>
+                    <button
+                      onClick={() => handleThemeChange("dark")}
+                      className={`w-full flex items-center gap-3 px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors ${
+                        theme === "dark"
+                          ? "text-primary bg-primary/10"
+                          : "text-gray-700 dark:text-gray-300"
+                      }`}
+                    >
+                      <MoonIcon className="h-4 w-4" />
+                      Dark
+                    </button>
+                    <button
+                      onClick={() => handleThemeChange("system")}
+                      className={`w-full flex items-center gap-3 px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors ${
+                        theme === "system"
+                          ? "text-primary bg-primary/10"
+                          : "text-gray-700 dark:text-gray-300"
+                      }`}
+                    >
+                      <ComputerDesktopIcon className="h-4 w-4" />
+                      System
+                    </button>
+                  </div>
+                )}
+              </div>
+
               {session?.user ? (
                 <>
                   {/* New Post Button */}

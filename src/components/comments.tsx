@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { formatDistanceToNow } from "date-fns";
+import Link from "next/link";
 
 interface Comment {
   id: string;
@@ -123,7 +124,10 @@ export function Comments({ postId, initialComments }: CommentsProps) {
               className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4"
             >
               <div className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-full bg-gray-300 dark:bg-gray-600 flex items-center justify-center flex-shrink-0">
+                <Link
+                  href={`/users/${comment.author.id}`}
+                  className="hover:opacity-80 transition-opacity flex-shrink-0"
+                >
                   {comment.author.image ? (
                     <img
                       src={comment.author.image}
@@ -131,16 +135,19 @@ export function Comments({ postId, initialComments }: CommentsProps) {
                       className="w-8 h-8 rounded-full object-cover"
                     />
                   ) : (
-                    <span className="text-gray-600 dark:text-gray-400 text-sm font-medium">
+                    <div className="w-8 h-8 rounded-full bg-primary text-primary-content flex items-center justify-center text-xs font-bold">
                       {comment.author.name?.[0]?.toUpperCase() || "U"}
-                    </span>
+                    </div>
                   )}
-                </div>
+                </Link>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1">
-                    <span className="font-medium text-gray-900 dark:text-white text-sm">
+                    <Link
+                      href={`/users/${comment.author.id}`}
+                      className="font-medium text-gray-900 dark:text-white text-sm hover:text-primary transition-colors"
+                    >
                       {comment.author.name || "Anonymous"}
-                    </span>
+                    </Link>
                     <span className="text-gray-500 dark:text-gray-400 text-xs">
                       {formatDistanceToNow(new Date(comment.createdAt), {
                         addSuffix: true,

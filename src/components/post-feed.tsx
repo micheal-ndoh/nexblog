@@ -8,6 +8,7 @@ import {
   BookmarkIcon,
 } from "@heroicons/react/24/outline";
 import { HeartIcon as HeartIconSolid } from "@heroicons/react/24/solid";
+import { BookmarkIcon as BookmarkIconSolid } from "@heroicons/react/24/solid";
 import { formatDate, truncateText } from "@/lib/utils";
 import { useSession } from "next-auth/react";
 
@@ -34,12 +35,16 @@ interface Post {
   likes: Array<{
     userId: string;
   }>;
+  interestedUsers: Array<{
+    userId: string;
+  }>;
 }
 
 export function PostFeed() {
   const { data: session } = useSession();
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
+  const [savedPosts, setSavedPosts] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     fetchPosts();
@@ -50,6 +55,26 @@ export function PostFeed() {
       const response = await fetch("/api/posts");
       const data = await response.json();
       setPosts(data.posts || []);
+
+      // Check save status for each post
+      if (session?.user) {
+        const savePromises = data.posts.map(async (post: Post) => {
+          const saveResponse = await fetch(`/api/posts/${post.id}/save`);
+          if (saveResponse.ok) {
+            const { saved } = await saveResponse.json();
+            return { postId: post.id, saved };
+          }
+          return { postId: post.id, saved: false };
+        });
+
+        const saveResults = await Promise.all(savePromises);
+        const savedSet = new Set(
+          saveResults
+            .filter((result) => result.saved)
+            .map((result) => result.postId)
+        );
+        setSavedPosts(savedSet);
+      }
     } catch (error) {
       console.error("Error fetching posts:", error);
     } finally {
@@ -95,6 +120,51 @@ export function PostFeed() {
     }
   };
 
+  const handleSave = async (postId: string) => {
+    if (!session?.user) return;
+
+    try {
+      const response = await fetch(`/api/posts/${postId}/save`, {
+        method: "POST",
+      });
+
+      if (response.ok) {
+        const { saved } = await response.json();
+
+        // Optimistically update the UI
+        setSavedPosts((prev) => {
+          const newSet = new Set(prev);
+          if (saved) {
+            newSet.add(postId);
+          } else {
+            newSet.delete(postId);
+          }
+          return newSet;
+        });
+
+        // Update post interestedUsers count
+        setPosts((prevPosts) =>
+          prevPosts.map((post) => {
+            if (post.id === postId) {
+              const isSaved = savedPosts.has(postId);
+              return {
+                ...post,
+                interestedUsers: isSaved
+                  ? post.interestedUsers.filter(
+                      (user) => user.userId !== session.user.id
+                    )
+                  : [...post.interestedUsers, { userId: session.user.id }],
+              };
+            }
+            return post;
+          })
+        );
+      }
+    } catch (error) {
+      console.error("Error toggling save:", error);
+    }
+  };
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -106,6 +176,8 @@ export function PostFeed() {
           session?.user &&
           post.likes.some((like) => like.userId === session.user.id);
 
+        const isSaved = savedPosts.has(post.id);
+
         return (
           <article
             key={post.id}
@@ -114,16 +186,30 @@ export function PostFeed() {
             <div className="p-6">
               {/* Post Header */}
               <div className="flex items-start gap-4 mb-4">
-                <img
-                  src={post.author.image || "/default-avatar.png"}
-                  alt={post.author.name}
-                  className="w-12 h-12 rounded-full"
-                />
+                <Link
+                  href={`/users/${post.author.id}`}
+                  className="hover:opacity-80 transition-opacity"
+                >
+                  {post.author.image ? (
+                    <img
+                      src={post.author.image}
+                      alt={post.author.name}
+                      className="w-12 h-12 rounded-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-12 h-12 rounded-full bg-primary text-primary-content flex items-center justify-center text-sm font-bold">
+                      {post.author.name?.charAt(0).toUpperCase() || "A"}
+                    </div>
+                  )}
+                </Link>
                 <div className="flex-1">
                   <div className="flex items-baseline gap-2">
-                    <h3 className="font-semibold text-gray-900 dark:text-white">
+                    <Link
+                      href={`/users/${post.author.id}`}
+                      className="font-semibold text-gray-900 dark:text-white hover:text-primary transition-colors"
+                    >
                       {post.author.name}
-                    </h3>
+                    </Link>
                     <span className="text-sm text-gray-500 dark:text-gray-400">
                       {formatDate(post.createdAt)}
                     </span>
@@ -191,9 +277,22 @@ export function PostFeed() {
                   </span>
                 </Link>
 
-                <button className="flex items-center gap-2 text-gray-500 dark:text-gray-400 hover:text-primary transition-colors">
-                  <BookmarkIcon className="h-5 w-5" />
-                  <span className="text-sm font-medium">Save</span>
+                <button
+                  onClick={() => handleSave(post.id)}
+                  className={`flex items-center gap-2 transition-colors ${
+                    isSaved
+                      ? "text-primary hover:text-primary/80"
+                      : "text-gray-500 dark:text-gray-400 hover:text-primary"
+                  }`}
+                >
+                  {isSaved ? (
+                    <BookmarkIconSolid className="h-5 w-5" />
+                  ) : (
+                    <BookmarkIcon className="h-5 w-5" />
+                  )}
+                  <span className="text-sm font-medium">
+                    {isSaved ? "Saved" : "Save"}
+                  </span>
                 </button>
               </div>
             </div>
