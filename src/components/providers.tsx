@@ -9,12 +9,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <SessionProvider>
       <TolgeeWrapper>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="light"
-          enableSystem
-          disableTransitionOnChange
-        >
+        <ThemeProvider>
           <ToasterProvider>{children}</ToasterProvider>
         </ThemeProvider>
       </TolgeeWrapper>
