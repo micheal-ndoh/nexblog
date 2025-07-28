@@ -36,10 +36,24 @@ interface NotificationState {
         createdAt: Date
     }>
     unreadCount: number
-    addNotification: (notification: any) => void
+    addNotification: (notification: {
+        id: string
+        type: string
+        title: string
+        message: string
+        read: boolean
+        createdAt: Date
+    }) => void
     markAsRead: (id: string) => void
     markAllAsRead: () => void
-    setNotifications: (notifications: any[]) => void
+    setNotifications: (notifications: Array<{
+        id: string
+        type: string
+        title: string
+        message: string
+        read: boolean
+        createdAt: Date
+    }>) => void
 }
 
 export const useNotificationStore = create<NotificationState>((set, get) => ({
