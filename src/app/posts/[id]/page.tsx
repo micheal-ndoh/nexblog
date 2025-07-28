@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import { Header } from "@/components/header";
+import { Comments } from "@/components/comments";
 import { db } from "@/lib/db";
 import { formatDistanceToNow } from "date-fns";
 
@@ -30,6 +31,20 @@ async function getPost(id: string) {
         likes: {
           select: {
             userId: true,
+          },
+        },
+        comments: {
+          include: {
+            author: {
+              select: {
+                id: true,
+                name: true,
+                image: true,
+              },
+            },
+          },
+          orderBy: {
+            createdAt: "desc",
           },
         },
         _count: {
@@ -91,6 +106,16 @@ export default async function PostPage({ params }: PostPageProps) {
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
               {post.title}
             </h1>
+
+            {post.imageUrl && (
+              <div className="mb-4">
+                <img
+                  src={post.imageUrl}
+                  alt="Featured image"
+                  className="w-full h-64 object-cover rounded-lg"
+                />
+              </div>
+            )}
 
             {post.tags.length > 0 && (
               <div className="flex flex-wrap gap-2">
@@ -165,14 +190,15 @@ export default async function PostPage({ params }: PostPageProps) {
           </div>
         </article>
 
-        {/* Comments Section - Placeholder for future implementation */}
-        <div className="mt-8 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6">
+        {/* Comments Section */}
+        <div
+          id="comments"
+          className="mt-8 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6"
+        >
           <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
-            Comments
+            Comments ({post._count.comments})
           </h2>
-          <p className="text-gray-600 dark:text-gray-400">
-            Comments feature coming soon!
-          </p>
+          <Comments postId={post.id} initialComments={post.comments} />
         </div>
       </main>
     </div>
