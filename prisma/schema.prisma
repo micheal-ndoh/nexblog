@@ -43,7 +43,7 @@ model User {
   email         String    @unique
   password      String?
   emailVerified DateTime?
-  image         String?
+  image         String?   @db.Text
   role          Role      @default(USER)
   isBanned      Boolean   @default(false)
   createdAt     DateTime  @default(now())
