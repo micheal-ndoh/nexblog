@@ -32,13 +32,10 @@ export function getThemeClass(theme: Theme): string {
 export function applyTheme(theme: Theme) {
   const root = document.documentElement;
 
-  // Remove existing theme classes
-  root.classList.remove("light", "dark");
-
   if (theme === "system") {
     const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-    root.classList.add(systemTheme);
+    root.setAttribute("data-theme", systemTheme);
   } else {
-    root.classList.add(theme);
+    root.setAttribute("data-theme", theme);
   }
 } 
