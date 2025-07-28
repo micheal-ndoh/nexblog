@@ -3,13 +3,16 @@
 import React from 'react'
 import { useAppStore } from './store'
 
-// Simple language configuration for now
+// Language configuration for the application
 export const languages = [
-    { code: 'en', name: 'English', flag: '🇺🇸' },
-    { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
-    { code: 'es', name: 'Español', flag: '🇪🇸' },
-    { code: 'fr', name: 'Français', flag: '🇫🇷' },
-    { code: 'ka-GE', name: 'ქართული', flag: '🇬🇪' },
+    { code: 'de', name: 'German | Deutsch', flag: '🇩🇪' },
+    { code: 'en', name: 'English', flag: '🇬🇧' },
+    { code: 'en-CM', name: 'English (Cameroon)', flag: '🇨🇲' },
+    { code: 'es', name: 'Spanish | español', flag: '🇪🇸' },
+    { code: 'fr', name: 'French | français', flag: '🇫🇷' },
+    { code: 'fr-CM', name: 'French (Cameroon) | français (Cameroun)', flag: '🇨🇲' },
+    { code: 'hi', name: 'Hindi | हिन्दी', flag: '🇮🇳' },
+    { code: 'zh', name: 'Chinese | 中文', flag: '🇨🇳' },
 ]
 
 export function TolgeeWrapper({ children }: { children: React.ReactNode }) {
@@ -21,7 +24,7 @@ export function TolgeeWrapper({ children }: { children: React.ReactNode }) {
 export function useT() {
     const { language } = useAppStore()
 
-    const t = (key: string, params?: Record<string, any>) => {
+    const t = (key: string, _params?: Record<string, unknown>) => {
         // For now, return the key as-is
         // In a full implementation, this would look up translations
         return key
