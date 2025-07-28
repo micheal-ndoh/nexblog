@@ -31,11 +31,14 @@ export function getThemeClass(theme: Theme): string {
 
 export function applyTheme(theme: Theme) {
   const root = document.documentElement;
-  
+
+  // Remove existing theme classes
+  root.classList.remove("light", "dark");
+
   if (theme === "system") {
     const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-    root.classList.toggle("dark", systemTheme === "dark");
+    root.classList.add(systemTheme);
   } else {
-    root.classList.toggle("dark", theme === "dark");
+    root.classList.add(theme);
   }
 } 
