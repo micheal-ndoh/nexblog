@@ -1,11 +1,11 @@
-import Minio from "minio";
+import { Client } from "minio";
 
-const minioClient = new Minio.Client({
-    endPoint: process.env.MINIO_ENDPOINT || "localhost",
+const minioClient = new Client({
+    endPoint: process.env.MINIO_ENDPOINT || "10.38.229.234",
     port: parseInt(process.env.MINIO_PORT || "9000"),
     useSSL: process.env.MINIO_USE_SSL === "true",
-    accessKey: process.env.MINIO_ACCESS_KEY || "",
-    secretKey: process.env.MINIO_SECRET_KEY || "",
+    accessKey: process.env.MINIO_ACCESS_KEY || "minio",
+    secretKey: process.env.MINIO_SECRET_KEY || "minio123",
 });
 
 const BUCKET_NAME = process.env.MINIO_BUCKET_NAME || "nexblog";
