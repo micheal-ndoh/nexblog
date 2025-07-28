@@ -1,6 +1,8 @@
 import type { Config } from "tailwindcss";
+// @ts-expect-error - daisyui types not available
+import daisyui from "daisyui";
 
-const config: Config = {
+const config = {
     content: [
         "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
         "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -39,35 +41,29 @@ const config: Config = {
             },
         },
     },
-    plugins: [require("daisyui")],
+    plugins: [daisyui],
     daisyui: {
         themes: [
             {
                 light: {
-                    "primary": "#4F46E5",
+                    "primary": "#3b82f6",
                     "secondary": "#F43F5E",
-                    "accent": "#818CF8",
-                    "neutral": "#111827",
-                    "base-100": "#FAFAFA",
-                    "base-200": "#FFFFFF",
-                    "base-300": "#F3F4F6",
-                    "info": "#3ABFF8",
-                    "success": "#36D399",
-                    "warning": "#FBBD23",
-                    "error": "#F87272",
+                    "background": "#FAFAFA",
+                    "surface": "#FFFFFF",
+                    "textPrimary": "#111827",
+                    "textSecondary": "#6B7280",
+                    "border": "#E5E7EB",
+                    "muted": "#F3F4F6",
                 },
                 dark: {
                     "primary": "#818CF8",
                     "secondary": "#FB7185",
-                    "accent": "#4F46E5",
-                    "neutral": "#F8FAFC",
-                    "base-100": "#0F172A",
-                    "base-200": "#1E293B",
-                    "base-300": "#334155",
-                    "info": "#3ABFF8",
-                    "success": "#36D399",
-                    "warning": "#FBBD23",
-                    "error": "#F87272",
+                    "background": "#0F172A",
+                    "surface": "#1E293B",
+                    "textPrimary": "#F8FAFC",
+                    "textSecondary": "#94A3B8",
+                    "border": "#334155",
+                    "muted": "#1E293B",
                 },
             },
         ],
