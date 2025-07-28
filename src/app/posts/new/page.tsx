@@ -4,12 +4,14 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { Header } from "@/components/header";
+import { FileUpload } from "@/components/file-upload";
 
 export default function NewPostPage() {
   const router = useRouter();
   const { data: session, status } = useSession();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
   const [tags, setTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -47,7 +49,7 @@ export default function NewPostPage() {
   };
 
   const handleRemoveTag = (tagToRemove: string) => {
-    setTags(tags.filter(tag => tag !== tagToRemove));
+    setTags(tags.filter((tag) => tag !== tagToRemove));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -64,6 +66,7 @@ export default function NewPostPage() {
         body: JSON.stringify({
           title: title.trim(),
           content: content.trim(),
+          imageUrl,
           tags,
         }),
       });
@@ -144,6 +147,55 @@ export default function NewPostPage() {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Featured Image (Optional)
+            </label>
+            {imageUrl ? (
+              <div className="space-y-3">
+                <img
+                  src={imageUrl}
+                  alt="Featured image"
+                  className="w-full max-w-md h-48 object-cover rounded-lg border border-gray-300 dark:border-gray-600"
+                />
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setImageUrl("")}
+                    className="px-3 py-1 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded transition-colors"
+                  >
+                    Remove Image
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <FileUpload
+                type="post"
+                onUpload={setImageUrl}
+                onError={setError}
+                className="mb-2"
+              >
+                <svg
+                  className="h-5 w-5 text-gray-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                  />
+                </svg>
+                <span>Upload Featured Image</span>
+              </FileUpload>
+            )}
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              Add a featured image to make your post more engaging
+            </p>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Tags
             </label>
             <div className="flex gap-2 mb-3">
@@ -151,7 +203,9 @@ export default function NewPostPage() {
                 type="text"
                 value={tagInput}
                 onChange={(e) => setTagInput(e.target.value)}
-                onKeyPress={(e) => e.key === "Enter" && (e.preventDefault(), handleAddTag())}
+                onKeyPress={(e) =>
+                  e.key === "Enter" && (e.preventDefault(), handleAddTag())
+                }
                 className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                 placeholder="Add a tag..."
               />
@@ -207,4 +261,4 @@ export default function NewPostPage() {
       </main>
     </div>
   );
-} 
+}
