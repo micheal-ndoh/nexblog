@@ -64,7 +64,8 @@ async function getPost(id: string) {
 }
 
 export default async function PostPage({ params }: PostPageProps) {
-  const post = await getPost(params.id);
+  const { id } = await params;
+  const post = await getPost(id);
 
   if (!post) {
     notFound();
