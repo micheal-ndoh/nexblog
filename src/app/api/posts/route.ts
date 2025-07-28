@@ -134,7 +134,7 @@ export async function POST(request: NextRequest) {
             )
         }
 
-        const { title, content, tags } = await request.json()
+        const { title, content, imageUrl, tags } = await request.json()
 
         if (!title || !content) {
             return NextResponse.json(
@@ -148,6 +148,7 @@ export async function POST(request: NextRequest) {
             data: {
                 title,
                 content,
+                imageUrl,
                 authorId: session.user.id,
                 published: true,
                 tags: {
