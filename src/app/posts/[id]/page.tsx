@@ -4,11 +4,10 @@ import { Header } from "@/components/header";
 import { Comments } from "@/components/comments";
 import { db } from "@/lib/db";
 import { formatDistanceToNow } from "date-fns";
+import Link from "next/link";
 
 interface PostPageProps {
-  params: {
-    id: string;
-  };
+  params: Promise<{ id: string }>;
 }
 
 async function getPost(id: string) {
@@ -79,7 +78,10 @@ export default async function PostPage({ params }: PostPageProps) {
           {/* Post Header */}
           <div className="p-6 border-b border-gray-200 dark:border-gray-700">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-full bg-gray-300 dark:bg-gray-600 flex items-center justify-center">
+              <Link
+                href={`/users/${post.author.id}`}
+                className="hover:opacity-80 transition-opacity"
+              >
                 {post.author.image ? (
                   <img
                     src={post.author.image}
@@ -87,15 +89,18 @@ export default async function PostPage({ params }: PostPageProps) {
                     className="w-10 h-10 rounded-full object-cover"
                   />
                 ) : (
-                  <span className="text-gray-600 dark:text-gray-400 font-medium">
+                  <div className="w-10 h-10 rounded-full bg-primary text-primary-content flex items-center justify-center text-sm font-bold">
                     {post.author.name?.[0]?.toUpperCase() || "U"}
-                  </span>
+                  </div>
                 )}
-              </div>
+              </Link>
               <div>
-                <h3 className="font-medium text-gray-900 dark:text-white">
+                <Link
+                  href={`/users/${post.author.id}`}
+                  className="font-medium text-gray-900 dark:text-white hover:text-primary transition-colors"
+                >
                   {post.author.name || "Anonymous"}
-                </h3>
+                </Link>
                 <p className="text-sm text-gray-500 dark:text-gray-400">
                   {formatDistanceToNow(new Date(post.createdAt), {
                     addSuffix: true,

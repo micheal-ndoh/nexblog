@@ -91,6 +91,11 @@ export async function GET(request: NextRequest) {
                         userId: true,
                     },
                 },
+                interestedUsers: {
+                    select: {
+                        userId: true,
+                    },
+                },
                 _count: {
                     select: {
                         likes: true,

@@ -56,7 +56,11 @@ export async function PUT(request: NextRequest) {
       },
     });
 
-    return NextResponse.json(updatedUser);
+    // Return updated user data for client-side session update
+    return NextResponse.json({
+      user: updatedUser,
+      message: "Settings updated successfully"
+    });
   } catch (error) {
     console.error("Error updating user settings:", error);
     return NextResponse.json(
