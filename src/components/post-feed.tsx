@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import {
   HeartIcon,
   ChatBubbleLeftIcon,
@@ -48,9 +49,9 @@ export function PostFeed() {
 
   useEffect(() => {
     fetchPosts();
-  }, []);
+  }, [fetchPosts]);
 
-  const fetchPosts = async () => {
+  const fetchPosts = useCallback(async () => {
     try {
       const response = await fetch("/api/posts");
       const data = await response.json();
@@ -80,7 +81,7 @@ export function PostFeed() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [session?.user]);
 
   const handleLike = async (postId: string) => {
     if (!session?.user) return;
@@ -191,9 +192,11 @@ export function PostFeed() {
                   className="hover:opacity-80 transition-opacity"
                 >
                   {post.author.image ? (
-                    <img
+                    <Image
                       src={post.author.image}
                       alt={post.author.name}
+                      width={48}
+                      height={48}
                       className="w-12 h-12 rounded-full object-cover"
                     />
                   ) : (

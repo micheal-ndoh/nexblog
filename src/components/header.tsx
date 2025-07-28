@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {
   MagnifyingGlassIcon,
@@ -15,7 +16,7 @@ import {
   MoonIcon,
   ComputerDesktopIcon,
 } from "@heroicons/react/24/outline";
-import { cn } from "@/lib/utils";
+// Removed unused import
 import { useNotificationStore } from "@/lib/store";
 import { useThemeStore, applyTheme } from "@/lib/theme";
 
@@ -230,9 +231,11 @@ export function Header() {
                       className="flex items-center gap-2 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
                     >
                       {session.user.image ? (
-                        <img
+                        <Image
                           src={session.user.image}
                           alt={session.user.name || "User"}
+                          width={40}
+                          height={40}
                           className="w-10 h-10 rounded-full"
                         />
                       ) : (
@@ -266,7 +269,8 @@ export function Header() {
                           <Cog6ToothIcon className="h-4 w-4" />
                           Settings
                         </Link>
-                        {session.user.role === "ADMIN" && (
+                        {(session.user as { role?: string }).role ===
+                          "ADMIN" && (
                           <Link
                             href="/admin"
                             className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
