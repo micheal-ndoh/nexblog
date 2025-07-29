@@ -26,7 +26,6 @@ export async function POST(
             where: {
                 id: notificationId,
                 // @ts-expect-error - Session user type is not properly typed in NextAuth
-                // @ts-expect-error - Session user type is not properly typed in NextAuth
                 userId: session.user.id,
             },
             data: {
