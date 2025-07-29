@@ -4,9 +4,14 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 's3.cubbit.eu',
-        pathname: '/nexblog/**',
+        protocol: "https",
+        hostname: "s3.cubbit.eu",
+        pathname: "/nexblog/**",
+      },
+      {
+        protocol: "https",
+        hostname: "lh3.googleusercontent.com",
+        pathname: "/**",
       },
     ],
   },
