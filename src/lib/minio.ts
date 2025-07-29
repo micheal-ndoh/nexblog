@@ -33,7 +33,7 @@ export async function uploadFile(
         await ensureBucket();
 
         const objectName = `${Date.now()}-${fileName}`;
-        await minioClient.putObject(BUCKET_NAME, objectName, file, {
+        await minioClient.putObject(BUCKET_NAME, objectName, file, file.length, {
             "Content-Type": contentType,
         });
 
