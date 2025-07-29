@@ -15,7 +15,7 @@ export async function GET(request: NextRequest) {
         const skip = (page - 1) * limit
 
         // Build where clause
-        const where: any = {
+        const where: Record<string, unknown> = {
             published: true,
         }
 
@@ -37,7 +37,7 @@ export async function GET(request: NextRequest) {
         }
 
         // Build orderBy clause based on sort parameter
-        let orderBy: any = { createdAt: "desc" }
+        let orderBy: Record<string, unknown> = { createdAt: "desc" }
 
         switch (sort) {
             case "viral":
