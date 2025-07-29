@@ -1,17 +1,18 @@
-import { NextRequest, NextResponse } from "next/server";
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/lib/auth";
+import { NextRequest, NextResponse } from "next/server"
+import { getServerSession } from "next-auth/next"
+import type { Session } from "next-auth"
+import { authOptions } from "@/lib/auth"
 import { uploadFile } from "@/lib/cubbit";
 
 export async function POST(request: NextRequest) {
     try {
-        const session = await getServerSession(authOptions);
+        const session = await getServerSession(authOptions) as Session;
 
-        if (!session?.user?.id) {
+        if (!session?.user) {
             return NextResponse.json(
                 { message: "Unauthorized" },
                 { status: 401 }
-            );
+            )
         }
 
         const formData = await request.formData();

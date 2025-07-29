@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
+import type { Session } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { db } from "@/lib/db";
 
@@ -10,9 +11,8 @@ export async function DELETE(
     const { commentId } = await params;
 
     try {
-        const session = await getServerSession(authOptions);
+        const session = await getServerSession(authOptions) as Session;
 
-        // @ts-expect-error - Session user type is not properly typed in NextAuth
         if (!session?.user?.id) {
             return NextResponse.json(
                 { message: "Unauthorized" },
@@ -40,7 +40,6 @@ export async function DELETE(
         }
 
         // Check if user is the author of the comment
-        // @ts-expect-error - Session user type is not properly typed in NextAuth
         if (comment.author.id !== session.user.id) {
             return NextResponse.json(
                 { message: "You can only delete your own comments" },
