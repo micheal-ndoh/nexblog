@@ -66,8 +66,8 @@ export default function SignUpPage() {
       } else {
         router.push("/");
       }
-    } catch (error) {
-      setError(error instanceof Error ? error.message : "An error occurred");
+    } catch {
+      setError("An error occurred");
     } finally {
       setLoading(false);
     }
@@ -77,7 +77,7 @@ export default function SignUpPage() {
     setLoading(true);
     try {
       await signIn("google", { callbackUrl: "/" });
-    } catch (error) {
+    } catch {
       setError("An error occurred. Please try again.");
       setLoading(false);
     }

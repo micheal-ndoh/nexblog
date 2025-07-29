@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Header } from "@/components/header";
@@ -42,17 +42,7 @@ export default function AdminDashboard() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (session?.user) {
-      if (session.user.role !== "ADMIN") {
-        router.push("/");
-        return;
-      }
-      fetchData();
-    }
-  }, [session, router]);
-
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       if (activeTab === "users") {
         const response = await fetch("/api/admin/users");
@@ -72,7 +62,17 @@ export default function AdminDashboard() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [activeTab]);
+
+  useEffect(() => {
+    if (session?.user) {
+      if (session.user.role !== "ADMIN") {
+        router.push("/");
+        return;
+      }
+      fetchData();
+    }
+  }, [session, router, fetchData]);
 
   const handleUserAction = async (userId: string, action: string) => {
     try {
@@ -112,7 +112,7 @@ export default function AdminDashboard() {
               Access Denied
             </h1>
             <p className="text-gray-600 dark:text-gray-400">
-              You don't have permission to access this page.
+              You don&apos;t have permission to access this page.
             </p>
           </div>
         </main>

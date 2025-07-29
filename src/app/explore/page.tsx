@@ -1,16 +1,14 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Header } from "@/components/header";
-import { PostFeed } from "@/components/post-feed";
 import { PostFeedSkeleton } from "@/components/post-feed-skeleton";
-import { Suspense } from "react";
+import Image from "next/image";
 import {
   FireIcon,
   HeartIcon,
   EyeIcon,
   ArrowTrendingUpIcon,
-  StarIcon,
 } from "@heroicons/react/24/outline";
 
 interface Post {
@@ -43,11 +41,7 @@ export default function ExplorePage() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchPosts();
-  }, [activeTab]);
-
-  const fetchPosts = async () => {
+  const fetchPosts = useCallback(async () => {
     setLoading(true);
     try {
       const response = await fetch(`/api/posts?sort=${activeTab}`);
@@ -58,7 +52,22 @@ export default function ExplorePage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [activeTab]);
+
+  useEffect(() => {
+    fetchPosts();
+  }, [fetchPosts]);
+    setLoading(true);
+    try {
+      const response = await fetch(`/api/posts?sort=${activeTab}`);
+      const data = await response.json();
+      setPosts(data.posts || []);
+    } catch (error) {
+      console.error("Error fetching posts:", error);
+    } finally {
+      setLoading(false);
+    }
+  }, [activeTab]);
 
   const tabs = [
     {
@@ -154,9 +163,11 @@ export default function ExplorePage() {
                       className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:shadow-md transition-shadow"
                     >
                       <div className="flex items-start gap-4">
-                        <img
+                        <Image
                           src={post.author.image || "/default-avatar.png"}
                           alt={post.author.name}
+                          width={40}
+                          height={40}
                           className="w-10 h-10 rounded-full"
                         />
                         <div className="flex-1">

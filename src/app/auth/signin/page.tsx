@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { signIn, getSession } from "next-auth/react";
+import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Header } from "@/components/header";
@@ -71,7 +71,7 @@ export default function SignInPage() {
       } else {
         router.push("/");
       }
-    } catch (error) {
+    } catch {
       setError("An error occurred. Please try again.");
     } finally {
       setLoading(false);
@@ -83,7 +83,7 @@ export default function SignInPage() {
     setError("");
     try {
       await signIn("google", { callbackUrl: "/" });
-    } catch (error) {
+    } catch {
       setError("An error occurred during Google sign-in. Please try again.");
       setLoading(false);
     }

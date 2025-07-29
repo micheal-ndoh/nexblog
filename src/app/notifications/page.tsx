@@ -190,7 +190,7 @@ export default function NotificationsPage() {
                   No notifications yet
                 </h3>
                 <p className="text-gray-500 dark:text-gray-400">
-                  When you receive notifications, they'll appear here.
+                  When you receive notifications, they&apos;ll appear here.
                 </p>
               </div>
             )}
