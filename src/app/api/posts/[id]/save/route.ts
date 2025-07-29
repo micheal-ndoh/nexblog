@@ -23,8 +23,6 @@ export async function GET(
         const savedPost = await db.interestedPost.findUnique({
             where: {
                 userId_postId: {
-                    // @ts-expect-error - Session user type is not properly typed in NextAuth
-                userId: session.user.id,
                     postId: id,
                 },
             },
@@ -60,8 +58,6 @@ export async function POST(
         const existingSave = await db.interestedPost.findUnique({
             where: {
                 userId_postId: {
-                    // @ts-expect-error - Session user type is not properly typed in NextAuth
-                userId: session.user.id,
                     postId: id,
                 },
             },
@@ -72,8 +68,6 @@ export async function POST(
             await db.interestedPost.delete({
                 where: {
                     userId_postId: {
-                        // @ts-expect-error - Session user type is not properly typed in NextAuth
-                userId: session.user.id,
                         postId: id,
                     },
                 },
@@ -84,8 +78,6 @@ export async function POST(
             // Add to saved posts
             await db.interestedPost.create({
                 data: {
-                    // @ts-expect-error - Session user type is not properly typed in NextAuth
-                userId: session.user.id,
                     postId: id,
                 },
             });

@@ -16,8 +16,6 @@ export async function GET() {
 
         const notifications = await db.notification.findMany({
             where: {
-                // @ts-expect-error - Session user type is not properly typed in NextAuth
-                // @ts-expect-error - Session user type is not properly typed in NextAuth
                 userId: session.user.id,
             },
             include: {
