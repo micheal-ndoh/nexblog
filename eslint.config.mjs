@@ -14,6 +14,7 @@ const eslintConfig = [
   {
     rules: {
       "@next/next/no-img-element": "warn", // Downgrade to warning instead of error
+      "@typescript-eslint/no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }], // Allow unused variables that start with _
     },
   },
 ];
