@@ -10,7 +10,10 @@
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
     "db:studio": "prisma studio",
-    "db:seed": "tsx prisma/seed.ts"
+    "db:seed": "tsx prisma/seed.ts",
+    "tolgee:export": "node scripts/tolgee-export.js export",
+    "tolgee:import": "node scripts/tolgee-export.js import",
+    "tolgee:languages": "node scripts/tolgee-export.js languages"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.10.0",
