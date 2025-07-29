@@ -57,17 +57,6 @@ export default function ExplorePage() {
   useEffect(() => {
     fetchPosts();
   }, [fetchPosts]);
-    setLoading(true);
-    try {
-      const response = await fetch(`/api/posts?sort=${activeTab}`);
-      const data = await response.json();
-      setPosts(data.posts || []);
-    } catch (error) {
-      console.error("Error fetching posts:", error);
-    } finally {
-      setLoading(false);
-    }
-  }, [activeTab]);
 
   const tabs = [
     {

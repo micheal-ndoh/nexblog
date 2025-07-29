@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
 import { Header } from "@/components/header";
-import { PostFeed } from "@/components/post-feed";
+
 import { PostFeedSkeleton } from "@/components/post-feed-skeleton";
 
 export default function SearchPage() {
@@ -12,13 +12,7 @@ export default function SearchPage() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (query) {
-      fetchSearchResults();
-    }
-  }, [query]);
-
-  const fetchSearchResults = async () => {
+  const fetchSearchResults = useCallback(async () => {
     try {
       setLoading(true);
       const response = await fetch(
@@ -33,7 +27,13 @@ export default function SearchPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [query]);
+
+  useEffect(() => {
+    if (query) {
+      fetchSearchResults();
+    }
+  }, [query, fetchSearchResults]);
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -54,7 +54,7 @@ export default function SearchPage() {
           <PostFeedSkeleton />
         ) : posts.length > 0 ? (
           <div className="space-y-6">
-            {posts.map((post: any) => (
+            {posts.map((post: Record<string, unknown>) => (
               <article
                 key={post.id}
                 className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden"
@@ -94,7 +94,7 @@ export default function SearchPage() {
                   {/* Tags */}
                   {post.tags.length > 0 && (
                     <div className="flex flex-wrap gap-2 mb-4">
-                      {post.tags.map((tag: any) => (
+                      {post.tags.map((tag: Record<string, unknown>) => (
                         <span
                           key={tag.tag.name}
                           className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium"

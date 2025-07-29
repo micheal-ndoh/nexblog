@@ -8,7 +8,7 @@ import { FileUpload } from "@/components/file-upload";
 
 export default function NewPostPage() {
   const router = useRouter();
-  const { data: session, status } = useSession();
+  const { status } = useSession();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [imageUrl, setImageUrl] = useState("");

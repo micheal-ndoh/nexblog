@@ -1,4 +1,4 @@
-import { Suspense } from "react";
+
 import { notFound } from "next/navigation";
 import { Header } from "@/components/header";
 import { Comments } from "@/components/comments";
