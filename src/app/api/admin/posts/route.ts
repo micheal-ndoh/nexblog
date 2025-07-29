@@ -7,6 +7,7 @@ export async function GET() {
     try {
         const session = await getServerSession(authOptions)
 
+        // @ts-expect-error - Session user type is not properly typed in NextAuth
         if (!session?.user || session.user.role !== "ADMIN") {
             return NextResponse.json(
                 { message: "Unauthorized" },

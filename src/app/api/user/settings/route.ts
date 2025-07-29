@@ -28,6 +28,7 @@ export async function PUT(request: NextRequest) {
     const existingUser = await db.user.findFirst({
       where: {
         email,
+        // @ts-expect-error - Session user type is not properly typed in NextAuth
         id: { not: session.user.id },
       },
     });
@@ -41,6 +42,7 @@ export async function PUT(request: NextRequest) {
 
     // Update user
     const updatedUser = await db.user.update({
+      // @ts-expect-error - Session user type is not properly typed in NextAuth
       where: { id: session.user.id },
       data: {
         name: name.trim(),

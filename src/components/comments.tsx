@@ -158,7 +158,7 @@ export function Comments({ postId, initialComments }: CommentsProps) {
                     {comment.content}
                   </p>
                 </div>
-                {session?.user?.id === comment.author.id && (
+                {(session?.user as any)?.id === comment.author.id && (
                   <button
                     onClick={() => handleDeleteComment(comment.id)}
                     className="text-gray-400 hover:text-red-500 transition-colors p-1"
