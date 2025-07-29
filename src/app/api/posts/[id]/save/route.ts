@@ -3,95 +3,95 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { db } from "@/lib/db";
 
-export async function POST(
+export async function GET(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
+    const { id } = await params;
+    
     try {
         const session = await getServerSession(authOptions);
-        if (!session?.user) {
-            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+        if (!session?.user?.id) {
+            return NextResponse.json(
+                { message: "Unauthorized" },
+                { status: 401 }
+            );
         }
 
-        const postId = params.id;
-        const userId = session.user.id;
-
-        // Check if post exists
-        const post = await db.post.findUnique({
-            where: { id: postId },
-        });
-
-        if (!post) {
-            return NextResponse.json({ error: "Post not found" }, { status: 404 });
-        }
-
-        // Check if already saved
-        const existingSave = await db.interestedPost.findUnique({
+        // Check if user has saved this post
+        const savedPost = await db.interestedPost.findUnique({
             where: {
                 userId_postId: {
-                    userId,
-                    postId,
+                    userId: session.user.id,
+                    postId: id,
                 },
             },
         });
 
-        if (existingSave) {
-            // Remove save
-            await db.interestedPost.delete({
-                where: {
-                    userId_postId: {
-                        userId,
-                        postId,
-                    },
-                },
-            });
-            return NextResponse.json({ saved: false });
-        } else {
-            // Add save
-            await db.interestedPost.create({
-                data: {
-                    userId,
-                    postId,
-                },
-            });
-            return NextResponse.json({ saved: true });
-        }
+        return NextResponse.json({ saved: !!savedPost });
     } catch (error) {
-        console.error("Error saving post:", error);
+        console.error("Error checking save status:", error);
         return NextResponse.json(
-            { error: "Failed to save post" },
+            { message: "Internal server error" },
             { status: 500 }
         );
     }
 }
 
-export async function GET(
+export async function POST(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
+    const { id } = await params;
+    
     try {
         const session = await getServerSession(authOptions);
-        if (!session?.user) {
-            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+        if (!session?.user?.id) {
+            return NextResponse.json(
+                { message: "Unauthorized" },
+                { status: 401 }
+            );
         }
 
-        const postId = params.id;
-        const userId = session.user.id;
-
-        const saved = await db.interestedPost.findUnique({
+        // Check if user already saved the post
+        const existingSave = await db.interestedPost.findUnique({
             where: {
                 userId_postId: {
-                    userId,
-                    postId,
+                    userId: session.user.id,
+                    postId: id,
                 },
             },
         });
 
-        return NextResponse.json({ saved: !!saved });
+        if (existingSave) {
+            // Remove from saved posts
+            await db.interestedPost.delete({
+                where: {
+                    userId_postId: {
+                        userId: session.user.id,
+                        postId: id,
+                    },
+                },
+            });
+
+            return NextResponse.json({ saved: false });
+        } else {
+            // Add to saved posts
+            await db.interestedPost.create({
+                data: {
+                    userId: session.user.id,
+                    postId: id,
+                },
+            });
+
+            return NextResponse.json({ saved: true });
+        }
     } catch (error) {
-        console.error("Error checking save status:", error);
+        console.error("Error toggling save:", error);
         return NextResponse.json(
-            { error: "Failed to check save status" },
+            { message: "Internal server error" },
             { status: 500 }
         );
     }
