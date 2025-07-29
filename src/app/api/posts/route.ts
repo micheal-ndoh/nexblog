@@ -154,6 +154,7 @@ export async function POST(request: NextRequest) {
                 title,
                 content,
                 imageUrl,
+                // @ts-expect-error - Session user type is not properly typed in NextAuth
                 authorId: session.user.id,
                 published: true,
                 tags: {

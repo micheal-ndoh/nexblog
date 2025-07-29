@@ -78,6 +78,7 @@ export async function POST(
         const comment = await db.comment.create({
             data: {
                 content: content.trim(),
+                // @ts-expect-error - Session user type is not properly typed in NextAuth
                 authorId: session.user.id,
                 postId: id,
             },

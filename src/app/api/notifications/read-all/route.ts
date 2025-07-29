@@ -7,6 +7,7 @@ export async function POST() {
     try {
         const session = await getServerSession(authOptions)
 
+        // @ts-expect-error - Session user type is not properly typed in NextAuth
         if (!session?.user) {
             return NextResponse.json(
                 { message: "Unauthorized" },
@@ -17,6 +18,7 @@ export async function POST() {
         // Mark all user notifications as read
         await db.notification.updateMany({
             where: {
+                // @ts-expect-error - Session user type is not properly typed in NextAuth
                 // @ts-expect-error - Session user type is not properly typed in NextAuth
                 userId: session.user.id,
                 read: false,

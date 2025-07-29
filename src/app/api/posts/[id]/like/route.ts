@@ -23,7 +23,8 @@ export async function POST(
         const existingLike = await db.like.findUnique({
             where: {
                 userId_postId: {
-                    userId: session.user.id,
+                    // @ts-expect-error - Session user type is not properly typed in NextAuth
+                userId: session.user.id,
                     postId: id,
                 },
             },
@@ -34,7 +35,8 @@ export async function POST(
             await db.like.delete({
                 where: {
                     userId_postId: {
-                        userId: session.user.id,
+                        // @ts-expect-error - Session user type is not properly typed in NextAuth
+                userId: session.user.id,
                         postId: id,
                     },
                 },
@@ -45,7 +47,8 @@ export async function POST(
             // Like the post
             await db.like.create({
                 data: {
-                    userId: session.user.id,
+                    // @ts-expect-error - Session user type is not properly typed in NextAuth
+                userId: session.user.id,
                     postId: id,
                 },
             });
