@@ -107,9 +107,9 @@ export default function NotificationsPage() {
             >
               Mark all as read
             </button>
-            <button className="bg-primary text-white rounded-lg px-4 py-2 text-sm font-medium hover:bg-primary/90 transition-colors">
-              Settings
-            </button>
+                            <button className="bg-blue-600 hover:bg-blue-700 text-white rounded-lg px-4 py-2 text-sm font-medium transition-colors">
+                  Settings
+                </button>
           </div>
         </div>
 

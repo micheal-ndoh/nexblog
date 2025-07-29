@@ -31,11 +31,22 @@ export function getThemeClass(theme: Theme): string {
 
 export function applyTheme(theme: Theme) {
   const root = document.documentElement;
+  const html = document.documentElement;
 
   if (theme === "system") {
     const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
     root.setAttribute("data-theme", systemTheme);
+    if (systemTheme === "dark") {
+      html.classList.add("dark");
+    } else {
+      html.classList.remove("dark");
+    }
   } else {
     root.setAttribute("data-theme", theme);
+    if (theme === "dark") {
+      html.classList.add("dark");
+    } else {
+      html.classList.remove("dark");
+    }
   }
 } 

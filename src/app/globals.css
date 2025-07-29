@@ -1,18 +1,139 @@
 @import "tailwindcss";
 
 :root {
-  --background: #FAFAFA;
+  --background: #fafafa;
   --foreground: #111827;
+  --primary: #3b82f6;
+  --primary-foreground: #ffffff;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0F172A;
-    --foreground: #F8FAFC;
-  }
+[data-theme="dark"] {
+  --background: #0f172a;
+  --foreground: #f8fafc;
+  --primary: #3b82f6;
+  --primary-foreground: #ffffff;
+}
+
+[data-theme="light"] {
+  --background: #fafafa;
+  --foreground: #111827;
+  --primary: #3b82f6;
+  --primary-foreground: #ffffff;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
+}
+
+/* Ensure proper text contrast in both themes */
+.text-gray-900 {
+  color: #111827;
+}
+
+.dark .text-gray-900 {
+  color: #f8fafc;
+}
+
+.text-gray-700 {
+  color: #374151;
+}
+
+.dark .text-gray-700 {
+  color: #d1d5db;
+}
+
+.text-gray-600 {
+  color: #4b5563;
+}
+
+.dark .text-gray-600 {
+  color: #9ca3af;
+}
+
+.text-gray-500 {
+  color: #6b7280;
+}
+
+.dark .text-gray-500 {
+  color: #9ca3af;
+}
+
+.text-gray-400 {
+  color: #9ca3af;
+}
+
+.dark .text-gray-400 {
+  color: #6b7280;
+}
+
+.text-gray-300 {
+  color: #d1d5db;
+}
+
+.dark .text-gray-300 {
+  color: #4b5563;
+}
+
+/* Background colors */
+.bg-white {
+  background-color: #ffffff;
+}
+
+.dark .bg-white {
+  background-color: #1f2937;
+}
+
+.bg-gray-50 {
+  background-color: #f9fafb;
+}
+
+.dark .bg-gray-50 {
+  background-color: #111827;
+}
+
+.bg-gray-100 {
+  background-color: #f3f4f6;
+}
+
+.dark .bg-gray-100 {
+  background-color: #1f2937;
+}
+
+.bg-gray-200 {
+  background-color: #e5e7eb;
+}
+
+.dark .bg-gray-200 {
+  background-color: #374151;
+}
+
+.bg-gray-800 {
+  background-color: #1f2937;
+}
+
+.dark .bg-gray-800 {
+  background-color: #111827;
+}
+
+.bg-gray-900 {
+  background-color: #111827;
+}
+
+.dark .bg-gray-900 {
+  background-color: #0f172a;
+}
+
+/* Primary button styles for better contrast */
+.bg-primary {
+  background-color: var(--primary);
+}
+
+.text-primary-foreground {
+  color: var(--primary-foreground);
+}
+
+/* Ensure primary button text is always visible */
+.bg-primary.text-primary-foreground {
+  color: #ffffff !important;
 }

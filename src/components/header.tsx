@@ -251,7 +251,7 @@ export function Header() {
                   {/* New Post Button */}
                   <Link
                     href="/posts/new"
-                    className="bg-primary text-white rounded-lg px-4 py-2 text-sm font-medium hover:bg-primary/90 transition-colors flex items-center gap-2"
+                    className="bg-blue-600 hover:bg-blue-700 text-white rounded-lg px-4 py-2 text-sm font-medium transition-colors flex items-center gap-2 shadow-sm"
                   >
                     <svg
                       fill="currentColor"
@@ -274,8 +274,8 @@ export function Header() {
                     <BellIcon className="h-6 w-6" />
                     {unreadCount > 0 && (
                       <span className="absolute -top-1 -right-1 flex h-5 w-5">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-5 w-5 bg-primary text-white text-xs items-center justify-center">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-600 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-5 w-5 bg-blue-600 text-white text-xs items-center justify-center">
                           {unreadCount > 9 ? "9+" : unreadCount}
                         </span>
                       </span>
@@ -365,7 +365,7 @@ export function Header() {
                   </Link>
                   <Link
                     href="/auth/signup"
-                    className="bg-primary text-white rounded-lg px-4 py-2 text-sm font-medium hover:bg-primary/90 transition-colors"
+                    className="bg-blue-600 hover:bg-blue-700 text-white rounded-lg px-4 py-2 text-sm font-medium transition-colors"
                   >
                     {t("nav.signUp")}
                   </Link>

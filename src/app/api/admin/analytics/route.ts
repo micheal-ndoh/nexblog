@@ -126,10 +126,10 @@ export async function GET() {
         ]);
 
         // Calculate engagement rate
-        const engagementRate = totalUsers > 0 ? ((totalLikes + totalComments) / totalUsers).toFixed(2) : 0;
+        const engagementRate = totalUsers > 0 ? ((totalLikes + totalComments) / totalUsers).toFixed(2) : "0.00";
 
         // Calculate posts per user
-        const postsPerUser = totalUsers > 0 ? (totalPosts / totalUsers).toFixed(2) : 0;
+        const postsPerUser = totalUsers > 0 ? (totalPosts / totalUsers).toFixed(2) : "0.00";
 
         // Get monthly stats for the last 6 months
         const monthlyStats = await Promise.all(

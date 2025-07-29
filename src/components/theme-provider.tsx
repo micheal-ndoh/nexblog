@@ -26,11 +26,26 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   // Apply theme on initial load
   useEffect(() => {
     const root = document.documentElement;
+    const html = document.documentElement;
+
     if (theme === "system") {
-      const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
+        .matches
+        ? "dark"
+        : "light";
       root.setAttribute("data-theme", systemTheme);
+      if (systemTheme === "dark") {
+        html.classList.add("dark");
+      } else {
+        html.classList.remove("dark");
+      }
     } else {
       root.setAttribute("data-theme", theme);
+      if (theme === "dark") {
+        html.classList.add("dark");
+      } else {
+        html.classList.remove("dark");
+      }
     }
   }, [theme]);
 
