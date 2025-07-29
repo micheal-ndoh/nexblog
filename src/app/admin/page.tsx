@@ -20,8 +20,8 @@ import {
   XCircleIcon,
   ClockIcon,
   FireIcon,
-  TrendingUpIcon,
-  BanIcon,
+  ArrowTrendingUpIcon,
+  NoSymbolIcon,
   CogIcon,
   BellIcon,
   CalendarIcon,
@@ -287,7 +287,7 @@ export default function AdminDashboard() {
                     : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
                 }`}
               >
-                <TrendingUpIcon className="h-6 w-6" />
+                <ArrowTrendingUpIcon className="h-6 w-6" />
                 <span className="font-medium">{t("admin.analytics")}</span>
               </button>
             </nav>
@@ -381,7 +381,7 @@ export default function AdminDashboard() {
                 <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
                   <div className="flex items-center">
                     <div className="flex-shrink-0">
-                      <BanIcon className="h-8 w-8 text-red-600 dark:text-red-400" />
+                      <NoSymbolIcon className="h-8 w-8 text-red-600 dark:text-red-400" />
                     </div>
                     <div className="ml-5 w-0 flex-1">
                       <dl>
@@ -455,7 +455,7 @@ export default function AdminDashboard() {
                     onClick={() => setActiveTab("analytics")}
                     className="flex items-center gap-3 p-4 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                   >
-                    <TrendingUpIcon className="h-6 w-6 text-purple-600 dark:text-purple-400" />
+                    <ArrowTrendingUpIcon className="h-6 w-6 text-purple-600 dark:text-purple-400" />
                     <div className="text-left">
                       <div className="font-medium text-gray-900 dark:text-white">
                         {t("admin.viewAnalytics")}
@@ -597,7 +597,7 @@ export default function AdminDashboard() {
                                   className="text-yellow-600 dark:text-yellow-400 hover:text-yellow-900 dark:hover:text-yellow-300 disabled:opacity-50"
                                   title={t("admin.banUser")}
                                 >
-                                  <BanIcon className="h-4 w-4" />
+                                  <NoSymbolIcon className="h-4 w-4" />
                                 </button>
                               ) : (
                                 <button
@@ -810,7 +810,7 @@ export default function AdminDashboard() {
                 <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
                   <div className="flex items-center">
                     <div className="flex-shrink-0">
-                      <TrendingUpIcon className="h-8 w-8 text-purple-600 dark:text-purple-400" />
+                      <ArrowTrendingUpIcon className="h-8 w-8 text-purple-600 dark:text-purple-400" />
                     </div>
                     <div className="ml-5 w-0 flex-1">
                       <dl>
