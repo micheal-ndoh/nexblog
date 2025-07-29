@@ -47,10 +47,6 @@ export function PostFeed() {
   const [loading, setLoading] = useState(true);
   const [savedPosts, setSavedPosts] = useState<Set<string>>(new Set());
 
-  useEffect(() => {
-    fetchPosts();
-  }, [fetchPosts]);
-
   const fetchPosts = useCallback(async () => {
     try {
       const response = await fetch("/api/posts");
@@ -82,6 +78,10 @@ export function PostFeed() {
       setLoading(false);
     }
   }, [session?.user]);
+
+  useEffect(() => {
+    fetchPosts();
+  }, [fetchPosts]);
 
   const handleLike = async (postId: string) => {
     if (!session?.user) return;

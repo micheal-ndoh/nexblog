@@ -66,7 +66,7 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     if (session?.user) {
-      if (session.user.role !== "ADMIN") {
+      if ((session.user as any).role !== "ADMIN") {
         router.push("/");
         return;
       }
@@ -102,7 +102,7 @@ export default function AdminDashboard() {
     }
   };
 
-  if (!session?.user || session.user.role !== "ADMIN") {
+  if (!session?.user || (session.user as any).role !== "ADMIN") {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
         <Header />
