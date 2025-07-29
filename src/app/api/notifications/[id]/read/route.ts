@@ -5,8 +5,9 @@ import { db } from "@/lib/db"
 
 export async function POST(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
+    const { id } = await params;
     try {
         const session = await getServerSession(authOptions)
 
@@ -17,7 +18,7 @@ export async function POST(
             )
         }
 
-        const notificationId = params.id
+        const notificationId = id
 
         // Update notification to mark as read
         await db.notification.updateMany({

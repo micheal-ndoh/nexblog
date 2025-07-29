@@ -5,12 +5,14 @@ import { db } from "@/lib/db";
 
 export async function GET(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
+    const { id } = await params;
+
     try {
         const comments = await db.comment.findMany({
             where: {
-                postId: params.id,
+                postId: id,
             },
             include: {
                 author: {
@@ -38,8 +40,10 @@ export async function GET(
 
 export async function POST(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
+    const { id } = await params;
+
     try {
         const session = await getServerSession(authOptions);
 
@@ -61,7 +65,7 @@ export async function POST(
 
         // Verify the post exists
         const post = await db.post.findUnique({
-            where: { id: params.id },
+            where: { id },
         });
 
         if (!post) {
@@ -75,7 +79,7 @@ export async function POST(
             data: {
                 content: content.trim(),
                 authorId: session.user.id,
-                postId: params.id,
+                postId: id,
             },
             include: {
                 author: {

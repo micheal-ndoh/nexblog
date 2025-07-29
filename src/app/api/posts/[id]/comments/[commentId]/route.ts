@@ -5,8 +5,10 @@ import { db } from "@/lib/db";
 
 export async function DELETE(
     request: NextRequest,
-    { params }: { params: { id: string; commentId: string } }
+    { params }: { params: Promise<{ id: string; commentId: string }> }
 ) {
+    const { id, commentId } = await params;
+    
     try {
         const session = await getServerSession(authOptions);
 
@@ -19,7 +21,7 @@ export async function DELETE(
 
         // Find the comment and verify ownership
         const comment = await db.comment.findUnique({
-            where: { id: params.commentId },
+            where: { id: commentId },
             include: {
                 author: {
                     select: {
@@ -46,7 +48,7 @@ export async function DELETE(
 
         // Delete the comment
         await db.comment.delete({
-            where: { id: params.commentId },
+            where: { id: commentId },
         });
 
         return NextResponse.json({ message: "Comment deleted successfully" });
