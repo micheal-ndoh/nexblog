@@ -8,7 +8,7 @@ export async function GET(
     { params }: { params: Promise<{ id: string }> }
 ) {
     const { id } = await params;
-    
+
     try {
         const session = await getServerSession(authOptions);
 
@@ -24,6 +24,7 @@ export async function GET(
             where: {
                 userId_postId: {
                     postId: id,
+                    userId: session.user.id,
                 },
             },
         });
@@ -43,7 +44,7 @@ export async function POST(
     { params }: { params: Promise<{ id: string }> }
 ) {
     const { id } = await params;
-    
+
     try {
         const session = await getServerSession(authOptions);
 
@@ -59,26 +60,29 @@ export async function POST(
             where: {
                 userId_postId: {
                     postId: id,
+                    userId: session.user.id,
                 },
             },
         });
 
         if (existingSave) {
-            // Remove from saved posts
+            // Unsave the post
             await db.interestedPost.delete({
                 where: {
                     userId_postId: {
                         postId: id,
+                        userId: session.user.id,
                     },
                 },
             });
 
             return NextResponse.json({ saved: false });
         } else {
-            // Add to saved posts
+            // Save the post
             await db.interestedPost.create({
                 data: {
                     postId: id,
+                    userId: session.user.id,
                 },
             });
 

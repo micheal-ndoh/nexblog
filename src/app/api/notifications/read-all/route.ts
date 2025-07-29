@@ -18,7 +18,6 @@ export async function POST() {
         // Mark all user notifications as read
         await db.notification.updateMany({
             where: {
-                
                 userId: session.user.id,
                 read: false,
             },

@@ -25,7 +25,6 @@ export async function POST(
         await db.notification.updateMany({
             where: {
                 id: notificationId,
-               
                 userId: session.user.id,
             },
             data: {

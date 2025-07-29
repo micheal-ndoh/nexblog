@@ -79,6 +79,9 @@ export async function POST(
             data: {
                 content: content.trim(),
                 postId: id,
+                author: {
+                    connect: { id: session.user.id }
+                }
             },
             include: {
                 author: {

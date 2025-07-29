@@ -1,4 +1,4 @@
-const { PrismaClient } = require('@prisma/client');
+import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
@@ -22,12 +22,12 @@ async function updateImageUrls() {
         'http://10.38.229.234:9000/nexblog',
         'https://s3.cubbit.eu/nexblog'
       );
-      
+
       await prisma.user.update({
         where: { id: user.id },
         data: { image: newImageUrl }
       });
-      
+
       console.log(`Updated user ${user.id}: ${user.image} -> ${newImageUrl}`);
     }
 
@@ -47,12 +47,12 @@ async function updateImageUrls() {
         'http://10.38.229.234:9000/nexblog',
         'https://s3.cubbit.eu/nexblog'
       );
-      
+
       await prisma.post.update({
         where: { id: post.id },
         data: { imageUrl: newImageUrl }
       });
-      
+
       console.log(`Updated post ${post.id}: ${post.imageUrl} -> ${newImageUrl}`);
     }
 

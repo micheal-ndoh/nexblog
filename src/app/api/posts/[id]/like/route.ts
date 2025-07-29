@@ -19,11 +19,22 @@ export async function POST(
             );
         }
 
+        // Check if user exists in the database
+        const dbUser = await db.user.findUnique({ where: { id: session.user.id } });
+        if (!dbUser) {
+            console.error('User not found for like creation:', session.user.id);
+            return NextResponse.json(
+                { message: "User not found" },
+                { status: 404 }
+            );
+        }
+
         // Check if user already liked the post
         const existingLike = await db.like.findUnique({
             where: {
                 userId_postId: {
                     postId: id,
+                    userId: session.user.id,
                 },
             },
         });
@@ -34,6 +45,7 @@ export async function POST(
                 where: {
                     userId_postId: {
                         postId: id,
+                        userId: session.user.id,
                     },
                 },
             });
@@ -44,6 +56,7 @@ export async function POST(
             await db.like.create({
                 data: {
                     postId: id,
+                    userId: session.user.id,
                 },
             });
 
