@@ -45,7 +45,7 @@ export async function POST(
     const { id } = await params;
 
     try {
-        const session = await getServerSession(authOptions);
+        const session = await getServerSession(authOptions) as { user?: { id?: string } };
 
         if (!session?.user?.id) {
             return NextResponse.json(

@@ -60,7 +60,7 @@ export default function SignInPage() {
     setError("");
 
     try {
-      const result = await signIn("credentials", {
+      const result: any = await signIn("credentials", {
         email,
         password,
         redirect: false,
