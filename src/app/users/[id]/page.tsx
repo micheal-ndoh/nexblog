@@ -2,6 +2,8 @@ import { notFound } from "next/navigation";
 import { db } from "@/lib/db";
 import { formatDistanceToNow } from "date-fns";
 import Link from "next/link";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/lib/auth";
 
 interface UserProfilePageProps {
   params: Promise<{ id: string }>;
@@ -54,6 +56,17 @@ export default async function UserProfilePage({
 
   if (!user) {
     notFound();
+  }
+
+  // Profile view notification logic
+  const session = await getServerSession(authOptions);
+  if (session?.user?.id && session.user.id !== id) {
+    // Fire and forget, don't await
+    fetch(`/api/user/profile-view`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ profileUserId: id }),
+    });
   }
 
   return (

@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useSession } from "next-auth/react";
 import { formatDistanceToNow } from "date-fns";
 import Link from "next/link";
 import { useT } from "@/lib/tolgee";
+import EmojiPicker from "emoji-picker-react";
 
 interface Comment {
   id: string;
@@ -37,6 +38,8 @@ export function Comments({ postId, initialComments }: CommentsProps) {
   const [newComment, setNewComment] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const handleSubmitComment = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -97,14 +100,58 @@ export function Comments({ postId, initialComments }: CommentsProps) {
       {session?.user && (
         <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4">
           <form onSubmit={handleSubmitComment} className="space-y-3">
-            <textarea
-              value={newComment}
-              onChange={(e) => setNewComment(e.target.value)}
-              placeholder={t("comments.placeholder")}
-              rows={3}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-vertical"
-              disabled={loading}
-            />
+            <div className="relative">
+              <textarea
+                ref={textareaRef}
+                value={newComment}
+                onChange={(e) => setNewComment(e.target.value)}
+                placeholder={t("comments.placeholder")}
+                rows={3}
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-vertical"
+                disabled={loading}
+              />
+              <button
+                type="button"
+                className="absolute right-2 bottom-2 text-xl"
+                onClick={() => setShowEmojiPicker((v) => !v)}
+                tabIndex={-1}
+                aria-label="Add emoji"
+              >
+                😊
+              </button>
+              {showEmojiPicker && (
+                <div className="absolute z-10 bottom-12 right-0">
+                  <EmojiPicker
+                    onEmojiClick={(emojiData) => {
+                      const emojiChar = emojiData.emoji;
+                      if (textareaRef.current) {
+                        const start = textareaRef.current.selectionStart;
+                        const end = textareaRef.current.selectionEnd;
+                        const before = newComment.slice(0, start);
+                        const after = newComment.slice(end);
+                        setNewComment(before + emojiChar + after);
+                        setTimeout(() => {
+                          textareaRef.current?.focus();
+                          textareaRef.current?.setSelectionRange(
+                            start + emojiChar.length,
+                            start + emojiChar.length
+                          );
+                        }, 0);
+                      } else {
+                        setNewComment(newComment + emojiChar);
+                      }
+                      setShowEmojiPicker(false);
+                    }}
+                    theme={
+                      typeof window !== "undefined" &&
+                      window.matchMedia("(prefers-color-scheme: dark)").matches
+                        ? "dark"
+                        : "light"
+                    }
+                  />
+                </div>
+              )}
+            </div>
             {error && (
               <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
             )}

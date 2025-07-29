@@ -24,6 +24,7 @@ export async function GET() {
                     select: {
                         name: true,
                         image: true,
+                        id: true,
                     },
                 },
             },
@@ -33,7 +34,15 @@ export async function GET() {
             take: 50,
         })
 
-        return NextResponse.json(notifications)
+        // Add postId and commentId to the response for clickable notifications
+        const notificationsWithLinks = notifications.map(n => ({
+            ...n,
+            user: n.user,
+            postId: n.postId,
+            commentId: n.commentId,
+        }));
+
+        return NextResponse.json(notificationsWithLinks)
     } catch (error) {
         console.error("Error fetching notifications:", error)
         return NextResponse.json(

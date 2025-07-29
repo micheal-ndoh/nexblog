@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import { Header } from "@/components/header";
 import { formatDate } from "@/lib/utils";
 import { useNotificationStore } from "@/lib/store";
+import Link from "next/link";
 
 interface Notification {
   id: string;
@@ -17,6 +18,7 @@ interface Notification {
     name: string;
     image: string;
   };
+  postId?: string; // Added for post/comment notifications
 }
 
 export default function NotificationsPage() {
@@ -107,9 +109,9 @@ export default function NotificationsPage() {
             >
               Mark all as read
             </button>
-                            <button className="bg-blue-600 hover:bg-blue-700 text-white rounded-lg px-4 py-2 text-sm font-medium transition-colors">
-                  Settings
-                </button>
+            <button className="bg-blue-600 hover:bg-blue-700 text-white rounded-lg px-4 py-2 text-sm font-medium transition-colors">
+              Settings
+            </button>
           </div>
         </div>
 
@@ -134,34 +136,57 @@ export default function NotificationsPage() {
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
             {notifications.length > 0 ? (
               <div className="divide-y divide-gray-200 dark:divide-gray-700">
-                {notifications.map((notification) => (
-                  <div
-                    key={notification.id}
-                    className={`flex items-start gap-4 p-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors ${
-                      !notification.read ? "bg-blue-50 dark:bg-blue-900/20" : ""
-                    }`}
-                    onClick={() =>
-                      !notification.read && handleMarkAsRead(notification.id)
-                    }
-                  >
-                    <img
-                      src={notification.user.image || "/default-avatar.png"}
-                      alt={notification.user.name}
-                      className="w-12 h-12 rounded-full flex-shrink-0"
-                    />
-                    <div className="flex-1">
-                      <p className="text-gray-900 dark:text-white text-base font-medium">
-                        {notification.title}
-                      </p>
-                      <p className="text-gray-600 dark:text-gray-400 text-sm mt-1">
-                        {formatDate(notification.createdAt)}
-                      </p>
-                    </div>
-                    {!notification.read && (
-                      <div className="h-3 w-3 rounded-full bg-primary flex-shrink-0 mt-1" />
-                    )}
-                  </div>
-                ))}
+                {notifications.map((notification) => {
+                  let link = undefined;
+                  if (
+                    notification.type === "COMMENT" ||
+                    notification.type === "LIKE" ||
+                    notification.type === "INTERESTED_UPDATE"
+                  ) {
+                    link = `/posts/${notification.postId}`;
+                  } else if (notification.type === "PROFILE_VIEW") {
+                    link = `/users/${notification.user.id}`;
+                  }
+                  return (
+                    <Link
+                      key={notification.id}
+                      href={link || "#"}
+                      className="block"
+                      onClick={() =>
+                        !notification.read && handleMarkAsRead(notification.id)
+                      }
+                    >
+                      <div
+                        className={`flex items-start gap-4 p-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors ${
+                          !notification.read
+                            ? "bg-blue-50 dark:bg-blue-900/20"
+                            : ""
+                        }`}
+                      >
+                        <img
+                          src={notification.user.image || "/default-avatar.png"}
+                          alt={notification.user.name}
+                          className="w-12 h-12 rounded-full flex-shrink-0"
+                        />
+                        <div className="flex-1">
+                          <p className="text-gray-900 dark:text-white text-base font-medium">
+                            {notification.user.name}{" "}
+                            {notification.title.toLowerCase()}
+                          </p>
+                          <p className="text-gray-600 dark:text-gray-400 text-sm mt-1">
+                            {notification.message}
+                          </p>
+                          <p className="text-gray-600 dark:text-gray-400 text-xs mt-1">
+                            {formatDate(notification.createdAt)}
+                          </p>
+                        </div>
+                        {!notification.read && (
+                          <div className="h-3 w-3 rounded-full bg-primary flex-shrink-0 mt-1" />
+                        )}
+                      </div>
+                    </Link>
+                  );
+                })}
               </div>
             ) : (
               <div className="text-center py-12">
