@@ -24,7 +24,7 @@ export function TolgeeWrapper({ children }: { children: React.ReactNode }) {
 export function useT() {
     const { language } = useAppStore()
 
-    const t = (key: string, _params?: Record<string, unknown>) => {
+    const t = (key: string, params?: Record<string, unknown>) => {
         // For now, return the key as-is
         // In a full implementation, this would look up translations
         return key

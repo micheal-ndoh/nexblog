@@ -4,6 +4,13 @@ import { useEffect, useState, useCallback } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Header } from "@/components/header";
+
+interface SessionUser {
+  id: string;
+  name: string;
+  email: string;
+  role: "USER" | "ADMIN";
+}
 import {
   UsersIcon,
   DocumentTextIcon,
@@ -40,7 +47,6 @@ export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState("users");
   const [users, setUsers] = useState<User[]>([]);
   const [posts, setPosts] = useState<Post[]>([]);
-  const [loading, setLoading] = useState(true);
 
   const fetchData = useCallback(async () => {
     try {
@@ -59,14 +65,12 @@ export default function AdminDashboard() {
       }
     } catch (error) {
       console.error("Error fetching data:", error);
-    } finally {
-      setLoading(false);
     }
   }, [activeTab]);
 
   useEffect(() => {
     if (session?.user) {
-      if ((session.user as any).role !== "ADMIN") {
+      if ((session.user as SessionUser).role !== "ADMIN") {
         router.push("/");
         return;
       }
@@ -102,7 +106,7 @@ export default function AdminDashboard() {
     }
   };
 
-  if (!session?.user || (session.user as any).role !== "ADMIN") {
+  if (!session?.user || (session.user as SessionUser).role !== "ADMIN") {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
         <Header />
