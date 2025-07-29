@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "next-auth/next"
+import type { Session } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { db } from "@/lib/db"
 
@@ -37,7 +38,7 @@ export async function GET(request: NextRequest) {
         }
 
         // Build orderBy clause based on sort parameter
-        let orderBy: Record<string, unknown> = { createdAt: "desc" }
+        let orderBy: any = { createdAt: "desc" }
 
         switch (sort) {
             case "viral":
@@ -130,7 +131,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
     try {
-        const session = await getServerSession(authOptions)
+        const session = await getServerSession(authOptions) as Session;
 
         if (!session?.user) {
             return NextResponse.json(
@@ -167,6 +168,9 @@ export async function POST(request: NextRequest) {
                             },
                         },
                     })) || [],
+                },
+                author: {
+                    connect: { id: session.user.id }
                 },
             },
             include: {
