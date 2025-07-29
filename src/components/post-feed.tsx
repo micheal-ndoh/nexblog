@@ -39,6 +39,7 @@ interface Post {
   interestedUsers: Array<{
     userId: string;
   }>;
+  imageUrl?: string;
 }
 
 export function PostFeed() {
@@ -222,6 +223,17 @@ export function PostFeed() {
 
               {/* Post Content */}
               <div className="mb-4">
+                {post.imageUrl && (
+                  <div className="relative w-full" style={{ minHeight: "300px", maxHeight: "500px" }}>
+                    <Image
+                      src={post.imageUrl}
+                      alt={post.title}
+                      fill
+                      sizes="100vw"
+                      className="object-contain rounded-2xl mb-4"
+                    />
+                  </div>
+                )}
                 <Link href={`/posts/${post.id}`}>
                   <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2 hover:text-primary transition-colors">
                     {post.title}
