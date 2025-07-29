@@ -63,9 +63,17 @@ export async function POST(
             );
         }
 
-        // Verify the post exists
+        // Verify the post exists and get author info
         const post = await db.post.findUnique({
             where: { id },
+            include: {
+                author: {
+                    select: {
+                        id: true,
+                        name: true,
+                    },
+                },
+            },
         });
 
         if (!post) {
@@ -74,6 +82,12 @@ export async function POST(
                 { status: 404 }
             );
         }
+
+        // Get the current user's name
+        const currentUser = await db.user.findUnique({
+            where: { id: session.user.id },
+            select: { name: true },
+        });
 
         const comment = await db.comment.create({
             data: {
@@ -93,6 +107,21 @@ export async function POST(
                 },
             },
         });
+
+        // Don't create notification if user is commenting on their own post
+        if (post.author.id !== session.user.id) {
+            // Create notification for the post author
+            await db.notification.create({
+                data: {
+                    type: "COMMENT",
+                    title: "New comment on your post",
+                    message: `${currentUser?.name || 'A user'} commented on your post "${post.title}"`,
+                    userId: post.author.id,
+                    postId: id,
+                    commentId: comment.id,
+                },
+            });
+        }
 
         return NextResponse.json(comment, { status: 201 });
     } catch (error) {

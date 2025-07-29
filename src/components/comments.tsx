@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { formatDistanceToNow } from "date-fns";
 import Link from "next/link";
+import { useT } from "@/lib/tolgee";
 
 interface Comment {
   id: string;
@@ -31,6 +32,7 @@ type SessionUser = {
 
 export function Comments({ postId, initialComments }: CommentsProps) {
   const { data: session } = useSession();
+  const { t } = useT();
   const [comments, setComments] = useState<Comment[]>(initialComments);
   const [newComment, setNewComment] = useState("");
   const [loading, setLoading] = useState(false);
@@ -54,14 +56,14 @@ export function Comments({ postId, initialComments }: CommentsProps) {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to post comment");
+        throw new Error(errorData.message || t("general.error"));
       }
 
       const comment = await response.json();
       setComments([comment, ...comments]);
       setNewComment("");
     } catch (error) {
-      setError(error instanceof Error ? error.message : "An error occurred");
+      setError(error instanceof Error ? error.message : t("general.error"));
     } finally {
       setLoading(false);
     }
@@ -80,12 +82,12 @@ export function Comments({ postId, initialComments }: CommentsProps) {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to delete comment");
+        throw new Error(errorData.message || t("general.error"));
       }
 
       setComments(comments.filter((comment) => comment.id !== commentId));
     } catch (error) {
-      setError(error instanceof Error ? error.message : "An error occurred");
+      setError(error instanceof Error ? error.message : t("general.error"));
     }
   };
 
@@ -98,7 +100,7 @@ export function Comments({ postId, initialComments }: CommentsProps) {
             <textarea
               value={newComment}
               onChange={(e) => setNewComment(e.target.value)}
-              placeholder="Write a comment..."
+              placeholder={t("comments.placeholder")}
               rows={3}
               className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-vertical"
               disabled={loading}
@@ -112,7 +114,7 @@ export function Comments({ postId, initialComments }: CommentsProps) {
                 disabled={loading || !newComment.trim()}
                 className="px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
-                {loading ? "Posting..." : "Post Comment"}
+                {loading ? t("comments.posting") : t("comments.post")}
               </button>
             </div>
           </form>
@@ -123,7 +125,7 @@ export function Comments({ postId, initialComments }: CommentsProps) {
       <div className="space-y-4">
         {comments.length === 0 ? (
           <p className="text-gray-500 dark:text-gray-400 text-center py-8">
-            No comments yet. Be the first to comment!
+            {t("comments.noCommentsMessage")}
           </p>
         ) : (
           comments.map((comment) => (
@@ -170,7 +172,7 @@ export function Comments({ postId, initialComments }: CommentsProps) {
                   <button
                     onClick={() => handleDeleteComment(comment.id)}
                     className="text-gray-400 hover:text-red-500 transition-colors p-1"
-                    title="Delete comment"
+                    title={t("comments.delete")}
                   >
                     <svg
                       className="w-4 h-4"

@@ -12,6 +12,7 @@ export async function GET(request: NextRequest) {
         const search = searchParams.get("search") || ""
         const tag = searchParams.get("tag") || ""
         const sort = searchParams.get("sort") || "latest"
+        const session = await getServerSession(authOptions) as Session
 
         const skip = (page - 1) * limit
 
@@ -37,34 +38,35 @@ export async function GET(request: NextRequest) {
             }
         }
 
+        // Handle interested posts - show posts that the current user has marked as interested
+        if (sort === "interested" && session?.user?.id) {
+            where.interestedUsers = {
+                some: {
+                    userId: session.user.id
+                }
+            }
+        }
+
         // Build orderBy clause based on sort parameter
         let orderBy: any = { createdAt: "desc" }
 
         switch (sort) {
             case "viral":
-                orderBy = [
-                    { _count: { likes: "desc" } },
-                    { _count: { comments: "desc" } },
-                    { createdAt: "desc" }
-                ]
+                // For viral posts, we need to order by engagement (likes + comments)
+                // Since Prisma doesn't support complex ordering by counts directly,
+                // we'll order by creation date for now and handle sorting in the frontend
+                orderBy = { createdAt: "desc" }
                 break
             case "trending":
                 // Posts with high engagement in the last 7 days
                 const sevenDaysAgo = new Date()
                 sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7)
                 where.createdAt = { gte: sevenDaysAgo }
-                orderBy = [
-                    { _count: { likes: "desc" } },
-                    { _count: { comments: "desc" } },
-                    { createdAt: "desc" }
-                ]
+                orderBy = { createdAt: "desc" }
                 break
             case "interested":
-                // Posts with tags that the user might be interested in
-                orderBy = [
-                    { _count: { likes: "desc" } },
-                    { createdAt: "desc" }
-                ]
+                // For interested posts, order by when they were saved (most recent first)
+                orderBy = { createdAt: "desc" }
                 break
             case "latest":
             default:
@@ -109,10 +111,20 @@ export async function GET(request: NextRequest) {
             take: limit,
         })
 
+        // Sort posts by engagement for viral posts
+        let sortedPosts = posts;
+        if (sort === "viral") {
+            sortedPosts = posts.sort((a, b) => {
+                const aEngagement = a._count.likes + a._count.comments;
+                const bEngagement = b._count.likes + b._count.comments;
+                return bEngagement - aEngagement;
+            });
+        }
+
         const total = await db.post.count({ where })
 
         return NextResponse.json({
-            posts,
+            posts: sortedPosts,
             pagination: {
                 page,
                 limit,

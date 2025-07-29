@@ -6,7 +6,7 @@ import { Providers } from "@/components/providers";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "NexBlog - Modern Micro-Blog Platform",
+  title: "NexBlog",
   description: "A modern, performant, and secure micro-blog/changelog platform",
 };
 

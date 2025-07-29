@@ -5,10 +5,12 @@ import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Header } from "@/components/header";
+import { useT } from "@/lib/tolgee";
 
 export default function SignInPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { t } = useT();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -20,39 +22,37 @@ export default function SignInPage() {
     if (errorParam) {
       switch (errorParam) {
         case "Callback":
-          setError("Google sign-in was cancelled or failed. Please try again.");
+          setError(t("signin.error.googleCancelled"));
           break;
         case "OAuthSignin":
-          setError("There was an error starting the Google sign-in process.");
+          setError(t("signin.error.googleStart"));
           break;
         case "OAuthCallback":
-          setError("There was an error completing the Google sign-in process.");
+          setError(t("signin.error.googleCallback"));
           break;
         case "OAuthCreateAccount":
-          setError("Could not create account with Google. Please try again.");
+          setError(t("signin.error.googleCreate"));
           break;
         case "EmailCreateAccount":
-          setError("Could not create account with email. Please try again.");
+          setError(t("signin.error.emailCreate"));
           break;
         case "OAuthAccountNotLinked":
-          setError(
-            "This email is already associated with a different account."
-          );
+          setError(t("signin.error.accountNotLinked"));
           break;
         case "EmailSignin":
-          setError("Check your email for a sign-in link.");
+          setError(t("signin.error.emailSignin"));
           break;
         case "CredentialsSignin":
-          setError("Invalid email or password.");
+          setError(t("signin.error.credentials"));
           break;
         case "SessionRequired":
-          setError("Please sign in to access this page.");
+          setError(t("signin.error.sessionRequired"));
           break;
         default:
-          setError("An error occurred during sign-in. Please try again.");
+          setError(t("signin.error.default"));
       }
     }
-  }, [searchParams]);
+  }, [searchParams, t]);
 
   const handleEmailSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -67,12 +67,12 @@ export default function SignInPage() {
       });
 
       if (result?.error) {
-        setError("Invalid email or password");
+        setError(t("signin.error.credentials"));
       } else {
         router.push("/");
       }
     } catch {
-      setError("An error occurred. Please try again.");
+      setError(t("signin.error.generic"));
     } finally {
       setLoading(false);
     }
@@ -84,7 +84,7 @@ export default function SignInPage() {
     try {
       await signIn("google", { callbackUrl: "/" });
     } catch {
-      setError("An error occurred during Google sign-in. Please try again.");
+      setError(t("signin.error.googleGeneric"));
       setLoading(false);
     }
   };
@@ -97,10 +97,10 @@ export default function SignInPage() {
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-8">
             <div className="text-center mb-8">
               <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-                Welcome back
+                {t("auth.welcomeBack")}
               </h1>
               <p className="text-gray-600 dark:text-gray-400">
-                Sign in to your account to continue
+                {t("auth.subtitle")}
               </p>
             </div>
 
@@ -118,7 +118,7 @@ export default function SignInPage() {
                   htmlFor="email"
                   className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
                 >
-                  Email
+                  {t("auth.email")}
                 </label>
                 <input
                   id="email"
@@ -130,7 +130,7 @@ export default function SignInPage() {
                   }}
                   required
                   className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                  placeholder="Enter your email"
+                  placeholder={t("auth.enterEmail")}
                 />
               </div>
 
@@ -139,7 +139,7 @@ export default function SignInPage() {
                   htmlFor="password"
                   className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
                 >
-                  Password
+                  {t("auth.password")}
                 </label>
                 <input
                   id="password"
@@ -151,7 +151,7 @@ export default function SignInPage() {
                   }}
                   required
                   className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                  placeholder="Enter your password"
+                  placeholder={t("auth.enterPassword")}
                 />
               </div>
 
@@ -160,7 +160,7 @@ export default function SignInPage() {
                 disabled={loading}
                 className="w-full bg-primary text-white rounded-lg px-4 py-2 font-medium hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
-                {loading ? "Signing in..." : "Sign In"}
+                {loading ? t("auth.signingIn") : t("auth.signIn")}
               </button>
             </form>
 
@@ -170,7 +170,7 @@ export default function SignInPage() {
               </div>
               <div className="relative flex justify-center text-sm">
                 <span className="px-2 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400">
-                  Or continue with
+                  {t("auth.orContinueWith")}
                 </span>
               </div>
             </div>
@@ -198,17 +198,17 @@ export default function SignInPage() {
                   d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
                 />
               </svg>
-              Continue with Google
+              {t("auth.continueWithGoogle")}
             </button>
 
             <div className="mt-6 text-center">
               <p className="text-sm text-gray-600 dark:text-gray-400">
-                Don&apos;t have an account?{" "}
+                {t("auth.noAccount")}{" "}
                 <Link
                   href="/auth/signup"
                   className="text-primary hover:text-primary/80 font-medium"
                 >
-                  Sign up
+                  {t("auth.signUp")}
                 </Link>
               </p>
             </div>

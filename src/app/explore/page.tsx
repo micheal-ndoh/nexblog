@@ -4,12 +4,14 @@ import { useState, useEffect, useCallback } from "react";
 import { Header } from "@/components/header";
 import { PostFeedSkeleton } from "@/components/post-feed-skeleton";
 import Image from "next/image";
+import Link from "next/link";
 import {
   FireIcon,
   HeartIcon,
   EyeIcon,
   ArrowTrendingUpIcon,
 } from "@heroicons/react/24/outline";
+import { useT } from "@/lib/tolgee";
 
 interface Post {
   id: string;
@@ -40,6 +42,7 @@ export default function ExplorePage() {
   const [activeTab, setActiveTab] = useState("viral");
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
+  const { t } = useT();
 
   const fetchPosts = useCallback(async () => {
     setLoading(true);
@@ -61,29 +64,44 @@ export default function ExplorePage() {
   const tabs = [
     {
       id: "viral",
-      name: "Viral",
+      name: t("explore.viral"),
       icon: FireIcon,
-      description: "Most popular posts",
+      description: t("explore.viralDescription"),
     },
     {
       id: "trending",
-      name: "Trending",
+      name: t("explore.trending"),
       icon: ArrowTrendingUpIcon,
-      description: "Rising in popularity",
+      description: t("explore.trendingDescription"),
     },
     {
       id: "interested",
-      name: "Interested",
+      name: t("explore.interested"),
       icon: HeartIcon,
-      description: "Posts you might like",
+      description: t("explore.interestedDescription"),
     },
     {
       id: "latest",
-      name: "Latest",
+      name: t("explore.latest"),
       icon: EyeIcon,
-      description: "Fresh content",
+      description: t("explore.latestDescription"),
     },
   ];
+
+  const getNoPostsMessage = () => {
+    switch (activeTab) {
+      case "viral":
+        return t("explore.noViralPosts");
+      case "trending":
+        return t("explore.noTrendingPosts");
+      case "interested":
+        return t("explore.noInterestedPosts");
+      case "latest":
+        return t("explore.noLatestPosts");
+      default:
+        return t("posts.noPosts");
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -92,10 +110,10 @@ export default function ExplorePage() {
         {/* Page Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-            Explore
+            {t("explore.title")}
           </h1>
           <p className="text-gray-600 dark:text-gray-400">
-            Discover trending content and viral posts
+            {t("explore.subtitle")}
           </p>
         </div>
 
@@ -138,7 +156,8 @@ export default function ExplorePage() {
                   return <Icon className="h-6 w-6 text-primary" />;
                 })()}
                 <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
-                  {tabs.find((tab) => tab.id === activeTab)?.name} Posts
+                  {tabs.find((tab) => tab.id === activeTab)?.name}{" "}
+                  {t("posts.title")}
                 </h2>
               </div>
 
@@ -147,68 +166,71 @@ export default function ExplorePage() {
               ) : (
                 <div className="space-y-6">
                   {posts.map((post) => (
-                    <article
+                    <Link
                       key={post.id}
-                      className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:shadow-md transition-shadow"
+                      href={`/posts/${post.id}`}
+                      className="block border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:shadow-md transition-shadow"
                     >
-                      <div className="flex items-start gap-4">
-                        <Image
-                          src={post.author.image || "/default-avatar.png"}
-                          alt={post.author.name}
-                          width={40}
-                          height={40}
-                          className="w-10 h-10 rounded-full"
-                        />
-                        <div className="flex-1">
-                          <div className="flex items-baseline gap-2 mb-2">
-                            <h3 className="font-semibold text-gray-900 dark:text-white">
-                              {post.author.name}
-                            </h3>
-                            <span className="text-sm text-gray-500 dark:text-gray-400">
-                              {new Date(post.createdAt).toLocaleDateString()}
-                            </span>
-                          </div>
-                          <h4 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
-                            {post.title}
-                          </h4>
-                          <p className="text-gray-600 dark:text-gray-300 text-sm mb-3">
-                            {post.content.length > 150
-                              ? `${post.content.substring(0, 150)}...`
-                              : post.content}
-                          </p>
-
-                          {/* Tags */}
-                          {post.tags.length > 0 && (
-                            <div className="flex flex-wrap gap-2 mb-3">
-                              {post.tags.map((tag) => (
-                                <span
-                                  key={tag.tag.name}
-                                  className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium"
-                                  style={{
-                                    backgroundColor: `${tag.tag.color}20`,
-                                    color: tag.tag.color,
-                                  }}
-                                >
-                                  {tag.tag.name}
-                                </span>
-                              ))}
+                      <article>
+                        <div className="flex items-start gap-4">
+                          <Image
+                            src={post.author.image || "/default-avatar.png"}
+                            alt={post.author.name}
+                            width={40}
+                            height={40}
+                            className="w-10 h-10 rounded-full"
+                          />
+                          <div className="flex-1">
+                            <div className="flex items-baseline gap-2 mb-2">
+                              <h3 className="font-semibold text-gray-900 dark:text-white">
+                                {post.author.name}
+                              </h3>
+                              <span className="text-sm text-gray-500 dark:text-gray-400">
+                                {new Date(post.createdAt).toLocaleDateString()}
+                              </span>
                             </div>
-                          )}
+                            <h4 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+                              {post.title}
+                            </h4>
+                            <p className="text-gray-600 dark:text-gray-300 text-sm mb-3">
+                              {post.content.length > 150
+                                ? `${post.content.substring(0, 150)}...`
+                                : post.content}
+                            </p>
 
-                          {/* Stats */}
-                          <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
-                            <div className="flex items-center gap-1">
-                              <HeartIcon className="h-4 w-4" />
-                              <span>{post._count.likes}</span>
-                            </div>
-                            <div className="flex items-center gap-1">
-                              <EyeIcon className="h-4 w-4" />
-                              <span>{post._count.comments}</span>
+                            {/* Tags */}
+                            {post.tags.length > 0 && (
+                              <div className="flex flex-wrap gap-2 mb-3">
+                                {post.tags.map((tag) => (
+                                  <span
+                                    key={tag.tag.name}
+                                    className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium"
+                                    style={{
+                                      backgroundColor: `${tag.tag.color}20`,
+                                      color: tag.tag.color,
+                                    }}
+                                  >
+                                    {tag.tag.name}
+                                  </span>
+                                ))}
+                              </div>
+                            )}
+
+                            {/* Stats */}
+                            <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
+                              <div className="flex items-center gap-1">
+                                <HeartIcon className="h-4 w-4" />
+                                <span>{post._count.likes}</span>
+                              </div>
+                              <div className="flex items-center gap-1">
+                                <EyeIcon className="h-4 w-4" />
+                                <span>{post._count.comments}</span>
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    </article>
+                      </article>
+                    </Link>
                   ))}
 
                   {posts.length === 0 && (
@@ -217,10 +239,10 @@ export default function ExplorePage() {
                         <FireIcon className="mx-auto h-12 w-12" />
                       </div>
                       <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
-                        No {activeTab} posts yet
+                        {getNoPostsMessage()}
                       </h3>
                       <p className="text-gray-500 dark:text-gray-400">
-                        Check back later for trending content!
+                        {t("explore.checkBackLater")}
                       </p>
                     </div>
                   )}
@@ -234,7 +256,7 @@ export default function ExplorePage() {
             {/* Trending Tags */}
             <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                Trending Tags
+                {t("explore.trendingTags")}
               </h3>
               <div className="space-y-2">
                 {[
@@ -268,7 +290,7 @@ export default function ExplorePage() {
             {/* Top Authors */}
             <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                Top Authors
+                {t("explore.topAuthors")}
               </h3>
               <div className="space-y-3">
                 {[
@@ -289,7 +311,8 @@ export default function ExplorePage() {
                         {author.name}
                       </p>
                       <p className="text-xs text-gray-500 dark:text-gray-400">
-                        {author.posts} posts • {author.followers} followers
+                        {author.posts} {t("posts.title")} • {author.followers}{" "}
+                        {t("user.followers")}
                       </p>
                     </div>
                   </div>
@@ -300,12 +323,12 @@ export default function ExplorePage() {
             {/* Quick Stats */}
             <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                Platform Stats
+                {t("explore.platformStats")}
               </h3>
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-600 dark:text-gray-400">
-                    Total Posts
+                    {t("explore.totalPosts")}
                   </span>
                   <span className="text-sm font-medium text-gray-900 dark:text-white">
                     1,234
@@ -313,7 +336,7 @@ export default function ExplorePage() {
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-600 dark:text-gray-400">
-                    Active Users
+                    {t("explore.activeUsers")}
                   </span>
                   <span className="text-sm font-medium text-gray-900 dark:text-white">
                     567
@@ -321,7 +344,7 @@ export default function ExplorePage() {
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-600 dark:text-gray-400">
-                    Total Likes
+                    {t("explore.totalLikes")}
                   </span>
                   <span className="text-sm font-medium text-gray-900 dark:text-white">
                     8,901
@@ -329,7 +352,7 @@ export default function ExplorePage() {
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-600 dark:text-gray-400">
-                    Comments
+                    {t("explore.comments")}
                   </span>
                   <span className="text-sm font-medium text-gray-900 dark:text-white">
                     2,345

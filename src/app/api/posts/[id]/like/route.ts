@@ -52,6 +52,40 @@ export async function POST(
 
             return NextResponse.json({ liked: false });
         } else {
+            // Get the post to find the author
+            const post = await db.post.findUnique({
+                where: { id },
+                include: {
+                    author: {
+                        select: {
+                            id: true,
+                            name: true,
+                        },
+                    },
+                },
+            });
+
+            if (!post) {
+                return NextResponse.json(
+                    { message: "Post not found" },
+                    { status: 404 }
+                );
+            }
+
+            // Don't create notification if user is liking their own post
+            if (post.author.id !== session.user.id) {
+                // Create notification for the post author
+                await db.notification.create({
+                    data: {
+                        type: "LIKE",
+                        title: "Someone liked your post",
+                        message: `${dbUser.name} liked your post "${post.title}"`,
+                        userId: post.author.id,
+                        postId: id,
+                    },
+                });
+            }
+
             // Like the post
             await db.like.create({
                 data: {

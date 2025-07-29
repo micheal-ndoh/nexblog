@@ -78,6 +78,46 @@ export async function POST(
 
             return NextResponse.json({ saved: false });
         } else {
+            // Get the post to find the author
+            const post = await db.post.findUnique({
+                where: { id },
+                include: {
+                    author: {
+                        select: {
+                            id: true,
+                            name: true,
+                        },
+                    },
+                },
+            });
+
+            if (!post) {
+                return NextResponse.json(
+                    { message: "Post not found" },
+                    { status: 404 }
+                );
+            }
+
+            // Get the current user's name
+            const currentUser = await db.user.findUnique({
+                where: { id: session.user.id },
+                select: { name: true },
+            });
+
+            // Don't create notification if user is saving their own post
+            if (post.author.id !== session.user.id) {
+                // Create notification for the post author
+                await db.notification.create({
+                    data: {
+                        type: "INTERESTED_UPDATE",
+                        title: "Someone is interested in your post",
+                        message: `${currentUser?.name || 'A user'} is interested in your post "${post.title}"`,
+                        userId: post.author.id,
+                        postId: id,
+                    },
+                });
+            }
+
             // Save the post
             await db.interestedPost.create({
                 data: {

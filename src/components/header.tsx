@@ -15,22 +15,27 @@ import {
   SunIcon,
   MoonIcon,
   ComputerDesktopIcon,
+  GlobeAltIcon,
 } from "@heroicons/react/24/outline";
 // Removed unused import
 import { useNotificationStore } from "@/lib/store";
 import { useThemeStore, applyTheme } from "@/lib/theme";
+import { useT, languages } from "@/lib/tolgee";
 
 export function Header() {
   const { data: session } = useSession();
   const router = useRouter();
   const { unreadCount } = useNotificationStore();
   const { theme, setTheme } = useThemeStore();
+  const { t, changeLanguage, getLanguage } = useT();
   const [searchQuery, setSearchQuery] = useState("");
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isThemeMenuOpen, setIsThemeMenuOpen] = useState(false);
+  const [isLanguageMenuOpen, setIsLanguageMenuOpen] = useState(false);
   const themeMenuRef = useRef<HTMLDivElement>(null);
+  const languageMenuRef = useRef<HTMLDivElement>(null);
 
-  // Close theme menu when clicking outside
+  // Close menus when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -38,6 +43,12 @@ export function Header() {
         !themeMenuRef.current.contains(event.target as Node)
       ) {
         setIsThemeMenuOpen(false);
+      }
+      if (
+        languageMenuRef.current &&
+        !languageMenuRef.current.contains(event.target as Node)
+      ) {
+        setIsLanguageMenuOpen(false);
       }
     };
 
@@ -64,6 +75,11 @@ export function Header() {
     setIsThemeMenuOpen(false);
   };
 
+  const handleLanguageChange = (langCode: string) => {
+    changeLanguage(langCode);
+    setIsLanguageMenuOpen(false);
+  };
+
   const getThemeIcon = () => {
     switch (theme) {
       case "light":
@@ -76,6 +92,9 @@ export function Header() {
         return <SunIcon className="h-5 w-5" />;
     }
   };
+
+  const currentLanguage =
+    languages.find((lang) => lang.code === getLanguage()) || languages[1]; // Default to English
 
   return (
     <header className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-40">
@@ -96,7 +115,9 @@ export function Header() {
                   <path d="M44 4H30.6666V17.3334H17.3334V30.6666H4V44H44V4Z" />
                 </svg>
               </div>
-              <h1 className="text-xl font-bold tracking-tight">NexBlog</h1>
+              <h1 className="text-xl font-bold tracking-tight">
+                {t("header.nexblog")}
+              </h1>
             </Link>
 
             <nav className="hidden md:flex items-center gap-6">
@@ -104,20 +125,20 @@ export function Header() {
                 href="/"
                 className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary transition-colors"
               >
-                Home
+                {t("nav.home")}
               </Link>
               <Link
                 href="/explore"
                 className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary transition-colors"
               >
-                Explore
+                {t("nav.explore")}
               </Link>
               {session?.user && (
                 <Link
                   href="/notifications"
                   className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary transition-colors"
                 >
-                  Notifications
+                  {t("nav.notifications")}
                 </Link>
               )}
             </nav>
@@ -131,7 +152,7 @@ export function Header() {
                 <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
                 <input
                   type="text"
-                  placeholder="Search by keywords or tags..."
+                  placeholder={t("header.searchPlaceholder")}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-64 pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-full bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
@@ -141,12 +162,47 @@ export function Header() {
 
             {/* Actions */}
             <div className="flex items-center gap-2">
+              {/* Language Toggle */}
+              <div className="relative" ref={languageMenuRef}>
+                <button
+                  onClick={() => setIsLanguageMenuOpen(!isLanguageMenuOpen)}
+                  className="p-2 text-gray-600 dark:text-gray-300 hover:text-primary transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
+                  title="Change language"
+                >
+                  <div className="flex items-center gap-1">
+                    <GlobeAltIcon className="h-5 w-5" />
+                    <span className="text-sm hidden sm:inline">
+                      {currentLanguage.flag}
+                    </span>
+                  </div>
+                </button>
+
+                {isLanguageMenuOpen && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1 z-50 max-h-64 overflow-y-auto">
+                    {languages.map((language) => (
+                      <button
+                        key={language.code}
+                        onClick={() => handleLanguageChange(language.code)}
+                        className={`w-full flex items-center gap-3 px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors ${
+                          getLanguage() === language.code
+                            ? "text-primary bg-primary/10"
+                            : "text-gray-700 dark:text-gray-300"
+                        }`}
+                      >
+                        <span className="text-lg">{language.flag}</span>
+                        <span className="truncate">{language.name}</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
               {/* Theme Toggle */}
               <div className="relative" ref={themeMenuRef}>
                 <button
                   onClick={() => setIsThemeMenuOpen(!isThemeMenuOpen)}
                   className="p-2 text-gray-600 dark:text-gray-300 hover:text-primary transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
-                  title="Toggle theme"
+                  title={t("header.toggleTheme")}
                 >
                   {getThemeIcon()}
                 </button>
@@ -162,7 +218,7 @@ export function Header() {
                       }`}
                     >
                       <SunIcon className="h-4 w-4" />
-                      Light
+                      {t("settings.light")}
                     </button>
                     <button
                       onClick={() => handleThemeChange("dark")}
@@ -173,7 +229,7 @@ export function Header() {
                       }`}
                     >
                       <MoonIcon className="h-4 w-4" />
-                      Dark
+                      {t("settings.dark")}
                     </button>
                     <button
                       onClick={() => handleThemeChange("system")}
@@ -184,7 +240,7 @@ export function Header() {
                       }`}
                     >
                       <ComputerDesktopIcon className="h-4 w-4" />
-                      System
+                      {t("settings.system")}
                     </button>
                   </div>
                 )}
@@ -205,7 +261,9 @@ export function Header() {
                     >
                       <path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z" />
                     </svg>
-                    <span className="hidden sm:inline">New Post</span>
+                    <span className="hidden sm:inline">
+                      {t("header.newPost")}
+                    </span>
                   </Link>
 
                   {/* Notifications */}
@@ -259,7 +317,7 @@ export function Header() {
                           onClick={() => setIsUserMenuOpen(false)}
                         >
                           <UserCircleIcon className="h-4 w-4" />
-                          Profile
+                          {t("header.profile")}
                         </Link>
                         <Link
                           href="/settings"
@@ -267,7 +325,7 @@ export function Header() {
                           onClick={() => setIsUserMenuOpen(false)}
                         >
                           <Cog6ToothIcon className="h-4 w-4" />
-                          Settings
+                          {t("nav.settings")}
                         </Link>
                         {(session.user as { role?: string }).role ===
                           "ADMIN" && (
@@ -283,7 +341,7 @@ export function Header() {
                             >
                               <path d="M12 2L2 7v10c0 5.55 3.84 9.74 9 11 5.16-1.26 9-5.45 9-11V7l-10-5z" />
                             </svg>
-                            Admin Dashboard
+                            {t("header.adminDashboard")}
                           </Link>
                         )}
                         <button
@@ -291,7 +349,7 @@ export function Header() {
                           className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
                         >
                           <ArrowRightOnRectangleIcon className="h-4 w-4" />
-                          Sign Out
+                          {t("nav.signOut")}
                         </button>
                       </div>
                     )}
@@ -303,13 +361,13 @@ export function Header() {
                     href="/auth/signin"
                     className="text-gray-700 dark:text-gray-300 hover:text-primary transition-colors"
                   >
-                    Sign In
+                    {t("nav.signIn")}
                   </Link>
                   <Link
                     href="/auth/signup"
                     className="bg-primary text-white rounded-lg px-4 py-2 text-sm font-medium hover:bg-primary/90 transition-colors"
                   >
-                    Sign Up
+                    {t("nav.signUp")}
                   </Link>
                 </div>
               )}
