@@ -21,6 +21,14 @@ interface CommentsProps {
   initialComments: Comment[];
 }
 
+type SessionUser = {
+  id: string;
+  name?: string | null;
+  email?: string | null;
+  image?: string | null;
+  role?: string;
+};
+
 export function Comments({ postId, initialComments }: CommentsProps) {
   const { data: session } = useSession();
   const [comments, setComments] = useState<Comment[]>(initialComments);
@@ -158,7 +166,7 @@ export function Comments({ postId, initialComments }: CommentsProps) {
                     {comment.content}
                   </p>
                 </div>
-                {(session?.user as any)?.id === comment.author.id && (
+                {(session?.user as SessionUser)?.id === comment.author.id && (
                   <button
                     onClick={() => handleDeleteComment(comment.id)}
                     className="text-gray-400 hover:text-red-500 transition-colors p-1"
