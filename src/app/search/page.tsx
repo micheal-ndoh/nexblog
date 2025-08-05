@@ -5,11 +5,34 @@ import { useSearchParams } from "next/navigation";
 import { Header } from "@/components/header";
 import { PostFeedSkeleton } from "@/components/post-feed-skeleton";
 
+// Define the post type structure
+interface Post {
+  id: string;
+  title: string;
+  content: string;
+  createdAt: string;
+  author: {
+    id: string;
+    name: string;
+    image: string | null;
+  };
+  tags: Array<{
+    tag: {
+      name: string;
+      color: string;
+    };
+  }>;
+  _count: {
+    likes: number;
+    comments: number;
+  };
+}
+
 // Component that uses useSearchParams - needs to be wrapped in Suspense
 function SearchResults() {
   const searchParams = useSearchParams();
   const query = searchParams.get("q") || "";
-  const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
 
   const fetchSearchResults = useCallback(async () => {
@@ -52,7 +75,7 @@ function SearchResults() {
         <PostFeedSkeleton />
       ) : posts.length > 0 ? (
         <div className="space-y-6">
-          {posts.map((post: Record<string, unknown>) => (
+          {posts.map((post: Post) => (
             <article
               key={post.id}
               className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden"
@@ -92,7 +115,7 @@ function SearchResults() {
                 {/* Tags */}
                 {post.tags.length > 0 && (
                   <div className="flex flex-wrap gap-2 mb-4">
-                    {post.tags.map((tag: Record<string, unknown>) => (
+                    {post.tags.map((tag) => (
                       <span
                         key={tag.tag.name}
                         className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium"
