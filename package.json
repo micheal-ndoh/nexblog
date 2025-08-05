@@ -11,6 +11,8 @@
     "db:push": "prisma db push",
     "db:studio": "prisma studio",
     "db:seed": "tsx prisma/seed.ts",
+    "db:seed:prod": "tsx prisma/seed-production.ts",
+    "db:manage": "node scripts/seed-utils.js",
     "tolgee:export": "node scripts/tolgee-export.js export",
     "tolgee:import": "node scripts/tolgee-export.js import",
     "tolgee:languages": "node scripts/tolgee-export.js languages"
