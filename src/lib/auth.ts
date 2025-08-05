@@ -6,6 +6,7 @@ import { db } from "./db"
 import bcrypt from "bcryptjs"
 
 export const authOptions: NextAuthOptions = {
+    debug: process.env.NODE_ENV === "development",
     adapter: PrismaAdapter(db),
     providers: [
         GoogleProvider({
@@ -53,26 +54,27 @@ export const authOptions: NextAuthOptions = {
         })
     ],
     session: {
-        strategy: "jwt"
+        strategy: "database"
     },
     callbacks: {
-        async jwt({ token, user }) {
+        async session({ session, user }) {
             if (user) {
-                token.role = user.role
-                token.id = user.id
-            }
-            return token
-        },
-        async session({ session, token }) {
-            if (token) {
-                session.user.id = token.id as string
-                session.user.role = token.role as string
+                session.user.id = user.id
+                session.user.role = user.role as string
             }
             return session
+        },
+        async redirect({ url, baseUrl }) {
+            // Allows relative callback URLs
+            if (url.startsWith("/")) return `${baseUrl}${url}`
+            // Allows callback URLs on the same origin
+            else if (new URL(url).origin === baseUrl) return url
+            return baseUrl
         }
     },
     pages: {
         signIn: '/auth/signin',
         signUp: '/auth/signup',
-    }
+    },
+    secret: process.env.NEXTAUTH_SECRET
 } 

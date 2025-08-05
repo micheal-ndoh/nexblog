@@ -82,9 +82,21 @@ export default function SignInPage() {
     setLoading(true);
     setError("");
     try {
-      await signIn("google", { callbackUrl: "/" });
-    } catch {
+      const result = await signIn("google", { 
+        callbackUrl: "/",
+        redirect: false 
+      });
+      
+      if (result?.error) {
+        console.error("Google sign-in error:", result.error);
+        setError(t("signin.error.googleGeneric"));
+      } else if (result?.url) {
+        window.location.href = result.url;
+      }
+    } catch (error) {
+      console.error("Google sign-in exception:", error);
       setError(t("signin.error.googleGeneric"));
+    } finally {
       setLoading(false);
     }
   };
