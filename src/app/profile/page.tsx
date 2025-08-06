@@ -340,7 +340,7 @@ export default function ProfilePage() {
             </div>
 
             {/* Account Statistics */}
-            <div className="mt-8 bg-custom-dark rounded-2xl shadow-lg border border-gray-700 p-8">
+            <div className="mt-8 glassmorphism-card rounded-2xl p-8">
               <h3 className="text-xl font-semibold text-white mb-6">
                 Account Statistics
               </h3>
