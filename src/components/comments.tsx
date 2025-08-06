@@ -98,7 +98,7 @@ export function Comments({ postId, initialComments }: CommentsProps) {
     <div className="space-y-6">
       {/* Comment Form */}
       {session?.user && (
-        <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4">
+        <div className="glassmorphism-card rounded-lg p-4">
           <form onSubmit={handleSubmitComment} className="space-y-3">
             <div className="relative">
               <textarea
@@ -176,10 +176,7 @@ export function Comments({ postId, initialComments }: CommentsProps) {
           </p>
         ) : (
           comments.map((comment) => (
-            <div
-              key={comment.id}
-              className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4"
-            >
+            <div key={comment.id} className="glassmorphism-card rounded-lg p-4">
               <div className="flex items-start gap-3">
                 <Link
                   href={`/users/${comment.author.id}`}

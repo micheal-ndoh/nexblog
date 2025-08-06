@@ -7,7 +7,6 @@ import { Layout } from "@/components/layout";
 import { FileUpload } from "@/components/file-upload";
 import {
   UserIcon,
-  EnvelopeIcon,
   CalendarIcon,
   CameraIcon,
   PencilIcon,
@@ -161,7 +160,7 @@ export default function ProfilePage() {
                   <div className="relative inline-block">
                     <img
                       src={profile.image}
-                      alt="Profile picture"
+                      alt={profile.name}
                       className="w-32 h-32 rounded-full object-cover border-4 border-gray-700"
                     />
                     <button
@@ -227,11 +226,15 @@ export default function ProfilePage() {
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                    <label
+                      htmlFor="profile-name"
+                      className="block text-sm font-medium text-gray-300 mb-2"
+                    >
                       Full Name
                     </label>
                     <input
                       type="text"
+                      id="profile-name"
                       value={profile.name}
                       onChange={(e) => handleChange("name", e.target.value)}
                       disabled={!isEditing}
@@ -241,11 +244,15 @@ export default function ProfilePage() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                    <label
+                      htmlFor="profile-email"
+                      className="block text-sm font-medium text-gray-300 mb-2"
+                    >
                       Email
                     </label>
                     <input
                       type="email"
+                      id="profile-email"
                       value={profile.email}
                       onChange={(e) => handleChange("email", e.target.value)}
                       disabled={!isEditing}
@@ -256,10 +263,14 @@ export default function ProfilePage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                  <label
+                    htmlFor="profile-bio"
+                    className="block text-sm font-medium text-gray-300 mb-2"
+                  >
                     Bio
                   </label>
                   <textarea
+                    id="profile-bio"
                     value={profile.bio}
                     onChange={(e) => handleChange("bio", e.target.value)}
                     disabled={!isEditing}
@@ -271,11 +282,15 @@ export default function ProfilePage() {
 
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                    <label
+                      htmlFor="profile-location"
+                      className="block text-sm font-medium text-gray-300 mb-2"
+                    >
                       Location
                     </label>
                     <input
                       type="text"
+                      id="profile-location"
                       value={profile.location}
                       onChange={(e) => handleChange("location", e.target.value)}
                       disabled={!isEditing}
@@ -285,11 +300,15 @@ export default function ProfilePage() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                    <label
+                      htmlFor="profile-website"
+                      className="block text-sm font-medium text-gray-300 mb-2"
+                    >
                       Website
                     </label>
                     <input
                       type="url"
+                      id="profile-website"
                       value={profile.website}
                       onChange={(e) => handleChange("website", e.target.value)}
                       disabled={!isEditing}

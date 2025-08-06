@@ -1,10 +1,10 @@
-
 import { notFound } from "next/navigation";
 import { Header } from "@/components/header";
 import { Comments } from "@/components/comments";
 import { db } from "@/lib/db";
 import { formatDistanceToNow } from "date-fns";
 import Link from "next/link";
+import Image from "next/image";
 
 interface PostPageProps {
   params: Promise<{ id: string }>;
@@ -114,11 +114,13 @@ export default async function PostPage({ params }: PostPageProps) {
             </h1>
 
             {post.imageUrl && (
-              <div className="mb-4">
-                <img
+              <div className="relative w-full aspect-[16/9] rounded-xl overflow-hidden mb-4">
+                <Image
                   src={post.imageUrl}
-                  alt="Featured image"
-                  className="w-full h-64 object-cover rounded-lg"
+                  alt={post.title}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 />
               </div>
             )}

@@ -24,23 +24,6 @@ export function Sidebar() {
   return (
     <div className="fixed left-0 top-0 h-full w-64 bg-black border-r border-gray-800 z-30">
       <div className="flex flex-col h-full">
-        {/* Logo */}
-        <div className="flex items-center gap-3 p-6 border-b border-gray-800">
-          <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center shadow-lg">
-            <svg
-              fill="currentColor"
-              viewBox="0 0 48 48"
-              className="w-6 h-6 text-white"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path d="M44 4H30.6666V17.3334H17.3334V30.6666H4V44H44V4Z" />
-            </svg>
-          </div>
-          <h1 className="text-xl font-bold tracking-tight text-white">
-            NexBlog
-          </h1>
-        </div>
-
         {/* Navigation */}
         <nav className="flex-1 px-4 py-6">
           <ul className="space-y-3">
@@ -63,9 +46,9 @@ export function Sidebar() {
                           : "bg-gray-700/50 hover:bg-gray-600/50"
                       }`}
                     >
-                      <item.icon className="w-6 h-6" />
+                      <item.icon className="w-7 h-7" />
                     </div>
-                    <span className="font-medium">{item.name}</span>
+                    <span className="font-semibold text-lg">{item.name}</span>
                   </Link>
                 </li>
               );

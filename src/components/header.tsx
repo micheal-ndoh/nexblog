@@ -11,7 +11,7 @@ import {
   Bars3Icon,
   UserCircleIcon,
   Cog6ToothIcon,
-  ArrowRightOnRectangleIcon,
+  ArrowLeftOnRectangleIcon,
   SunIcon,
   MoonIcon,
   ComputerDesktopIcon,
@@ -28,7 +28,7 @@ export function Header() {
   const router = useRouter();
   const { unreadCount } = useNotificationStore();
   const { theme, setTheme } = useThemeStore();
-  const { t, changeLanguage, getLanguage } = useT();
+  const { changeLanguage, getLanguage } = useT();
   const [searchQuery, setSearchQuery] = useState("");
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isThemeMenuOpen, setIsThemeMenuOpen] = useState(false);
@@ -36,6 +36,7 @@ export function Header() {
   const [isSignoutModalOpen, setIsSignoutModalOpen] = useState(false);
   const themeMenuRef = useRef<HTMLDivElement>(null);
   const languageMenuRef = useRef<HTMLDivElement>(null);
+  const userMenuRef = useRef<HTMLDivElement>(null);
 
   // Close menus when clicking outside
   useEffect(() => {
@@ -59,6 +60,25 @@ export function Header() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        userMenuRef.current &&
+        !userMenuRef.current.contains(event.target as Node)
+      ) {
+        setIsUserMenuOpen(false);
+      }
+    }
+    if (isUserMenuOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isUserMenuOpen]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -107,19 +127,21 @@ export function Header() {
           <div className="flex items-center gap-6">
             {/* NexBlog Logo */}
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center shadow-lg">
-                <svg
-                  fill="currentColor"
-                  viewBox="0 0 48 48"
-                  className="w-6 h-6 text-white"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path d="M44 4H30.6666V17.3334H17.3334V30.6666H4V44H44V4Z" />
-                </svg>
-              </div>
-              <h1 className="text-xl font-bold tracking-tight text-white">
-                NexBlog
-              </h1>
+              <Link href="/" className="flex items-center gap-3 group">
+                <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
+                  <svg
+                    fill="currentColor"
+                    viewBox="0 0 48 48"
+                    className="w-6 h-6 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path d="M44 4H30.6666V17.3334H17.3334V30.6666H4V44H44V4Z" />
+                  </svg>
+                </div>
+                <h1 className="text-xl font-bold tracking-tight text-white group-hover:text-orange-400 transition-colors">
+                  NexBlog
+                </h1>
+              </Link>
             </div>
 
             {/* Search */}
@@ -147,7 +169,7 @@ export function Header() {
                 title="Change language"
               >
                 <div className="flex items-center gap-2">
-                  <GlobeAltIcon className="h-6 w-6" />
+                  <GlobeAltIcon className="h-7 w-7" />
                   <span className="text-sm hidden sm:inline font-medium">
                     {currentLanguage.flag}
                   </span>
@@ -167,7 +189,9 @@ export function Header() {
                       }`}
                     >
                       <span className="text-lg">{language.flag}</span>
-                      <span className="truncate font-medium">{language.name}</span>
+                      <span className="truncate font-medium">
+                        {language.name}
+                      </span>
                     </button>
                   ))}
                 </div>
@@ -240,7 +264,7 @@ export function Header() {
             </Link>
 
             {/* User Menu */}
-            <div className="relative">
+            <div className="relative" ref={userMenuRef}>
               <button
                 onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
                 className="flex items-center gap-3 p-2 rounded-xl hover:bg-gray-800/50 backdrop-blur-sm transition-colors"
@@ -257,38 +281,39 @@ export function Header() {
                   <UserCircleIcon className="w-12 h-12 text-gray-400" />
                 )}
               </button>
-
               {isUserMenuOpen && (
-                <div className="absolute right-0 mt-2 w-56 bg-gray-800/90 backdrop-blur-xl rounded-xl shadow-lg border border-gray-700/50 py-2 z-50">
-                  <div className="px-4 py-3 border-b border-gray-700/50">
-                    <p className="text-sm font-medium text-white">
+                <div className="absolute right-0 mt-2 w-64 bg-gray-800/90 backdrop-blur-xl rounded-xl shadow-lg border border-gray-700/50 py-2 z-50 animate-fade-in-up">
+                  <div className="px-4 py-4 border-b border-gray-700/50">
+                    <p className="text-lg font-bold text-white mb-1">
                       {session?.user?.name}
                     </p>
-                    <p className="text-sm text-gray-400">{session?.user?.email}</p>
+                    <p className="text-base text-gray-300 font-medium">
+                      {session?.user?.email}
+                    </p>
                   </div>
-                  <div className="py-1">
+                  <div className="py-2">
                     <Link
                       href="/profile"
-                      className="flex items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:bg-gray-700/50 transition-colors"
+                      className="flex items-center gap-4 px-4 py-4 text-lg text-white font-semibold hover:bg-gray-700/50 transition-colors"
                       onClick={() => setIsUserMenuOpen(false)}
                     >
-                      <UserCircleIcon className="h-5 w-5" />
-                      <span className="font-medium">Profile</span>
+                      <UserCircleIcon className="h-7 w-7" />
+                      Profile
                     </Link>
                     <Link
                       href="/settings"
-                      className="flex items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:bg-gray-700/50 transition-colors"
+                      className="flex items-center gap-4 px-4 py-4 text-lg text-white font-semibold hover:bg-gray-700/50 transition-colors"
                       onClick={() => setIsUserMenuOpen(false)}
                     >
-                      <Cog6ToothIcon className="h-5 w-5" />
-                      <span className="font-medium">Settings</span>
+                      <Cog6ToothIcon className="h-7 w-7" />
+                      Settings
                     </Link>
                     <button
                       onClick={handleSignOut}
-                      className="flex items-center gap-3 w-full px-4 py-3 text-sm text-gray-300 hover:bg-gray-700/50 transition-colors"
+                      className="flex items-center gap-4 w-full px-4 py-4 text-lg text-white font-semibold hover:bg-gray-700/50 transition-colors"
                     >
-                      <ArrowRightOnRectangleIcon className="h-5 w-5" />
-                      <span className="font-medium">Sign Out</span>
+                      <ArrowLeftOnRectangleIcon className="h-7 w-7" />
+                      Sign Out
                     </button>
                   </div>
                 </div>
@@ -304,9 +329,9 @@ export function Header() {
       </div>
 
       {/* Signout Modal */}
-      <SignoutModal 
-        isOpen={isSignoutModalOpen} 
-        onClose={() => setIsSignoutModalOpen(false)} 
+      <SignoutModal
+        isOpen={isSignoutModalOpen}
+        onClose={() => setIsSignoutModalOpen(false)}
       />
     </header>
   );

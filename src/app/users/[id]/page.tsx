@@ -4,6 +4,7 @@ import { formatDistanceToNow } from "date-fns";
 import Link from "next/link";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
+import Image from "next/image";
 
 interface UserProfilePageProps {
   params: Promise<{ id: string }>;
@@ -176,11 +177,15 @@ export default async function UserProfilePage({
                   </h3>
 
                   {post.imageUrl && (
-                    <img
-                      src={post.imageUrl}
-                      alt={post.title}
-                      className="w-full h-48 object-cover rounded-lg mb-4"
-                    />
+                    <div className="relative w-full aspect-[16/9] rounded-xl overflow-hidden mb-4">
+                      <Image
+                        src={post.imageUrl}
+                        alt={post.title}
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      />
+                    </div>
                   )}
 
                   <p className="text-base-content/80 mb-4 line-clamp-3">

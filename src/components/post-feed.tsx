@@ -14,6 +14,7 @@ import { HeartIcon as HeartIconSolid } from "@heroicons/react/24/solid";
 import { BookmarkIcon as BookmarkIconSolid } from "@heroicons/react/24/solid";
 import { formatDate, truncateText } from "@/lib/utils";
 import { useSession } from "next-auth/react";
+import { PostModal } from "@/components/post-modal";
 
 interface Post {
   id: string;
@@ -63,6 +64,9 @@ export function PostFeed() {
   const [savedPosts, setSavedPosts] = useState<Set<string>>(new Set());
   const [visiblePosts, setVisiblePosts] = useState(5);
   const [loadingMore, setLoadingMore] = useState(false);
+  const [modalPost, setModalPost] = useState<Post | null>(null);
+  const [modalComments, setModalComments] = useState<any[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const fetchPosts = useCallback(async () => {
     try {
@@ -173,6 +177,15 @@ export function PostFeed() {
     }, 500);
   };
 
+  const openPostModal = async (post: Post) => {
+    // Fetch comments for the post
+    const res = await fetch(`/api/posts/${post.id}/comments`);
+    const data = await res.json();
+    setModalPost(post);
+    setModalComments(data.comments || []);
+    setIsModalOpen(true);
+  };
+
   const getTagColor = (index: number) => {
     return tagColors[index % tagColors.length];
   };
@@ -208,7 +221,14 @@ export function PostFeed() {
         return (
           <article
             key={post.id}
-            className="post-container p-6 animate-fade-in-up"
+            className="post-container p-6 animate-fade-in-up cursor-pointer"
+            tabIndex={0}
+            role="button"
+            aria-label={`Open post: ${post.title}`}
+            onClick={() => openPostModal(post)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") openPostModal(post);
+            }}
           >
             {/* Author Info */}
             <div className="flex items-center gap-4 mb-6">
@@ -273,7 +293,7 @@ export function PostFeed() {
                 {post.tags.map((tag, index) => (
                   <span
                     key={tag.tag.name}
-                    className={`inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium ${getTagColor(
+                    className={`inline-flex items-center px-3 py-1.5 rounded-full text-base font-bold ${getTagColor(
                       index
                     )} shadow-lg`}
                   >
@@ -295,9 +315,9 @@ export function PostFeed() {
                   }`}
                 >
                   {isLiked ? (
-                    <HeartIconSolid className="h-6 w-6" />
+                    <HeartIconSolid className="h-7 w-7" />
                   ) : (
-                    <HeartIcon className="h-6 w-6" />
+                    <HeartIcon className="h-7 w-7" />
                   )}
                   <span className="text-sm font-medium text-white">
                     {post._count.likes}
@@ -308,7 +328,7 @@ export function PostFeed() {
                   href={`/posts/${post.id}#comments`}
                   className="flex items-center gap-2 text-gray-400 hover:text-orange-500 transition-colors"
                 >
-                  <ChatBubbleLeftIcon className="h-6 w-6" />
+                  <ChatBubbleLeftIcon className="h-7 w-7" />
                   <span className="text-sm font-medium text-white">
                     {post._count.comments}
                   </span>
@@ -323,9 +343,9 @@ export function PostFeed() {
                   }`}
                 >
                   {isSaved ? (
-                    <BookmarkIconSolid className="h-6 w-6" />
+                    <BookmarkIconSolid className="h-7 w-7" />
                   ) : (
-                    <BookmarkIcon className="h-6 w-6" />
+                    <BookmarkIcon className="h-7 w-7" />
                   )}
                   <span className="text-sm font-medium text-white">
                     {isSaved ? "Saved" : "Save"}
@@ -337,7 +357,7 @@ export function PostFeed() {
                 href={`/posts/${post.id}`}
                 className="flex items-center gap-2 text-gray-400 hover:text-orange-500 transition-colors"
               >
-                <EyeIcon className="h-5 w-5" />
+                <EyeIcon className="h-6 w-6" />
                 <span className="text-sm font-medium text-white">View</span>
               </Link>
             </div>
@@ -390,6 +410,12 @@ export function PostFeed() {
           </p>
         </div>
       )}
+      <PostModal
+        post={modalPost}
+        comments={modalComments}
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </div>
   );
 }

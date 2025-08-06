@@ -183,13 +183,13 @@ export default function SettingsPage() {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label
-                htmlFor="name"
-                className="block text-sm font-medium text-gray-300 mb-2"
+                htmlFor="profile-name"
+                className="block text-sm font-medium text-white mb-2"
               >
-                Display Name
+                Name
               </label>
               <input
-                id="name"
+                id="profile-name"
                 type="text"
                 value={settings.name}
                 onChange={(e) => handleChange("name", e.target.value)}
@@ -224,7 +224,7 @@ export default function SettingsPage() {
                   <div className="flex items-center gap-4">
                     <img
                       src={settings.image}
-                      alt="Profile picture"
+                      alt={settings.name}
                       className="w-20 h-20 rounded-full object-cover border-2 border-gray-600"
                     />
                     <div className="flex gap-2">

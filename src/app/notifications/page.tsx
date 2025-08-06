@@ -6,6 +6,13 @@ import { Header } from "@/components/header";
 import { formatDate } from "@/lib/utils";
 import { useNotificationStore } from "@/lib/store";
 import Link from "next/link";
+import {
+  Cog6ToothIcon,
+  TrashIcon,
+  ChatBubbleLeftRightIcon,
+  HeartIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
 
 interface Notification {
   id: string;
@@ -26,6 +33,8 @@ export default function NotificationsPage() {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [loading, setLoading] = useState(true);
   const { markAsRead, markAllAsRead } = useNotificationStore();
+  const [showSettings, setShowSettings] = useState(false);
+  const [sortType, setSortType] = useState<string | null>(null);
 
   useEffect(() => {
     if (session?.user) {
@@ -79,6 +88,28 @@ export default function NotificationsPage() {
     }
   };
 
+  const handleDeleteAll = async () => {
+    // TODO: Implement delete all notifications API call
+    setNotifications([]);
+    setShowSettings(false);
+  };
+
+  const handleSort = (type: string) => {
+    setSortType(type);
+    setShowSettings(false);
+    if (type === "likes") {
+      setNotifications((prev) =>
+        [...prev].sort((a, b) => (b.type === "LIKE" ? 1 : -1))
+      );
+    } else if (type === "comments") {
+      setNotifications((prev) =>
+        [...prev].sort((a, b) => (b.type === "COMMENT" ? 1 : -1))
+      );
+    } else {
+      fetchNotifications();
+    }
+  };
+
   if (!session?.user) {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -102,16 +133,51 @@ export default function NotificationsPage() {
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
             Notifications
           </h1>
-          <div className="flex gap-2">
+          <div className="relative flex gap-2">
             <button
               onClick={handleMarkAllAsRead}
               className="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg px-4 py-2 text-sm font-medium hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
             >
               Mark all as read
             </button>
-            <button className="bg-blue-600 hover:bg-blue-700 text-white rounded-lg px-4 py-2 text-sm font-medium transition-colors">
-              Settings
+            <button
+              onClick={() => setShowSettings((v) => !v)}
+              className="bg-blue-600 hover:bg-blue-700 text-white rounded-lg px-4 py-2 text-sm font-medium transition-colors"
+            >
+              <Cog6ToothIcon className="w-4 h-4 mr-1" /> Settings
             </button>
+            {showSettings && (
+              <div className="absolute right-0 top-12 z-50 glassmorphism-card w-56 rounded-xl shadow-xl p-4 animate-fade-in-up">
+                <button
+                  onClick={handleDeleteAll}
+                  className="flex items-center gap-3 w-full px-4 py-3 text-base text-red-400 hover:bg-red-900/20 rounded-xl transition-colors mb-2"
+                >
+                  <TrashIcon className="w-6 h-6" />
+                  Delete All
+                </button>
+                <button
+                  onClick={() => handleSort("likes")}
+                  className="flex items-center gap-3 w-full px-4 py-3 text-base text-white hover:bg-gray-800/50 rounded-xl transition-colors mb-2"
+                >
+                  <HeartIcon className="w-6 h-6 text-pink-400" />
+                  Sort by Likes
+                </button>
+                <button
+                  onClick={() => handleSort("comments")}
+                  className="flex items-center gap-3 w-full px-4 py-3 text-base text-white hover:bg-gray-800/50 rounded-xl transition-colors mb-2"
+                >
+                  <ChatBubbleLeftRightIcon className="w-6 h-6 text-blue-400" />
+                  Sort by Comments
+                </button>
+                <button
+                  onClick={() => setShowSettings(false)}
+                  className="flex items-center gap-3 w-full px-4 py-3 text-base text-gray-400 hover:bg-gray-800/50 rounded-xl transition-colors"
+                >
+                  <XMarkIcon className="w-6 h-6" />
+                  Close
+                </button>
+              </div>
+            )}
           </div>
         </div>
 

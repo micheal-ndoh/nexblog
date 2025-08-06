@@ -42,13 +42,15 @@ export default function HomePage() {
             </div>
 
             <div className="text-left">
-              <p className="text-orange-400 text-sm mb-2 font-medium">Featured Post</p>
+              <p className="text-orange-400 text-sm mb-2 font-medium">
+                Featured Post
+              </p>
               <h3 className="text-3xl font-semibold mb-4 text-white">
                 10 Tips for Successful Blogging
               </h3>
               <p className="text-gray-300 mb-6 text-lg">
-                Learn how to create engaging blog content that converts and drives
-                profits.
+                Learn how to create engaging blog content that converts and
+                drives profits.
               </p>
               <Link
                 href="/posts/new"
@@ -265,7 +267,7 @@ export default function HomePage() {
         <div className="flex justify-between items-center mb-8">
           <h2 className="text-4xl font-bold text-white">Latest Posts</h2>
         </div>
-        
+
         <Suspense fallback={<PostFeedSkeleton />}>
           <PostFeed />
         </Suspense>
