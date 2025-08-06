@@ -51,9 +51,7 @@ export default function RootLayout({
           <div className="min-h-screen dark-theme">
             <Sidebar />
             <Header />
-            <main className="ml-64 pt-16">
-              {children}
-            </main>
+            <main className="ml-64 pt-16">{children}</main>
           </div>
         </Providers>
       </body>

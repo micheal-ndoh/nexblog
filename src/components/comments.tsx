@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useSession } from "next-auth/react";
 import { formatDistanceToNow } from "date-fns";
 import Link from "next/link";
@@ -40,6 +40,18 @@ export function Comments({ postId, initialComments }: CommentsProps) {
   const [error, setError] = useState("");
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const [emojiTheme, setEmojiTheme] = useState<"light" | "dark">("light");
+
+  useEffect(() => {
+    if (
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches
+    ) {
+      setEmojiTheme("dark");
+    } else {
+      setEmojiTheme("light");
+    }
+  }, []);
 
   const handleSubmitComment = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -142,12 +154,7 @@ export function Comments({ postId, initialComments }: CommentsProps) {
                       }
                       setShowEmojiPicker(false);
                     }}
-                    theme={
-                      typeof window !== "undefined" &&
-                      window.matchMedia("(prefers-color-scheme: dark)").matches
-                        ? "dark"
-                        : "light"
-                    }
+                    theme={emojiTheme}
                   />
                 </div>
               )}

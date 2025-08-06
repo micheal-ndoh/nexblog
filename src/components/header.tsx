@@ -264,61 +264,78 @@ export function Header() {
             </Link>
 
             {/* User Menu */}
-            <div className="relative" ref={userMenuRef}>
-              <button
-                onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                className="flex items-center gap-3 p-2 rounded-xl hover:bg-gray-800/50 backdrop-blur-sm transition-colors"
-              >
-                {session?.user?.image ? (
-                  <Image
-                    src={session.user.image}
-                    alt="Profile"
-                    width={40}
-                    height={40}
-                    className="w-10 h-10 rounded-full border-2 border-gray-700"
-                  />
-                ) : (
-                  <UserCircleIcon className="w-12 h-12 text-gray-400" />
+            {session?.user ? (
+              <div className="relative" ref={userMenuRef}>
+                <button
+                  onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                  className="flex items-center gap-3 p-2 rounded-xl hover:bg-gray-800/50 backdrop-blur-sm transition-colors"
+                >
+                  {session.user.image ? (
+                    <Image
+                      src={session.user.image}
+                      alt="Profile"
+                      width={40}
+                      height={40}
+                      className="w-10 h-10 rounded-full border-2 border-gray-700"
+                    />
+                  ) : (
+                    <UserCircleIcon className="w-12 h-12 text-gray-400" />
+                  )}
+                </button>
+                {isUserMenuOpen && (
+                  <div className="absolute right-0 mt-2 w-64 bg-gray-800/90 backdrop-blur-xl rounded-xl shadow-lg border border-gray-700/50 py-2 z-50 animate-fade-in-up">
+                    <div className="px-4 py-4 border-b border-gray-700/50">
+                      <p className="text-lg font-bold text-white mb-1">
+                        {session?.user?.name}
+                      </p>
+                      <p className="text-base text-gray-300 font-medium">
+                        {session?.user?.email}
+                      </p>
+                    </div>
+                    <div className="py-2">
+                      <Link
+                        href="/profile"
+                        className="flex items-center gap-4 px-4 py-4 text-lg text-white font-semibold hover:bg-gray-700/50 transition-colors"
+                        onClick={() => setIsUserMenuOpen(false)}
+                      >
+                        <UserCircleIcon className="h-7 w-7" />
+                        Profile
+                      </Link>
+                      <Link
+                        href="/settings"
+                        className="flex items-center gap-4 px-4 py-4 text-lg text-white font-semibold hover:bg-gray-700/50 transition-colors"
+                        onClick={() => setIsUserMenuOpen(false)}
+                      >
+                        <Cog6ToothIcon className="h-7 w-7" />
+                        Settings
+                      </Link>
+                      <button
+                        onClick={handleSignOut}
+                        className="flex items-center gap-4 w-full px-4 py-4 text-lg text-white font-semibold hover:bg-gray-700/50 transition-colors"
+                      >
+                        <ArrowLeftOnRectangleIcon className="h-7 w-7" />
+                        Sign Out
+                      </button>
+                    </div>
+                  </div>
                 )}
-              </button>
-              {isUserMenuOpen && (
-                <div className="absolute right-0 mt-2 w-64 bg-gray-800/90 backdrop-blur-xl rounded-xl shadow-lg border border-gray-700/50 py-2 z-50 animate-fade-in-up">
-                  <div className="px-4 py-4 border-b border-gray-700/50">
-                    <p className="text-lg font-bold text-white mb-1">
-                      {session?.user?.name}
-                    </p>
-                    <p className="text-base text-gray-300 font-medium">
-                      {session?.user?.email}
-                    </p>
-                  </div>
-                  <div className="py-2">
-                    <Link
-                      href="/profile"
-                      className="flex items-center gap-4 px-4 py-4 text-lg text-white font-semibold hover:bg-gray-700/50 transition-colors"
-                      onClick={() => setIsUserMenuOpen(false)}
-                    >
-                      <UserCircleIcon className="h-7 w-7" />
-                      Profile
-                    </Link>
-                    <Link
-                      href="/settings"
-                      className="flex items-center gap-4 px-4 py-4 text-lg text-white font-semibold hover:bg-gray-700/50 transition-colors"
-                      onClick={() => setIsUserMenuOpen(false)}
-                    >
-                      <Cog6ToothIcon className="h-7 w-7" />
-                      Settings
-                    </Link>
-                    <button
-                      onClick={handleSignOut}
-                      className="flex items-center gap-4 w-full px-4 py-4 text-lg text-white font-semibold hover:bg-gray-700/50 transition-colors"
-                    >
-                      <ArrowLeftOnRectangleIcon className="h-7 w-7" />
-                      Sign Out
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
+              </div>
+            ) : (
+              <div className="flex items-center gap-3">
+                <Link
+                  href="/auth/signin"
+                  className="btn-primary px-6 py-2 rounded-xl font-semibold flex items-center hover:bg-orange-600 transition-colors"
+                >
+                  Sign In
+                </Link>
+                <Link
+                  href="/auth/signup"
+                  className="glassmorphism-dark px-6 py-2 rounded-xl font-semibold flex items-center text-white hover:bg-gray-800/50 transition-all duration-200"
+                >
+                  Sign Up
+                </Link>
+              </div>
+            )}
 
             {/* Mobile menu button */}
             <button className="md:hidden p-3 text-gray-300 hover:text-orange-500 transition-colors rounded-xl hover:bg-gray-800/50 backdrop-blur-sm">

@@ -2,7 +2,6 @@
 
 import { useEffect, useState, useCallback, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-import { Header } from "@/components/header";
 import { PostFeedSkeleton } from "@/components/post-feed-skeleton";
 
 // Define the post type structure
@@ -209,7 +208,6 @@ function SearchResultsFallback() {
 export default function SearchPage() {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <Header />
       <Suspense fallback={<SearchResultsFallback />}>
         <SearchResults />
       </Suspense>
