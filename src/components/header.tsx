@@ -16,6 +16,7 @@ import {
   MoonIcon,
   ComputerDesktopIcon,
   GlobeAltIcon,
+  PlusIcon,
 } from "@heroicons/react/24/outline";
 // Removed unused import
 import { useNotificationStore } from "@/lib/store";
@@ -157,6 +158,15 @@ export function Header() {
                 />
               </div>
             </form>
+            <button
+              type="button"
+              onClick={() => router.push("/posts/new")}
+              className="ml-2 p-2 rounded-xl bg-orange-500 hover:bg-orange-600 text-white flex items-center justify-center transition-colors"
+              title="Add new post"
+              aria-label="Add new post"
+            >
+              <PlusIcon className="h-6 w-6" />
+            </button>
           </div>
 
           {/* Actions */}

@@ -3,8 +3,10 @@ import { Layout } from "@/components/layout";
 export default function AboutPage() {
   return (
     <Layout>
-      <div className="max-w-4xl mx-auto px-4 py-8">
-        <h1 className="text-4xl font-bold text-white mb-8">About Us</h1>
+      <div className="max-w-4xl mx-auto px-4 py-8 text-left">
+        <h1 className="text-4xl font-bold text-white mb-8 text-left">
+          About Us
+        </h1>
 
         <div className="bg-custom-dark p-8 rounded-2xl mb-8">
           <h2 className="text-2xl font-semibold text-white mb-4">Our Story</h2>
