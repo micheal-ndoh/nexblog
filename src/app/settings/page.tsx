@@ -172,7 +172,7 @@ export default function SettingsPage() {
         )}
 
         {/* Profile Settings */}
-        <div className="bg-custom-dark rounded-2xl shadow-lg border border-gray-700 p-8 mb-8">
+        <div className="glassmorphism-card rounded-2xl p-8 mb-8">
           <div className="flex items-center gap-3 mb-6">
             <UserIcon className="w-6 h-6 text-orange-500" />
             <h2 className="text-2xl font-semibold text-white">
@@ -280,7 +280,7 @@ export default function SettingsPage() {
         </div>
 
         {/* Theme Settings */}
-        <div className="bg-custom-dark rounded-2xl shadow-lg border border-gray-700 p-8 mb-8">
+        <div className="glassmorphism-card rounded-2xl p-8 mb-8">
           <div className="flex items-center gap-3 mb-6">
             <Cog6ToothIcon className="w-6 h-6 text-orange-500" />
             <h2 className="text-2xl font-semibold text-white">Appearance</h2>
@@ -326,7 +326,7 @@ export default function SettingsPage() {
         </div>
 
         {/* Language Settings */}
-        <div className="bg-custom-dark rounded-2xl shadow-lg border border-gray-700 p-8 mb-8">
+        <div className="glassmorphism-card rounded-2xl p-8 mb-8">
           <div className="flex items-center gap-3 mb-6">
             <GlobeAltIcon className="w-6 h-6 text-orange-500" />
             <h2 className="text-2xl font-semibold text-white">Language</h2>
@@ -378,7 +378,7 @@ export default function SettingsPage() {
         </div>
 
         {/* Account Actions */}
-        <div className="bg-custom-dark rounded-2xl shadow-lg border border-gray-700 p-8">
+        <div className="glassmorphism-card rounded-2xl p-8">
           <h2 className="text-2xl font-semibold text-white mb-6">
             Account Actions
           </h2>
