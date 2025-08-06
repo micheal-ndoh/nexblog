@@ -8,7 +8,7 @@ export default function AboutPage() {
           About Us
         </h1>
 
-        <div className="bg-custom-dark p-8 rounded-2xl mb-8">
+        <div className="glassmorphism-card p-8 rounded-2xl mb-8">
           <h2 className="text-2xl font-semibold text-white mb-4">Our Story</h2>
           <p className="text-gray-400 mb-6">
             NexBlog is a modern blogging platform designed to empower creators
@@ -24,7 +24,7 @@ export default function AboutPage() {
         </div>
 
         <div className="grid md:grid-cols-2 gap-8">
-          <div className="bg-custom-dark p-6 rounded-2xl">
+          <div className="glassmorphism-card p-6 rounded-2xl">
             <h3 className="text-xl font-semibold text-white mb-4">
               Our Mission
             </h3>
@@ -35,7 +35,7 @@ export default function AboutPage() {
             </p>
           </div>
 
-          <div className="bg-custom-dark p-6 rounded-2xl">
+          <div className="glassmorphism-card p-6 rounded-2xl">
             <h3 className="text-xl font-semibold text-white mb-4">
               Our Vision
             </h3>

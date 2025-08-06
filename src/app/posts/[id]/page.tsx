@@ -1,5 +1,4 @@
 import { notFound } from "next/navigation";
-import { Header } from "@/components/header";
 import { Comments } from "@/components/comments";
 import { db } from "@/lib/db";
 import { formatDistanceToNow } from "date-fns";
@@ -71,12 +70,11 @@ export default async function PostPage({ params }: PostPageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <Header />
+    <div className="min-h-screen">
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <article className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+        <article className="glassmorphism-card rounded-xl overflow-hidden">
           {/* Post Header */}
-          <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+          <div className="p-6 border-b border-gray-700">
             <div className="flex items-center gap-3 mb-4">
               <Link
                 href={`/users/${post.author.id}`}
@@ -89,7 +87,7 @@ export default async function PostPage({ params }: PostPageProps) {
                     className="w-10 h-10 rounded-full object-cover"
                   />
                 ) : (
-                  <div className="w-10 h-10 rounded-full bg-primary text-primary-content flex items-center justify-center text-sm font-bold">
+                  <div className="w-10 h-10 rounded-full bg-orange-500 text-white flex items-center justify-center text-sm font-bold">
                     {post.author.name?.[0]?.toUpperCase() || "U"}
                   </div>
                 )}
@@ -97,11 +95,11 @@ export default async function PostPage({ params }: PostPageProps) {
               <div>
                 <Link
                   href={`/users/${post.author.id}`}
-                  className="font-medium text-gray-900 dark:text-white hover:text-primary transition-colors"
+                  className="font-medium text-white hover:text-orange-400 transition-colors"
                 >
                   {post.author.name || "Anonymous"}
                 </Link>
-                <p className="text-sm text-gray-500 dark:text-gray-400">
+                <p className="text-sm text-gray-400">
                   {formatDistanceToNow(new Date(post.createdAt), {
                     addSuffix: true,
                   })}
@@ -109,7 +107,7 @@ export default async function PostPage({ params }: PostPageProps) {
               </div>
             </div>
 
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+            <h1 className="text-3xl font-bold text-white mb-4">
               {post.title}
             </h1>
 
@@ -130,7 +128,7 @@ export default async function PostPage({ params }: PostPageProps) {
                 {post.tags.map((postTag) => (
                   <span
                     key={postTag.tag.id}
-                    className="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium"
+                    className="px-3 py-1 rounded-full text-sm font-medium"
                     style={{
                       backgroundColor: `${postTag.tag.color}20`,
                       color: postTag.tag.color,
@@ -153,10 +151,10 @@ export default async function PostPage({ params }: PostPageProps) {
           </div>
 
           {/* Post Footer */}
-          <div className="px-6 py-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/50">
+          <div className="px-6 py-4 border-t border-gray-700 bg-gray-800/50">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-6">
-                <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
+                <div className="flex items-center gap-2 text-gray-400">
                   <svg
                     className="w-5 h-5"
                     fill="none"
@@ -172,7 +170,7 @@ export default async function PostPage({ params }: PostPageProps) {
                   </svg>
                   <span className="text-sm">{post._count.likes} likes</span>
                 </div>
-                <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
+                <div className="flex items-center gap-2 text-gray-400">
                   <svg
                     className="w-5 h-5"
                     fill="none"
@@ -191,7 +189,7 @@ export default async function PostPage({ params }: PostPageProps) {
                   </span>
                 </div>
               </div>
-              <div className="text-sm text-gray-500 dark:text-gray-400">
+              <div className="text-sm text-gray-400">
                 {post.published ? "Published" : "Draft"}
               </div>
             </div>
@@ -201,9 +199,9 @@ export default async function PostPage({ params }: PostPageProps) {
         {/* Comments Section */}
         <div
           id="comments"
-          className="mt-8 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6"
+          className="mt-8 glassmorphism-card rounded-xl p-6"
         >
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+          <h2 className="text-xl font-semibold text-white mb-4">
             Comments ({post._count.comments})
           </h2>
           <Comments postId={post.id} initialComments={post.comments} />

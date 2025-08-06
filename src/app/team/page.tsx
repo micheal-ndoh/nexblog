@@ -33,7 +33,7 @@ export default function TeamPage() {
       <div className="max-w-6xl mx-auto px-4 py-8">
         <h1 className="text-4xl font-bold text-white mb-8">Our Team</h1>
 
-        <div className="bg-custom-dark p-8 rounded-2xl mb-8">
+        <div className="glassmorphism-card p-8 rounded-2xl mb-8">
           <h2 className="text-2xl font-semibold text-white mb-4">
             Meet the Team
           </h2>
@@ -48,7 +48,7 @@ export default function TeamPage() {
           {teamMembers.map((member, index) => (
             <div
               key={index}
-              className="bg-custom-dark p-6 rounded-2xl text-center"
+              className="glassmorphism-card p-6 rounded-2xl text-center"
             >
               <div className="w-24 h-24 bg-gradient-to-br from-purple-600 to-blue-600 rounded-full mx-auto mb-4 flex items-center justify-center">
                 <span className="text-white text-2xl font-bold">

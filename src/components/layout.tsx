@@ -9,7 +9,7 @@ export function Layout({ children }: LayoutProps) {
   return (
     <div className="min-h-screen dark-theme">
       <Sidebar />
-      <main className="">{children}</main>
+      <main className="min-h-screen">{children}</main>
     </div>
   );
 }

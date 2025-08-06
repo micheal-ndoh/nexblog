@@ -9,7 +9,7 @@ export default function InsightsPage() {
       <div className="max-w-6xl mx-auto px-4 py-8">
         <h1 className="text-4xl font-bold text-white mb-8">Insights</h1>
 
-        <div className="bg-custom-dark p-8 rounded-2xl mb-8">
+        <div className="glassmorphism-card p-8 rounded-2xl mb-8">
           <h2 className="text-2xl font-semibold text-white mb-4">
             Latest Insights
           </h2>

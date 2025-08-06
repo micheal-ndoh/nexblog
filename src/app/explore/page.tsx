@@ -103,21 +103,21 @@ export default function ExplorePage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen">
       <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Page Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+          <h1 className="text-3xl font-bold text-white mb-2">
             {t("explore.title")}
           </h1>
-          <p className="text-gray-600 dark:text-gray-400">
+          <p className="text-gray-400">
             {t("explore.subtitle")}
           </p>
         </div>
 
         {/* Tab Navigation */}
         <div className="mb-8">
-          <div className="border-b border-gray-200 dark:border-gray-700">
+          <div className="border-b border-gray-700">
             <nav className="-mb-px flex space-x-8">
               {tabs.map((tab) => {
                 const Icon = tab.icon;
@@ -127,8 +127,8 @@ export default function ExplorePage() {
                     onClick={() => setActiveTab(tab.id)}
                     className={`flex items-center gap-2 py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
                       activeTab === tab.id
-                        ? "border-primary text-primary"
-                        : "border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
+                        ? "border-orange-500 text-orange-500"
+                        : "border-transparent text-gray-400 hover:text-gray-300"
                     }`}
                   >
                     <Icon className="h-5 w-5" />
@@ -144,16 +144,16 @@ export default function ExplorePage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main Content */}
           <div className="lg:col-span-2">
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+            <div className="glassmorphism-card rounded-xl p-6">
               <div className="flex items-center gap-2 mb-6">
                 {(() => {
                   const activeTabData = tabs.find(
                     (tab) => tab.id === activeTab
                   );
                   const Icon = activeTabData?.icon || FireIcon;
-                  return <Icon className="h-6 w-6 text-primary" />;
+                  return <Icon className="h-6 w-6 text-orange-500" />;
                 })()}
-                <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                <h2 className="text-xl font-semibold text-white">
                   {tabs.find((tab) => tab.id === activeTab)?.name}{" "}
                   {t("posts.title")}
                 </h2>
@@ -167,7 +167,7 @@ export default function ExplorePage() {
                     <Link
                       key={post.id}
                       href={`/posts/${post.id}`}
-                      className="block border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:shadow-md transition-shadow"
+                      className="block glassmorphism-card rounded-lg p-4 hover:shadow-md transition-shadow"
                     >
                       <article>
                         <div className="flex items-start gap-4">
@@ -180,17 +180,17 @@ export default function ExplorePage() {
                           />
                           <div className="flex-1">
                             <div className="flex items-baseline gap-2 mb-2">
-                              <h3 className="font-semibold text-gray-900 dark:text-white">
+                              <h3 className="font-semibold text-white">
                                 {post.author.name}
                               </h3>
-                              <span className="text-sm text-gray-500 dark:text-gray-400">
+                              <span className="text-sm text-gray-400">
                                 {new Date(post.createdAt).toLocaleDateString()}
                               </span>
                             </div>
-                            <h4 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+                            <h4 className="text-lg font-medium text-white mb-2">
                               {post.title}
                             </h4>
-                            <p className="text-gray-600 dark:text-gray-300 text-sm mb-3">
+                            <p className="text-gray-300 text-sm mb-3">
                               {post.content.length > 150
                                 ? `${post.content.substring(0, 150)}...`
                                 : post.content}
@@ -215,7 +215,7 @@ export default function ExplorePage() {
                             )}
 
                             {/* Stats */}
-                            <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
+                            <div className="flex items-center gap-4 text-sm text-gray-400">
                               <div className="flex items-center gap-1">
                                 <HeartIcon className="h-4 w-4" />
                                 <span>{post._count.likes}</span>
@@ -233,13 +233,13 @@ export default function ExplorePage() {
 
                   {posts.length === 0 && (
                     <div className="text-center py-12">
-                      <div className="text-gray-500 dark:text-gray-400 mb-4">
+                      <div className="text-gray-400 mb-4">
                         <FireIcon className="mx-auto h-12 w-12" />
                       </div>
-                      <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+                      <h3 className="text-lg font-medium text-white mb-2">
                         {getNoPostsMessage()}
                       </h3>
-                      <p className="text-gray-500 dark:text-gray-400">
+                      <p className="text-gray-400">
                         {t("explore.checkBackLater")}
                       </p>
                     </div>
@@ -252,8 +252,8 @@ export default function ExplorePage() {
           {/* Sidebar */}
           <div className="space-y-6">
             {/* Trending Tags */}
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            <div className="glassmorphism-card rounded-xl p-6">
+              <h3 className="text-lg font-semibold text-white mb-4">
                 {t("explore.trendingTags")}
               </h3>
               <div className="space-y-2">
@@ -266,7 +266,7 @@ export default function ExplorePage() {
                 ].map((tag) => (
                   <div
                     key={tag.name}
-                    className="flex items-center justify-between p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors cursor-pointer"
+                    className="flex items-center justify-between p-2 rounded-lg hover:bg-gray-800/50 transition-colors cursor-pointer"
                   >
                     <span
                       className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium"
@@ -277,7 +277,7 @@ export default function ExplorePage() {
                     >
                       #{tag.name}
                     </span>
-                    <span className="text-sm text-gray-500 dark:text-gray-400">
+                    <span className="text-sm text-gray-400">
                       {tag.count}
                     </span>
                   </div>
@@ -286,8 +286,8 @@ export default function ExplorePage() {
             </div>
 
             {/* Top Authors */}
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            <div className="glassmorphism-card rounded-xl p-6">
+              <h3 className="text-lg font-semibold text-white mb-4">
                 {t("explore.topAuthors")}
               </h3>
               <div className="space-y-3">
@@ -299,16 +299,16 @@ export default function ExplorePage() {
                 ].map((author, index) => (
                   <div
                     key={index}
-                    className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors cursor-pointer"
+                    className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-800/50 transition-colors cursor-pointer"
                   >
-                    <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white text-sm font-medium">
+                    <div className="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center text-white text-sm font-medium">
                       {author.name.charAt(0)}
                     </div>
                     <div className="flex-1">
-                      <p className="text-sm font-medium text-gray-900 dark:text-white">
+                      <p className="text-sm font-medium text-white">
                         {author.name}
                       </p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">
+                      <p className="text-xs text-gray-400">
                         {author.posts} {t("posts.title")} • {author.followers}{" "}
                         {t("user.followers")}
                       </p>
@@ -319,40 +319,40 @@ export default function ExplorePage() {
             </div>
 
             {/* Quick Stats */}
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            <div className="glassmorphism-card rounded-xl p-6">
+              <h3 className="text-lg font-semibold text-white mb-4">
                 {t("explore.platformStats")}
               </h3>
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-600 dark:text-gray-400">
+                  <span className="text-sm text-gray-400">
                     {t("explore.totalPosts")}
                   </span>
-                  <span className="text-sm font-medium text-gray-900 dark:text-white">
+                  <span className="text-sm font-medium text-white">
                     1,234
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-600 dark:text-gray-400">
+                  <span className="text-sm text-gray-400">
                     {t("explore.activeUsers")}
                   </span>
-                  <span className="text-sm font-medium text-gray-900 dark:text-white">
+                  <span className="text-sm font-medium text-white">
                     567
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-600 dark:text-gray-400">
+                  <span className="text-sm text-gray-400">
                     {t("explore.totalLikes")}
                   </span>
-                  <span className="text-sm font-medium text-gray-900 dark:text-white">
+                  <span className="text-sm font-medium text-white">
                     8,901
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-600 dark:text-gray-400">
+                  <span className="text-sm text-gray-400">
                     {t("explore.comments")}
                   </span>
-                  <span className="text-sm font-medium text-gray-900 dark:text-white">
+                  <span className="text-sm font-medium text-white">
                     2,345
                   </span>
                 </div>

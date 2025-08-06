@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { PostFeedSkeleton } from "@/components/post-feed-skeleton";
+import { Layout } from "@/components/layout";
 
 // Define the post type structure
 interface Post {
@@ -58,13 +59,13 @@ function SearchResults() {
   }, [query, fetchSearchResults]);
 
   return (
-    <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div>
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+        <h1 className="text-3xl font-bold text-white mb-2">
           Search Results
         </h1>
         {query && (
-          <p className="text-gray-600 dark:text-gray-400">
+          <p className="text-gray-400">
             Showing results for &quot;{query}&quot;
           </p>
         )}
@@ -77,7 +78,7 @@ function SearchResults() {
           {posts.map((post: Post) => (
             <article
               key={post.id}
-              className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden"
+              className="glassmorphism-card rounded-xl overflow-hidden"
             >
               <div className="p-6">
                 {/* Post Header */}
@@ -89,10 +90,10 @@ function SearchResults() {
                   />
                   <div className="flex-1">
                     <div className="flex items-baseline gap-2">
-                      <h3 className="font-semibold text-gray-900 dark:text-white">
+                      <h3 className="font-semibold text-white">
                         {post.author.name}
                       </h3>
-                      <span className="text-sm text-gray-500 dark:text-gray-400">
+                      <span className="text-sm text-gray-400">
                         {new Date(post.createdAt).toLocaleDateString()}
                       </span>
                     </div>
@@ -101,10 +102,10 @@ function SearchResults() {
 
                 {/* Post Content */}
                 <div className="mb-4">
-                  <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                  <h2 className="text-xl font-semibold text-white mb-2">
                     {post.title}
                   </h2>
-                  <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+                  <p className="text-gray-300 leading-relaxed">
                     {post.content.length > 200
                       ? `${post.content.substring(0, 200)}...`
                       : post.content}
@@ -130,8 +131,8 @@ function SearchResults() {
                 )}
 
                 {/* Post Stats */}
-                <div className="flex items-center gap-6 pt-4 border-t border-gray-200 dark:border-gray-700">
-                  <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
+                <div className="flex items-center gap-6 pt-4 border-t border-gray-700">
+                  <div className="flex items-center gap-2 text-gray-400">
                     <svg
                       className="h-5 w-5"
                       fill="currentColor"
@@ -143,7 +144,7 @@ function SearchResults() {
                       {post._count.likes}
                     </span>
                   </div>
-                  <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
+                  <div className="flex items-center gap-2 text-gray-400">
                     <svg
                       className="h-5 w-5"
                       fill="currentColor"
@@ -162,7 +163,7 @@ function SearchResults() {
         </div>
       ) : (
         <div className="text-center py-12">
-          <div className="text-gray-400 dark:text-gray-500 mb-4">
+          <div className="text-gray-400 mb-4">
             <svg
               className="mx-auto h-12 w-12"
               fill="none"
@@ -177,40 +178,40 @@ function SearchResults() {
               />
             </svg>
           </div>
-          <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+          <h3 className="text-lg font-medium text-white mb-2">
             No results found
           </h3>
-          <p className="text-gray-500 dark:text-gray-400">
+          <p className="text-gray-400">
             Try searching with different keywords or tags.
           </p>
         </div>
       )}
-    </main>
+    </div>
   );
 }
 
 // Loading fallback component
 function SearchResultsFallback() {
   return (
-    <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div>
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+        <h1 className="text-3xl font-bold text-white mb-2">
           Search Results
         </h1>
-        <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-64"></div>
+        <div className="h-4 bg-gray-700 rounded animate-pulse w-64"></div>
       </div>
       <PostFeedSkeleton />
-    </main>
+    </div>
   );
 }
 
 // Main page component with Suspense boundary
 export default function SearchPage() {
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <Layout>
       <Suspense fallback={<SearchResultsFallback />}>
         <SearchResults />
       </Suspense>
-    </div>
+    </Layout>
   );
 }

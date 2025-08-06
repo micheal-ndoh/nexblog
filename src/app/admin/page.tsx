@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useT } from "@/lib/tolgee";
+import { Layout } from "@/components/layout";
 import {
   UsersIcon,
   DocumentTextIcon,
@@ -219,130 +220,25 @@ export default function AdminDashboard() {
 
   if (!session?.user || (session.user as SessionUser).role !== "ADMIN") {
     return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-        <div className="text-center">
-          <ExclamationTriangleIcon className="mx-auto h-12 w-12 text-red-500 mb-4" />
-          <h1 className="text-2xl font-bold text-white mb-4">
-            {t("admin.accessDenied")}
-          </h1>
-          <p className="text-gray-400">{t("admin.noPermission")}</p>
+      <Layout>
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="text-center">
+            <ExclamationTriangleIcon className="mx-auto h-12 w-12 text-red-500 mb-4" />
+            <h1 className="text-2xl font-bold text-white mb-4">
+              {t("admin.accessDenied")}
+            </h1>
+            <p className="text-gray-400">{t("admin.noPermission")}</p>
+          </div>
         </div>
-      </div>
+      </Layout>
     );
   }
 
   return (
-    <div className="flex min-h-screen bg-gray-900">
-      {/* Sidebar */}
-      <aside className="w-64 p-4 flex flex-col justify-between bg-gray-800">
-        <div>
-          <div className="flex items-center justify-between mb-8">
-            <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">N</span>
-              </div>
-              <span className="text-white font-semibold">NexBlog Admin</span>
-            </div>
-          </div>
-
-          <nav className="space-y-2">
-            <button
-              onClick={() => setActiveTab("overview")}
-              className={`w-full flex items-center p-2 rounded-lg transition-colors ${
-                activeTab === "overview"
-                  ? "bg-gray-700 text-white"
-                  : "text-gray-400 hover:bg-gray-700 hover:text-white"
-              }`}
-            >
-              <ChartBarIcon className="h-6 w-6 mr-3" />
-              <span>Dashboard</span>
-            </button>
-
-            <div className="relative">
-              <button
-                onClick={() => setProductMenuOpen(!productMenuOpen)}
-                className="w-full flex items-center justify-between p-2 text-white rounded-lg bg-gray-700"
-              >
-                <div className="flex items-center">
-                  <DocumentTextIcon className="h-6 w-6 mr-3" />
-                  <span>Content</span>
-                </div>
-                {productMenuOpen ? (
-                  <ChevronUpIcon className="h-4 w-4" />
-                ) : (
-                  <ChevronDownIcon className="h-4 w-4" />
-                )}
-              </button>
-              {productMenuOpen && (
-                <div className="pl-6 mt-1 space-y-1">
-                  <button
-                    onClick={() => setActiveTab("overview")}
-                    className="block w-full text-left p-2 text-white bg-gray-700 rounded-lg"
-                  >
-                    Overview
-                  </button>
-                  <button
-                    onClick={() => setActiveTab("posts")}
-                    className="flex items-center justify-between w-full p-2 text-gray-400 rounded-lg hover:bg-gray-700 hover:text-white"
-                  >
-                    <span>Posts</span>
-                    <span className="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">
-                      {posts.filter((p) => !p.published).length}
-                    </span>
-                  </button>
-                  <button
-                    onClick={() => setActiveTab("users")}
-                    className="flex items-center justify-between w-full p-2 text-gray-400 rounded-lg hover:bg-gray-700 hover:text-white"
-                  >
-                    <span>Users</span>
-                    <span className="bg-gray-600 text-white text-xs font-bold px-2 py-1 rounded-full">
-                      {users.length}
-                    </span>
-                  </button>
-                </div>
-              )}
-            </div>
-
-            <button
-              onClick={() => setActiveTab("users")}
-              className={`w-full flex items-center p-2 rounded-lg transition-colors ${
-                activeTab === "users"
-                  ? "bg-gray-700 text-white"
-                  : "text-gray-400 hover:bg-gray-700 hover:text-white"
-              }`}
-            >
-              <UsersIcon className="h-6 w-6 mr-3" />
-              <span>Users</span>
-            </button>
-
-            <button
-              onClick={() => setActiveTab("analytics")}
-              className={`w-full flex items-center p-2 rounded-lg transition-colors ${
-                activeTab === "analytics"
-                  ? "bg-gray-700 text-white"
-                  : "text-gray-400 hover:bg-gray-700 hover:text-white"
-              }`}
-            >
-              <ArrowTrendingUpIcon className="h-6 w-6 mr-3" />
-              <span>Analytics</span>
-            </button>
-          </nav>
-        </div>
-
-        <div className="space-y-4">
-          <button className="flex items-center p-2 text-gray-400 rounded-lg hover:bg-gray-700 hover:text-white">
-            <BellIcon className="h-6 w-6" />
-          </button>
-          <button className="flex items-center p-2 text-gray-400 rounded-lg hover:bg-gray-700 hover:text-white">
-            <CogIcon className="h-6 w-6" />
-          </button>
-        </div>
-      </aside>
-
-      {/* Main Content */}
-      <main className="flex-1 p-6 bg-gray-900">
+    <Layout>
+      <div className="space-y-6">
         {/* Header */}
-        <header className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between">
           <div className="flex-1 max-w-lg">
             <div className="relative">
               <MagnifyingGlassIcon className="absolute left-4 top-1/2 -translate-y-1/2 h-6 w-6 text-gray-400" />
@@ -351,7 +247,7 @@ export default function AdminDashboard() {
                 placeholder="Search anything..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-gray-800 text-white border border-gray-700 rounded-lg py-2 pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                className="w-full bg-gray-800 text-white border border-gray-700 rounded-lg py-2 pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-orange-500"
               />
             </div>
           </div>
@@ -361,20 +257,20 @@ export default function AdminDashboard() {
               className="w-8 h-8 rounded-full"
               src={session.user.image || "https://via.placeholder.com/32"}
             />
-            <button className="bg-white text-black font-semibold py-2 px-4 rounded-lg flex items-center">
+            <button className="bg-orange-500 text-white font-semibold py-2 px-4 rounded-lg flex items-center hover:bg-orange-600 transition-colors">
               <PlusIcon className="h-5 w-5 mr-2" />
               Create
             </button>
           </div>
-        </header>
+        </div>
 
         {/* Message Display */}
         {message && (
           <div
-            className={`mb-6 p-4 rounded-lg flex items-center gap-3 ${
+            className={`p-4 rounded-lg flex items-center gap-3 ${
               message.type === "success"
-                ? "bg-green-900/20 border border-green-800"
-                : "bg-red-900/20 border border-red-800"
+                ? "bg-green-500/20 border border-green-500/50"
+                : "bg-red-500/20 border border-red-500/50"
             }`}
           >
             {message.type === "success" ? (
@@ -398,12 +294,56 @@ export default function AdminDashboard() {
           </div>
         )}
 
+        {/* Tab Navigation */}
+        <div className="flex space-x-4 border-b border-gray-700">
+          <button
+            onClick={() => setActiveTab("overview")}
+            className={`px-4 py-2 font-medium rounded-t-lg transition-colors ${
+              activeTab === "overview"
+                ? "bg-orange-500 text-white"
+                : "text-gray-400 hover:text-white hover:bg-gray-800"
+            }`}
+          >
+            Dashboard
+          </button>
+          <button
+            onClick={() => setActiveTab("users")}
+            className={`px-4 py-2 font-medium rounded-t-lg transition-colors ${
+              activeTab === "users"
+                ? "bg-orange-500 text-white"
+                : "text-gray-400 hover:text-white hover:bg-gray-800"
+            }`}
+          >
+            Users
+          </button>
+          <button
+            onClick={() => setActiveTab("posts")}
+            className={`px-4 py-2 font-medium rounded-t-lg transition-colors ${
+              activeTab === "posts"
+                ? "bg-orange-500 text-white"
+                : "text-gray-400 hover:text-white hover:bg-gray-800"
+            }`}
+          >
+            Posts
+          </button>
+          <button
+            onClick={() => setActiveTab("analytics")}
+            className={`px-4 py-2 font-medium rounded-t-lg transition-colors ${
+              activeTab === "analytics"
+                ? "bg-orange-500 text-white"
+                : "text-gray-400 hover:text-white hover:bg-gray-800"
+            }`}
+          >
+            Analytics
+          </button>
+        </div>
+
         {/* Overview Tab */}
         {activeTab === "overview" && (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="lg:col-span-2 space-y-6">
               {/* Overview Card */}
-              <div className="bg-gray-800 rounded-2xl p-6 border border-gray-700">
+              <div className="glassmorphism-card rounded-xl p-6">
                 <div className="flex justify-between items-center mb-6">
                   <h2 className="text-xl font-semibold text-white">Overview</h2>
                   <button className="text-gray-400 text-sm border border-gray-600 px-3 py-1 rounded-lg">
@@ -441,7 +381,7 @@ export default function AdminDashboard() {
               </div>
 
               {/* Recent Activity */}
-              <div className="bg-gray-800 rounded-2xl p-6 border border-gray-700">
+              <div className="glassmorphism-card rounded-xl p-6">
                 <h3 className="font-semibold mb-1 text-white">
                   Recent Activity
                 </h3>
@@ -472,7 +412,7 @@ export default function AdminDashboard() {
               </div>
 
               {/* Posts Chart */}
-              <div className="bg-gray-800 rounded-2xl p-6 border border-gray-700">
+              <div className="glassmorphism-card rounded-xl p-6">
                 <div className="flex justify-between items-center mb-6">
                   <h2 className="text-xl font-semibold text-white">
                     Posts Activity
@@ -512,7 +452,7 @@ export default function AdminDashboard() {
 
             <div className="space-y-6">
               {/* Quick Stats */}
-              <div className="bg-gray-800 rounded-2xl p-6 border border-gray-700">
+              <div className="glassmorphism-card rounded-xl p-6">
                 <h2 className="text-xl font-semibold text-white mb-4">
                   Quick Stats
                 </h2>
@@ -545,7 +485,7 @@ export default function AdminDashboard() {
               </div>
 
               {/* Recent Posts */}
-              <div className="bg-gray-800 rounded-2xl p-6 border border-gray-700">
+              <div className="glassmorphism-card rounded-xl p-6">
                 <h2 className="text-xl font-semibold text-white mb-4">
                   Recent Posts
                 </h2>
@@ -590,7 +530,7 @@ export default function AdminDashboard() {
 
         {/* Users Tab */}
         {activeTab === "users" && (
-          <div className="bg-gray-800 rounded-2xl border border-gray-700 overflow-hidden">
+          <div className="glassmorphism-card rounded-xl overflow-hidden">
             {loading ? (
               <div className="p-8 text-center">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-500 mx-auto"></div>
@@ -599,7 +539,7 @@ export default function AdminDashboard() {
             ) : (
               <div className="overflow-x-auto">
                 <table className="min-w-full">
-                  <thead className="bg-gray-700">
+                  <thead className="bg-gray-800/50">
                     <tr>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
                         {t("general.user")}
@@ -621,9 +561,9 @@ export default function AdminDashboard() {
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="bg-gray-800 divide-y divide-gray-700">
+                  <tbody className="divide-y divide-gray-700">
                     {users.map((user) => (
-                      <tr key={user.id} className="hover:bg-gray-700">
+                      <tr key={user.id} className="hover:bg-gray-800/50">
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="text-sm font-medium text-white">
                             {user.name}
@@ -743,7 +683,7 @@ export default function AdminDashboard() {
 
         {/* Posts Tab */}
         {activeTab === "posts" && (
-          <div className="bg-gray-800 rounded-2xl border border-gray-700 overflow-hidden">
+          <div className="glassmorphism-card rounded-xl overflow-hidden">
             {loading ? (
               <div className="p-8 text-center">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-500 mx-auto"></div>
@@ -752,7 +692,7 @@ export default function AdminDashboard() {
             ) : (
               <div className="overflow-x-auto">
                 <table className="min-w-full">
-                  <thead className="bg-gray-700">
+                  <thead className="bg-gray-800/50">
                     <tr>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
                         {t("general.title")}
@@ -774,9 +714,9 @@ export default function AdminDashboard() {
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="bg-gray-800 divide-y divide-gray-700">
+                  <tbody className="divide-y divide-gray-700">
                     {posts.map((post) => (
-                      <tr key={post.id} className="hover:bg-gray-700">
+                      <tr key={post.id} className="hover:bg-gray-800/50">
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="text-sm font-medium text-white">
                             {post.title}
@@ -871,7 +811,7 @@ export default function AdminDashboard() {
           <div className="space-y-6">
             {/* Overview Stats */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <div className="bg-gray-800 rounded-2xl p-6 border border-gray-700">
+              <div className="glassmorphism-card rounded-xl p-6">
                 <div className="flex items-center">
                   <div className="flex-shrink-0">
                     <UsersIcon className="h-8 w-8 text-blue-400" />
@@ -889,7 +829,7 @@ export default function AdminDashboard() {
                 </div>
               </div>
 
-              <div className="bg-gray-800 rounded-2xl p-6 border border-gray-700">
+              <div className="glassmorphism-card rounded-xl p-6">
                 <div className="flex items-center">
                   <div className="flex-shrink-0">
                     <DocumentTextIcon className="h-8 w-8 text-green-400" />
@@ -907,7 +847,7 @@ export default function AdminDashboard() {
                 </div>
               </div>
 
-              <div className="bg-gray-800 rounded-2xl p-6 border border-gray-700">
+              <div className="glassmorphism-card rounded-xl p-6">
                 <div className="flex items-center">
                   <div className="flex-shrink-0">
                     <ArrowTrendingUpIcon className="h-8 w-8 text-purple-400" />
@@ -925,7 +865,7 @@ export default function AdminDashboard() {
                 </div>
               </div>
 
-              <div className="bg-gray-800 rounded-2xl p-6 border border-gray-700">
+              <div className="glassmorphism-card rounded-xl p-6">
                 <div className="flex items-center">
                   <div className="flex-shrink-0">
                     <StarIcon className="h-8 w-8 text-orange-400" />
@@ -947,7 +887,7 @@ export default function AdminDashboard() {
             {/* Top Users and Posts */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* Top Users */}
-              <div className="bg-gray-800 rounded-2xl p-6 border border-gray-700">
+              <div className="glassmorphism-card rounded-xl p-6">
                 <h3 className="text-lg font-semibold text-white mb-4">
                   {t("admin.topUsers")}
                 </h3>
@@ -955,7 +895,7 @@ export default function AdminDashboard() {
                   {analytics.topUsers.map((user, index) => (
                     <div
                       key={user.id}
-                      className="flex items-center justify-between p-3 bg-gray-700 rounded-lg"
+                      className="flex items-center justify-between p-3 bg-gray-800/50 rounded-lg"
                     >
                       <div className="flex items-center gap-3">
                         <div className="w-8 h-8 bg-blue-900 rounded-full flex items-center justify-center text-blue-400 font-semibold">
@@ -977,7 +917,7 @@ export default function AdminDashboard() {
               </div>
 
               {/* Top Posts */}
-              <div className="bg-gray-800 rounded-2xl p-6 border border-gray-700">
+              <div className="glassmorphism-card rounded-xl p-6">
                 <h3 className="text-lg font-semibold text-white mb-4">
                   {t("admin.topPosts")}
                 </h3>
@@ -985,7 +925,7 @@ export default function AdminDashboard() {
                   {analytics.topPosts.map((post, index) => (
                     <div
                       key={post.id}
-                      className="flex items-center justify-between p-3 bg-gray-700 rounded-lg"
+                      className="flex items-center justify-between p-3 bg-gray-800/50 rounded-lg"
                     >
                       <div className="flex items-center gap-3">
                         <div className="w-8 h-8 bg-green-900 rounded-full flex items-center justify-center text-green-400 font-semibold">
@@ -1019,7 +959,7 @@ export default function AdminDashboard() {
             </div>
           </div>
         )}
-      </main>
-    </div>
+      </div>
+    </Layout>
   );
 }

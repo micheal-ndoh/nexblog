@@ -68,23 +68,6 @@ export function PostModal({ post, comments, isOpen, onClose }) {
             </div>
           )}
         </div>
-        <div>
-          <h3 className="text-lg font-semibold text-white mb-2">Comments</h3>
-          <div className="space-y-4 max-h-64 overflow-y-auto">
-            {comments && comments.length > 0 ? (
-              comments.map((c) => (
-                <div key={c.id} className="bg-gray-800/60 rounded-lg p-3">
-                  <p className="text-white font-medium">
-                    {c.user?.name || "User"}
-                  </p>
-                  <p className="text-gray-300 text-sm">{c.content}</p>
-                </div>
-              ))
-            ) : (
-              <p className="text-gray-400">No comments yet.</p>
-            )}
-          </div>
-        </div>
       </div>
     </div>
   );

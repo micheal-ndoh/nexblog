@@ -7,7 +7,7 @@ export default function ContactPage() {
         <h1 className="text-4xl font-bold text-white mb-8">Contact Us</h1>
 
         <div className="grid md:grid-cols-2 gap-8">
-          <div className="bg-custom-dark p-8 rounded-2xl">
+          <div className="glassmorphism-card p-8 rounded-2xl">
             <h2 className="text-2xl font-semibold text-white mb-6">
               Get in Touch
             </h2>
@@ -69,7 +69,7 @@ export default function ContactPage() {
             </div>
           </div>
 
-          <div className="bg-custom-dark p-8 rounded-2xl">
+          <div className="glassmorphism-card p-8 rounded-2xl">
             <h2 className="text-2xl font-semibold text-white mb-6">
               Send Message
             </h2>
