@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/providers";
+import { Sidebar } from "@/components/sidebar";
+import { Header } from "@/components/header";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -44,8 +46,16 @@ export default function RootLayout({
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
-      <body className={inter.className}>
-        <Providers>{children}</Providers>
+      <body className={`${inter.className} gradient-bg min-h-screen`}>
+        <Providers>
+          <div className="min-h-screen dark-theme">
+            <Sidebar />
+            <Header />
+            <main className="ml-64 pt-16">
+              {children}
+            </main>
+          </div>
+        </Providers>
       </body>
     </html>
   );

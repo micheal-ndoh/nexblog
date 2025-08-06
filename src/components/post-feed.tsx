@@ -7,6 +7,8 @@ import {
   HeartIcon,
   ChatBubbleLeftIcon,
   BookmarkIcon,
+  EyeIcon,
+  ShareIcon,
 } from "@heroicons/react/24/outline";
 import { HeartIcon as HeartIconSolid } from "@heroicons/react/24/solid";
 import { BookmarkIcon as BookmarkIconSolid } from "@heroicons/react/24/solid";
@@ -42,11 +44,25 @@ interface Post {
   imageUrl?: string;
 }
 
+// Tag color mapping for varied colors
+const tagColors = [
+  "tag-blue",
+  "tag-green",
+  "tag-purple",
+  "tag-orange",
+  "tag-red",
+  "tag-pink",
+  "tag-indigo",
+  "tag-teal",
+];
+
 export function PostFeed() {
   const { data: session } = useSession();
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [savedPosts, setSavedPosts] = useState<Set<string>>(new Set());
+  const [visiblePosts, setVisiblePosts] = useState(5);
+  const [loadingMore, setLoadingMore] = useState(false);
 
   const fetchPosts = useCallback(async () => {
     try {
@@ -100,17 +116,19 @@ export function PostFeed() {
               const isLiked = post.likes.some(
                 (like) => like.userId === session.user.id
               );
+              const newLikes = isLiked
+                ? post.likes.filter((like) => like.userId !== session.user.id)
+                : [...post.likes, { userId: session.user.id }];
+
               return {
                 ...post,
+                likes: newLikes,
                 _count: {
                   ...post._count,
                   likes: isLiked
                     ? post._count.likes - 1
                     : post._count.likes + 1,
                 },
-                likes: isLiked
-                  ? post.likes.filter((like) => like.userId !== session.user.id)
-                  : [...post.likes, { userId: session.user.id }],
               };
             }
             return post;
@@ -118,7 +136,7 @@ export function PostFeed() {
         );
       }
     } catch (error) {
-      console.error("Error toggling like:", error);
+      console.error("Error liking post:", error);
     }
   };
 
@@ -132,8 +150,6 @@ export function PostFeed() {
 
       if (response.ok) {
         const { saved } = await response.json();
-
-        // Optimistically update the UI
         setSavedPosts((prev) => {
           const newSet = new Set(prev);
           if (saved) {
@@ -143,136 +159,139 @@ export function PostFeed() {
           }
           return newSet;
         });
-
-        // Update post interestedUsers count
-        setPosts((prevPosts) =>
-          prevPosts.map((post) => {
-            if (post.id === postId) {
-              const isSaved = savedPosts.has(postId);
-              return {
-                ...post,
-                interestedUsers: isSaved
-                  ? post.interestedUsers.filter(
-                      (user) => user.userId !== session.user.id
-                    )
-                  : [...post.interestedUsers, { userId: session.user.id }],
-              };
-            }
-            return post;
-          })
-        );
       }
     } catch (error) {
-      console.error("Error toggling save:", error);
+      console.error("Error saving post:", error);
     }
   };
 
+  const loadMorePosts = () => {
+    setLoadingMore(true);
+    setTimeout(() => {
+      setVisiblePosts((prev) => Math.min(prev + 5, posts.length));
+      setLoadingMore(false);
+    }, 500);
+  };
+
+  const getTagColor = (index: number) => {
+    return tagColors[index % tagColors.length];
+  };
+
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="space-y-6">
+        {[...Array(3)].map((_, i) => (
+          <div key={i} className="post-container p-6 animate-pulse">
+            <div className="flex items-center gap-4 mb-4">
+              <div className="w-12 h-12 bg-gray-700 rounded-full"></div>
+              <div className="flex-1">
+                <div className="h-4 bg-gray-700 rounded w-1/3 mb-2"></div>
+                <div className="h-3 bg-gray-700 rounded w-1/4"></div>
+              </div>
+            </div>
+            <div className="h-4 bg-gray-700 rounded w-3/4 mb-2"></div>
+            <div className="h-4 bg-gray-700 rounded w-1/2"></div>
+          </div>
+        ))}
+      </div>
+    );
   }
 
   return (
     <div className="space-y-6">
-      {posts.map((post) => {
-        const isLiked =
-          session?.user &&
-          post.likes.some((like) => like.userId === session.user.id);
-
+      {posts.slice(0, visiblePosts).map((post) => {
+        const isLiked = post.likes.some(
+          (like) => like.userId === session?.user?.id
+        );
         const isSaved = savedPosts.has(post.id);
 
         return (
           <article
             key={post.id}
-            className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden"
+            className="post-container p-6 animate-fade-in-up"
           >
-            <div className="p-6">
-              {/* Post Header */}
-              <div className="flex items-start gap-4 mb-4">
-                <Link
-                  href={`/users/${post.author.id}`}
-                  className="hover:opacity-80 transition-opacity"
-                >
-                  {post.author.image ? (
-                    <Image
-                      src={post.author.image}
-                      alt={post.author.name}
-                      width={48}
-                      height={48}
-                      className="w-12 h-12 rounded-full object-cover"
-                    />
-                  ) : (
-                    <div className="w-12 h-12 rounded-full bg-primary text-primary-content flex items-center justify-center text-sm font-bold">
-                      {post.author.name?.charAt(0).toUpperCase() || "A"}
-                    </div>
-                  )}
-                </Link>
-                <div className="flex-1">
-                  <div className="flex items-baseline gap-2">
-                    <Link
-                      href={`/users/${post.author.id}`}
-                      className="font-semibold text-gray-900 dark:text-white hover:text-primary transition-colors"
-                    >
-                      {post.author.name}
-                    </Link>
-                    <span className="text-sm text-gray-500 dark:text-gray-400">
-                      {formatDate(post.createdAt)}
+            {/* Author Info */}
+            <div className="flex items-center gap-4 mb-6">
+              <div className="relative">
+                {post.author.image ? (
+                  <Image
+                    src={post.author.image}
+                    alt={post.author.name}
+                    width={48}
+                    height={48}
+                    className="w-12 h-12 rounded-full border-2 border-gray-700"
+                  />
+                ) : (
+                  <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-full flex items-center justify-center">
+                    <span className="text-white font-semibold text-lg">
+                      {post.author.name.charAt(0)}
                     </span>
                   </div>
-                </div>
+                )}
               </div>
+              <div className="flex-1">
+                <h3 className="text-white font-semibold text-lg">
+                  {post.author.name}
+                </h3>
+                <p className="text-gray-400 text-sm">
+                  {formatDate(post.createdAt)}
+                </p>
+              </div>
+              <button className="p-2 text-gray-400 hover:text-orange-500 transition-colors rounded-lg hover:bg-gray-800/50">
+                <ShareIcon className="h-5 w-5" />
+              </button>
+            </div>
 
-              {/* Post Content */}
-              <div className="mb-4">
-                {post.imageUrl && (
-                  <div
-                    className="relative w-full"
-                    style={{ minHeight: "300px", maxHeight: "500px" }}
-                  >
+            {/* Post Content */}
+            <div className="mb-6">
+              <h2 className="text-white text-xl font-bold mb-3 hover:text-orange-400 transition-colors">
+                <Link href={`/posts/${post.id}`}>{post.title}</Link>
+              </h2>
+              <p className="text-gray-300 text-base leading-relaxed mb-4">
+                {truncateText(post.content, 200)}
+              </p>
+
+              {/* Post Image */}
+              {post.imageUrl && (
+                <div className="mb-4">
+                  <div className="relative w-full h-64 rounded-xl overflow-hidden">
                     <Image
                       src={post.imageUrl}
                       alt={post.title}
                       fill
-                      sizes="100vw"
-                      className="object-contain rounded-2xl mb-4"
+                      className="object-cover"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     />
                   </div>
-                )}
-                <Link href={`/posts/${post.id}`}>
-                  <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2 hover:text-primary transition-colors">
-                    {post.title}
-                  </h2>
-                </Link>
-                <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-                  {truncateText(post.content, 200)}
-                </p>
-              </div>
-
-              {/* Tags */}
-              {post.tags.length > 0 && (
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {post.tags.map((tag) => (
-                    <span
-                      key={tag.tag.name}
-                      className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium"
-                      style={{
-                        backgroundColor: `${tag.tag.color}20`,
-                        color: tag.tag.color,
-                      }}
-                    >
-                      {tag.tag.name}
-                    </span>
-                  ))}
                 </div>
               )}
+            </div>
 
-              {/* Post Actions */}
-              <div className="flex items-center gap-6 pt-4 border-t border-gray-200 dark:border-gray-700">
+            {/* Tags */}
+            {post.tags.length > 0 && (
+              <div className="flex flex-wrap gap-2 mb-6">
+                {post.tags.map((tag, index) => (
+                  <span
+                    key={tag.tag.name}
+                    className={`inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium ${getTagColor(
+                      index
+                    )} shadow-lg`}
+                  >
+                    {tag.tag.name}
+                  </span>
+                ))}
+              </div>
+            )}
+
+            {/* Post Actions */}
+            <div className="flex items-center justify-between pt-4 border-t border-gray-700/50">
+              <div className="flex items-center gap-6">
                 <button
                   onClick={() => handleLike(post.id)}
-                  className={`flex items-center gap-2 transition-colors ${
+                  className={`flex items-center gap-2 transition-all duration-200 ${
                     isLiked
-                      ? "text-red-500 hover:text-red-600"
-                      : "text-gray-500 dark:text-gray-400 hover:text-red-500"
+                      ? "text-red-500 hover:text-red-400"
+                      : "text-gray-400 hover:text-red-500"
                   }`}
                 >
                   {isLiked ? (
@@ -280,17 +299,17 @@ export function PostFeed() {
                   ) : (
                     <HeartIcon className="h-6 w-6" />
                   )}
-                  <span className="text-sm font-medium">
+                  <span className="text-sm font-medium text-white">
                     {post._count.likes}
                   </span>
                 </button>
 
                 <Link
                   href={`/posts/${post.id}#comments`}
-                  className="flex items-center gap-2 text-gray-500 dark:text-gray-400 hover:text-primary transition-colors"
+                  className="flex items-center gap-2 text-gray-400 hover:text-orange-500 transition-colors"
                 >
                   <ChatBubbleLeftIcon className="h-6 w-6" />
-                  <span className="text-sm font-medium">
+                  <span className="text-sm font-medium text-white">
                     {post._count.comments}
                   </span>
                 </Link>
@@ -299,8 +318,8 @@ export function PostFeed() {
                   onClick={() => handleSave(post.id)}
                   className={`flex items-center gap-2 transition-colors ${
                     isSaved
-                      ? "text-primary hover:text-primary/80"
-                      : "text-gray-500 dark:text-gray-400 hover:text-primary"
+                      ? "text-orange-500 hover:text-orange-400"
+                      : "text-gray-400 hover:text-orange-500"
                   }`}
                 >
                   {isSaved ? (
@@ -308,21 +327,49 @@ export function PostFeed() {
                   ) : (
                     <BookmarkIcon className="h-6 w-6" />
                   )}
-                  <span className="text-sm font-medium">
+                  <span className="text-sm font-medium text-white">
                     {isSaved ? "Saved" : "Save"}
                   </span>
                 </button>
               </div>
+
+              <Link
+                href={`/posts/${post.id}`}
+                className="flex items-center gap-2 text-gray-400 hover:text-orange-500 transition-colors"
+              >
+                <EyeIcon className="h-5 w-5" />
+                <span className="text-sm font-medium text-white">View</span>
+              </Link>
             </div>
           </article>
         );
       })}
 
+      {/* Load More Button */}
+      {visiblePosts < posts.length && (
+        <div className="text-center pt-6">
+          <button
+            onClick={loadMorePosts}
+            disabled={loadingMore}
+            className="btn-primary px-8 py-3 rounded-xl font-semibold text-lg transition-all duration-200 hover:scale-105"
+          >
+            {loadingMore ? (
+              <div className="flex items-center gap-2">
+                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                Loading...
+              </div>
+            ) : (
+              "Load More Posts"
+            )}
+          </button>
+        </div>
+      )}
+
       {posts.length === 0 && (
         <div className="text-center py-12">
-          <div className="text-gray-500 dark:text-gray-400 mb-4">
+          <div className="text-gray-400 mb-4">
             <svg
-              className="mx-auto h-12 w-12"
+              className="mx-auto h-16 w-16"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -335,10 +382,10 @@ export function PostFeed() {
               />
             </svg>
           </div>
-          <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+          <h3 className="text-xl font-semibold text-white mb-2">
             No posts yet
           </h3>
-          <p className="text-gray-500 dark:text-gray-400">
+          <p className="text-gray-400 text-lg">
             Be the first to share an update!
           </p>
         </div>

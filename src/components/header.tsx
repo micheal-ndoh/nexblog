@@ -100,258 +100,213 @@ export function Header() {
     languages.find((lang) => lang.code === getLanguage()) || languages[1]; // Default to English
 
   return (
-    <header className="bg-black border-b border-gray-800 sticky top-0 z-40 ml-64">
+    <header className="bg-black/80 backdrop-blur-xl border-b border-gray-800/50 sticky top-0 z-40 ml-64">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          {/* Spacer for sidebar */}
-          <div className="flex items-center gap-8"></div>
+          {/* Logo and Search */}
+          <div className="flex items-center gap-6">
+            {/* NexBlog Logo */}
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center shadow-lg">
+                <svg
+                  fill="currentColor"
+                  viewBox="0 0 48 48"
+                  className="w-6 h-6 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path d="M44 4H30.6666V17.3334H17.3334V30.6666H4V44H44V4Z" />
+                </svg>
+              </div>
+              <h1 className="text-xl font-bold tracking-tight text-white">
+                NexBlog
+              </h1>
+            </div>
 
-          {/* Search and Actions */}
-          <div className="flex items-center gap-4">
             {/* Search */}
             <form onSubmit={handleSearch} className="hidden md:block">
               <div className="relative">
                 <MagnifyingGlassIcon className="absolute left-4 top-1/2 transform -translate-y-1/2 h-6 w-6 text-gray-400" />
                 <input
                   type="text"
-                  placeholder="Search..."
+                  placeholder="Search posts, users, tags..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-64 pl-10 pr-4 py-2 border border-gray-700 rounded-full bg-gray-800 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                  className="w-80 pl-12 pr-4 py-3 border border-gray-700/50 rounded-xl bg-gray-800/50 backdrop-blur-sm text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-200"
                 />
               </div>
             </form>
+          </div>
 
-            {/* Actions */}
-            <div className="flex items-center gap-2">
-              {/* Language Toggle */}
-              <div className="relative" ref={languageMenuRef}>
-                <button
-                  onClick={() => setIsLanguageMenuOpen(!isLanguageMenuOpen)}
-                  className="p-2 text-gray-300 hover:text-orange-500 transition-colors rounded-lg hover:bg-gray-800"
-                  title="Change language"
-                >
-                  <div className="flex items-center gap-1">
-                    <GlobeAltIcon className="h-6 w-6" />
-                    <span className="text-sm hidden sm:inline">
-                      {currentLanguage.flag}
-                    </span>
-                  </div>
-                </button>
-
-                {isLanguageMenuOpen && (
-                  <div className="absolute right-0 mt-2 w-48 bg-gray-800 rounded-lg shadow-lg border border-gray-700 py-1 z-50 max-h-64 overflow-y-auto">
-                    {languages.map((language) => (
-                      <button
-                        key={language.code}
-                        onClick={() => handleLanguageChange(language.code)}
-                        className={`w-full flex items-center gap-3 px-4 py-2 text-sm hover:bg-gray-700 transition-colors ${
-                          getLanguage() === language.code
-                            ? "text-orange-500 bg-orange-500/10"
-                            : "text-gray-300"
-                        }`}
-                      >
-                        <span className="text-lg">{language.flag}</span>
-                        <span className="truncate">{language.name}</span>
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              {/* Theme Toggle */}
-              <div className="relative" ref={themeMenuRef}>
-                <button
-                  onClick={() => setIsThemeMenuOpen(!isThemeMenuOpen)}
-                  className="p-2 text-gray-300 hover:text-orange-500 transition-colors rounded-lg hover:bg-gray-800"
-                  title="Toggle theme"
-                >
-                  {getThemeIcon()}
-                </button>
-
-                {isThemeMenuOpen && (
-                  <div className="absolute right-0 mt-2 w-40 bg-gray-800 rounded-lg shadow-lg border border-gray-700 py-1 z-50">
-                    <button
-                      onClick={() => handleThemeChange("light")}
-                      className={`w-full flex items-center gap-3 px-4 py-2 text-sm hover:bg-gray-700 transition-colors ${
-                        theme === "light"
-                          ? "text-orange-500 bg-orange-500/10"
-                          : "text-gray-300"
-                      }`}
-                    >
-                      <SunIcon className="h-5 w-5" />
-                      Light
-                    </button>
-                    <button
-                      onClick={() => handleThemeChange("dark")}
-                      className={`w-full flex items-center gap-3 px-4 py-2 text-sm hover:bg-gray-700 transition-colors ${
-                        theme === "dark"
-                          ? "text-orange-500 bg-orange-500/10"
-                          : "text-gray-300"
-                      }`}
-                    >
-                      <MoonIcon className="h-5 w-5" />
-                      Dark
-                    </button>
-                    <button
-                      onClick={() => handleThemeChange("system")}
-                      className={`w-full flex items-center gap-3 px-4 py-2 text-sm hover:bg-gray-700 transition-colors ${
-                        theme === "system"
-                          ? "text-orange-500 bg-orange-500/10"
-                          : "text-gray-300"
-                      }`}
-                    >
-                      <ComputerDesktopIcon className="h-5 w-5" />
-                      System
-                    </button>
-                  </div>
-                )}
-              </div>
-
-              {session?.user ? (
-                <>
-                  {/* New Post Button */}
-                  <Link
-                    href="/posts/new"
-                    className="btn-primary rounded-lg px-4 py-2 text-sm font-medium transition-colors flex items-center gap-2 shadow-sm hover:bg-orange-600"
-                  >
-                    <svg
-                      fill="currentColor"
-                      height="20"
-                      viewBox="0 0 256 256"
-                      width="20"
-                    >
-                      <path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z" />
-                    </svg>
-                    <span className="hidden sm:inline">New Post</span>
-                  </Link>
-
-                  {/* Notifications */}
-                  <Link
-                    href="/notifications"
-                    className="relative p-2 text-gray-300 hover:text-orange-500 transition-colors"
-                  >
-                    <BellIcon className="h-7 w-7" />
-                    {unreadCount > 0 && (
-                      <span className="absolute -top-1 -right-1 flex h-5 w-5">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-600 opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-5 w-5 bg-blue-600 text-white text-xs items-center justify-center">
-                          {unreadCount > 9 ? "9+" : unreadCount}
-                        </span>
-                      </span>
-                    )}
-                  </Link>
-
-                  {/* User Menu */}
-                  <div className="relative">
-                    <button
-                      onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                      className="flex items-center gap-2 p-2 rounded-full hover:bg-gray-800 transition-colors"
-                    >
-                      {session.user.image ? (
-                        <Image
-                          src={session.user.image}
-                          alt={session.user.name || "User"}
-                          width={40}
-                          height={40}
-                          className="w-10 h-10 rounded-full"
-                        />
-                      ) : (
-                        <UserCircleIcon className="w-12 h-12 text-gray-400" />
-                      )}
-                    </button>
-
-                    {isUserMenuOpen && (
-                      <div className="absolute right-0 mt-2 w-48 bg-gray-800 rounded-lg shadow-lg border border-gray-700 py-1 z-50">
-                        <div className="px-4 py-2 border-b border-gray-700">
-                          <p className="text-sm font-medium text-white">
-                            {session.user.name}
-                          </p>
-                          <p className="text-sm text-gray-400">
-                            {session.user.email}
-                          </p>
-                        </div>
-                        <Link
-                          href="/profile"
-                          className="flex items-center gap-2 px-4 py-2 text-sm text-gray-300 hover:bg-gray-700"
-                          onClick={() => setIsUserMenuOpen(false)}
-                        >
-                          <UserCircleIcon className="h-5 w-5" />
-                          Profile
-                        </Link>
-                        <Link
-                          href="/settings"
-                          className="flex items-center gap-2 px-4 py-2 text-sm text-gray-300 hover:bg-gray-700"
-                          onClick={() => setIsUserMenuOpen(false)}
-                        >
-                          <Cog6ToothIcon className="h-5 w-5" />
-                          Settings
-                        </Link>
-                        {(session.user as { role?: string }).role ===
-                          "ADMIN" && (
-                          <Link
-                            href="/admin"
-                            className="flex items-center gap-2 px-4 py-2 text-sm text-gray-300 hover:bg-gray-700"
-                            onClick={() => setIsUserMenuOpen(false)}
-                          >
-                            <svg
-                              className="h-4 w-4"
-                              fill="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path d="M12 2L2 7v10c0 5.55 3.84 9.74 9 11 5.16-1.26 9-5.45 9-11V7l-10-5z" />
-                            </svg>
-                            Admin Dashboard
-                          </Link>
-                        )}
-                        <button
-                          onClick={handleSignOut}
-                          className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-300 hover:bg-gray-700"
-                        >
-                          <ArrowRightOnRectangleIcon className="h-5 w-5" />
-                          Sign Out
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                </>
-              ) : (
+          {/* Actions */}
+          <div className="flex items-center gap-3">
+            {/* Language Toggle */}
+            <div className="relative" ref={languageMenuRef}>
+              <button
+                onClick={() => setIsLanguageMenuOpen(!isLanguageMenuOpen)}
+                className="p-3 text-gray-300 hover:text-orange-500 transition-colors rounded-xl hover:bg-gray-800/50 backdrop-blur-sm"
+                title="Change language"
+              >
                 <div className="flex items-center gap-2">
-                  <Link
-                    href="/auth/signin"
-                    className="text-gray-300 hover:text-orange-500 transition-colors"
-                  >
-                    Sign In
-                  </Link>
-                  <Link
-                    href="/auth/signup"
-                    className="btn-primary px-6 py-2 rounded-lg font-semibold flex items-center hover:bg-orange-600 transition-colors"
-                  >
-                    Get Started
-                    <svg
-                      className="w-5 h-5 ml-2"
-                      fill="currentColor"
-                      viewBox="0 0 24 24"
+                  <GlobeAltIcon className="h-6 w-6" />
+                  <span className="text-sm hidden sm:inline font-medium">
+                    {currentLanguage.flag}
+                  </span>
+                </div>
+              </button>
+
+              {isLanguageMenuOpen && (
+                <div className="absolute right-0 mt-2 w-48 bg-gray-800/90 backdrop-blur-xl rounded-xl shadow-lg border border-gray-700/50 py-2 z-50 max-h-64 overflow-y-auto">
+                  {languages.map((language) => (
+                    <button
+                      key={language.code}
+                      onClick={() => handleLanguageChange(language.code)}
+                      className={`w-full flex items-center gap-3 px-4 py-3 text-sm hover:bg-gray-700/50 transition-colors ${
+                        getLanguage() === language.code
+                          ? "text-orange-500 bg-orange-500/10"
+                          : "text-gray-300"
+                      }`}
                     >
-                      <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8-8-8z" />
-                    </svg>
-                  </Link>
+                      <span className="text-lg">{language.flag}</span>
+                      <span className="truncate font-medium">{language.name}</span>
+                    </button>
+                  ))}
                 </div>
               )}
-
-              {/* Mobile menu button */}
-              <button className="md:hidden p-2 text-gray-300 hover:text-orange-500 transition-colors">
-                <Bars3Icon className="h-7 w-7" />
-              </button>
             </div>
+
+            {/* Theme Toggle */}
+            <div className="relative" ref={themeMenuRef}>
+              <button
+                onClick={() => setIsThemeMenuOpen(!isThemeMenuOpen)}
+                className="p-3 text-gray-300 hover:text-orange-500 transition-colors rounded-xl hover:bg-gray-800/50 backdrop-blur-sm"
+                title="Toggle theme"
+              >
+                {getThemeIcon()}
+              </button>
+
+              {isThemeMenuOpen && (
+                <div className="absolute right-0 mt-2 w-40 bg-gray-800/90 backdrop-blur-xl rounded-xl shadow-lg border border-gray-700/50 py-2 z-50">
+                  <button
+                    onClick={() => handleThemeChange("light")}
+                    className={`w-full flex items-center gap-3 px-4 py-3 text-sm hover:bg-gray-700/50 transition-colors ${
+                      theme === "light"
+                        ? "text-orange-500 bg-orange-500/10"
+                        : "text-gray-300"
+                    }`}
+                  >
+                    <SunIcon className="h-5 w-5" />
+                    <span className="font-medium">Light</span>
+                  </button>
+                  <button
+                    onClick={() => handleThemeChange("dark")}
+                    className={`w-full flex items-center gap-3 px-4 py-3 text-sm hover:bg-gray-700/50 transition-colors ${
+                      theme === "dark"
+                        ? "text-orange-500 bg-orange-500/10"
+                        : "text-gray-300"
+                    }`}
+                  >
+                    <MoonIcon className="h-5 w-5" />
+                    <span className="font-medium">Dark</span>
+                  </button>
+                  <button
+                    onClick={() => handleThemeChange("system")}
+                    className={`w-full flex items-center gap-3 px-4 py-3 text-sm hover:bg-gray-700/50 transition-colors ${
+                      theme === "system"
+                        ? "text-orange-500 bg-orange-500/10"
+                        : "text-gray-300"
+                    }`}
+                  >
+                    <ComputerDesktopIcon className="h-5 w-5" />
+                    <span className="font-medium">System</span>
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* Notifications */}
+            <Link
+              href="/notifications"
+              className="relative p-3 text-gray-300 hover:text-orange-500 transition-colors rounded-xl hover:bg-gray-800/50 backdrop-blur-sm"
+            >
+              <BellIcon className="h-7 w-7" />
+              {unreadCount > 0 && (
+                <span className="absolute -top-1 -right-1 flex h-6 w-6">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-6 w-6 bg-orange-500 text-white text-xs font-bold items-center justify-center">
+                    {unreadCount > 99 ? "99+" : unreadCount}
+                  </span>
+                </span>
+              )}
+            </Link>
+
+            {/* User Menu */}
+            <div className="relative">
+              <button
+                onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                className="flex items-center gap-3 p-2 rounded-xl hover:bg-gray-800/50 backdrop-blur-sm transition-colors"
+              >
+                {session?.user?.image ? (
+                  <Image
+                    src={session.user.image}
+                    alt="Profile"
+                    width={40}
+                    height={40}
+                    className="w-10 h-10 rounded-full border-2 border-gray-700"
+                  />
+                ) : (
+                  <UserCircleIcon className="w-12 h-12 text-gray-400" />
+                )}
+              </button>
+
+              {isUserMenuOpen && (
+                <div className="absolute right-0 mt-2 w-56 bg-gray-800/90 backdrop-blur-xl rounded-xl shadow-lg border border-gray-700/50 py-2 z-50">
+                  <div className="px-4 py-3 border-b border-gray-700/50">
+                    <p className="text-sm font-medium text-white">
+                      {session?.user?.name}
+                    </p>
+                    <p className="text-sm text-gray-400">{session?.user?.email}</p>
+                  </div>
+                  <div className="py-1">
+                    <Link
+                      href="/profile"
+                      className="flex items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:bg-gray-700/50 transition-colors"
+                      onClick={() => setIsUserMenuOpen(false)}
+                    >
+                      <UserCircleIcon className="h-5 w-5" />
+                      <span className="font-medium">Profile</span>
+                    </Link>
+                    <Link
+                      href="/settings"
+                      className="flex items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:bg-gray-700/50 transition-colors"
+                      onClick={() => setIsUserMenuOpen(false)}
+                    >
+                      <Cog6ToothIcon className="h-5 w-5" />
+                      <span className="font-medium">Settings</span>
+                    </Link>
+                    <button
+                      onClick={handleSignOut}
+                      className="flex items-center gap-3 w-full px-4 py-3 text-sm text-gray-300 hover:bg-gray-700/50 transition-colors"
+                    >
+                      <ArrowRightOnRectangleIcon className="h-5 w-5" />
+                      <span className="font-medium">Sign Out</span>
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Mobile menu button */}
+            <button className="md:hidden p-3 text-gray-300 hover:text-orange-500 transition-colors rounded-xl hover:bg-gray-800/50 backdrop-blur-sm">
+              <Bars3Icon className="h-7 w-7" />
+            </button>
           </div>
         </div>
       </div>
 
       {/* Signout Modal */}
-      <SignoutModal
-        isOpen={isSignoutModalOpen}
-        onClose={() => setIsSignoutModalOpen(false)}
+      <SignoutModal 
+        isOpen={isSignoutModalOpen} 
+        onClose={() => setIsSignoutModalOpen(false)} 
       />
     </header>
   );
