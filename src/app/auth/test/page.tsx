@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { signIn, getProviders } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
 
-export default function AuthTestPage() {
+// Component that uses useSearchParams - needs to be wrapped in Suspense
+function AuthTestContent() {
   const [providers, setProviders] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -116,5 +117,31 @@ export default function AuthTestPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+// Loading fallback component
+function AuthTestFallback() {
+  return (
+    <div className="min-h-screen bg-gray-900 flex items-center justify-center p-4">
+      <div className="max-w-md w-full bg-gray-800 rounded-lg p-6">
+        <div className="animate-pulse">
+          <div className="h-8 bg-gray-700 rounded w-3/4 mb-6"></div>
+          <div className="space-y-4">
+            <div className="h-10 bg-gray-700 rounded"></div>
+            <div className="h-10 bg-gray-700 rounded"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Main page component with Suspense boundary
+export default function AuthTestPage() {
+  return (
+    <Suspense fallback={<AuthTestFallback />}>
+      <AuthTestContent />
+    </Suspense>
   );
 }
