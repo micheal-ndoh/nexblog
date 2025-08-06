@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { signOut } from "next-auth/react";
 import {
   ExclamationTriangleIcon,
@@ -8,6 +8,7 @@ import {
   XMarkIcon,
   CheckIcon,
 } from "@heroicons/react/24/outline";
+import { createPortal } from "react-dom";
 
 interface SignoutModalProps {
   isOpen: boolean;
@@ -17,6 +18,11 @@ interface SignoutModalProps {
 export function SignoutModal({ isOpen, onClose }: SignoutModalProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [isBrowser, setIsBrowser] = useState(false);
+
+  useEffect(() => {
+    setIsBrowser(true);
+  }, []);
 
   const handleSignout = async () => {
     setIsLoading(true);
@@ -33,19 +39,19 @@ export function SignoutModal({ isOpen, onClose }: SignoutModalProps) {
     }
   };
 
-  if (!isOpen) return null;
+  if (!isOpen || !isBrowser) return null;
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+  return createPortal(
+    <div className="fixed inset-0 z-[1000] flex items-center justify-center p-4">
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/80 backdrop-blur-2xl z-[1001]"
         onClick={onClose}
       />
 
       {/* Modal */}
-      <div className="relative w-full max-w-md animate-fade-in-up">
-        <div className="relative bg-custom-dark rounded-2xl shadow-2xl border border-gray-700 overflow-hidden">
+      <div className="relative w-full max-w-md animate-fade-in-up z-[1002]">
+        <div className="relative bg-black/90 rounded-2xl shadow-2xl border border-gray-700 overflow-hidden">
           {/* Aurora Effect */}
           <div className="aurora-effect" />
 
@@ -140,6 +146,7 @@ export function SignoutModal({ isOpen, onClose }: SignoutModalProps) {
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

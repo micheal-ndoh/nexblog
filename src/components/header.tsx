@@ -24,7 +24,7 @@ import { useT, languages } from "@/lib/tolgee";
 import { SignoutModal } from "./signout-modal";
 
 export function Header() {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const router = useRouter();
   const { unreadCount } = useNotificationStore();
   const { theme, setTheme } = useThemeStore();
@@ -264,7 +264,7 @@ export function Header() {
             </Link>
 
             {/* User Menu */}
-            {session?.user ? (
+            {status === "loading" ? null : session?.user ? (
               <div className="relative" ref={userMenuRef}>
                 <button
                   onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}

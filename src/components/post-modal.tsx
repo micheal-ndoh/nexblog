@@ -45,7 +45,7 @@ export function PostModal({ post, comments, isOpen, onClose }) {
       {/* Modal card */}
       <div
         ref={modalRef}
-        className="glassmorphism-card relative z-10 max-w-2xl w-full mx-4 p-8 rounded-2xl shadow-2xl animate-fade-in-up"
+        className="glassmorphism-card relative z-10 max-w-2xl w-full mx-4 p-8 rounded-2xl shadow-2xl animate-fade-in-up max-h-[90vh] overflow-auto"
       >
         <button
           onClick={onClose}
@@ -55,7 +55,7 @@ export function PostModal({ post, comments, isOpen, onClose }) {
         </button>
         <div className="mb-6">
           <h2 className="text-2xl font-bold text-white mb-2">{post.title}</h2>
-          <p className="text-gray-300 mb-4">{post.content}</p>
+          <p className="text-white mb-4">{post.content}</p>
           {post.imageUrl && (
             <div className="relative w-full aspect-[16/9] rounded-xl overflow-hidden mb-4">
               <Image

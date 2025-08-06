@@ -145,8 +145,8 @@ export default async function PostPage({ params }: PostPageProps) {
 
           {/* Post Content */}
           <div className="p-6">
-            <div className="prose prose-gray dark:prose-invert max-w-none">
-              <div className="whitespace-pre-wrap text-gray-700 dark:text-gray-300 leading-relaxed">
+            <div className="prose max-w-none max-h-[60vh] overflow-auto">
+              <div className="whitespace-pre-wrap text-white leading-relaxed">
                 {post.content}
               </div>
             </div>

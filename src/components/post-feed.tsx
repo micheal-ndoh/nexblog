@@ -267,9 +267,11 @@ export function PostFeed() {
               <h2 className="text-white text-xl font-bold mb-3 hover:text-orange-400 transition-colors">
                 <Link href={`/posts/${post.id}`}>{post.title}</Link>
               </h2>
-              <p className="text-gray-300 text-base leading-relaxed mb-4">
-                {truncateText(post.content, 200)}
-              </p>
+              <div className="max-h-32 overflow-auto">
+                <p className="text-white text-base leading-relaxed mb-4">
+                  {truncateText(post.content, 200)}
+                </p>
+              </div>
 
               {/* Post Image */}
               {post.imageUrl && (
