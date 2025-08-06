@@ -86,13 +86,13 @@ export function Header() {
   const getThemeIcon = () => {
     switch (theme) {
       case "light":
-        return <SunIcon className="h-5 w-5" />;
+        return <SunIcon className="h-6 w-6" />;
       case "dark":
-        return <MoonIcon className="h-5 w-5" />;
+        return <MoonIcon className="h-6 w-6" />;
       case "system":
-        return <ComputerDesktopIcon className="h-5 w-5" />;
+        return <ComputerDesktopIcon className="h-6 w-6" />;
       default:
-        return <SunIcon className="h-5 w-5" />;
+        return <SunIcon className="h-6 w-6" />;
     }
   };
 
@@ -111,7 +111,7 @@ export function Header() {
             {/* Search */}
             <form onSubmit={handleSearch} className="hidden md:block">
               <div className="relative">
-                <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                <MagnifyingGlassIcon className="absolute left-4 top-1/2 transform -translate-y-1/2 h-6 w-6 text-gray-400" />
                 <input
                   type="text"
                   placeholder="Search..."
@@ -132,7 +132,7 @@ export function Header() {
                   title="Change language"
                 >
                   <div className="flex items-center gap-1">
-                    <GlobeAltIcon className="h-5 w-5" />
+                    <GlobeAltIcon className="h-6 w-6" />
                     <span className="text-sm hidden sm:inline">
                       {currentLanguage.flag}
                     </span>
@@ -179,7 +179,7 @@ export function Header() {
                           : "text-gray-300"
                       }`}
                     >
-                      <SunIcon className="h-4 w-4" />
+                      <SunIcon className="h-5 w-5" />
                       Light
                     </button>
                     <button
@@ -190,7 +190,7 @@ export function Header() {
                           : "text-gray-300"
                       }`}
                     >
-                      <MoonIcon className="h-4 w-4" />
+                      <MoonIcon className="h-5 w-5" />
                       Dark
                     </button>
                     <button
@@ -201,7 +201,7 @@ export function Header() {
                           : "text-gray-300"
                       }`}
                     >
-                      <ComputerDesktopIcon className="h-4 w-4" />
+                      <ComputerDesktopIcon className="h-5 w-5" />
                       System
                     </button>
                   </div>
@@ -231,7 +231,7 @@ export function Header() {
                     href="/notifications"
                     className="relative p-2 text-gray-300 hover:text-orange-500 transition-colors"
                   >
-                    <BellIcon className="h-6 w-6" />
+                    <BellIcon className="h-7 w-7" />
                     {unreadCount > 0 && (
                       <span className="absolute -top-1 -right-1 flex h-5 w-5">
                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-600 opacity-75"></span>
@@ -257,7 +257,7 @@ export function Header() {
                           className="w-10 h-10 rounded-full"
                         />
                       ) : (
-                        <UserCircleIcon className="w-10 h-10 text-gray-400" />
+                        <UserCircleIcon className="w-12 h-12 text-gray-400" />
                       )}
                     </button>
 
@@ -276,7 +276,7 @@ export function Header() {
                           className="flex items-center gap-2 px-4 py-2 text-sm text-gray-300 hover:bg-gray-700"
                           onClick={() => setIsUserMenuOpen(false)}
                         >
-                          <UserCircleIcon className="h-4 w-4" />
+                          <UserCircleIcon className="h-5 w-5" />
                           Profile
                         </Link>
                         <Link
@@ -284,7 +284,7 @@ export function Header() {
                           className="flex items-center gap-2 px-4 py-2 text-sm text-gray-300 hover:bg-gray-700"
                           onClick={() => setIsUserMenuOpen(false)}
                         >
-                          <Cog6ToothIcon className="h-4 w-4" />
+                          <Cog6ToothIcon className="h-5 w-5" />
                           Settings
                         </Link>
                         {(session.user as { role?: string }).role ===
@@ -308,7 +308,7 @@ export function Header() {
                           onClick={handleSignOut}
                           className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-300 hover:bg-gray-700"
                         >
-                          <ArrowRightOnRectangleIcon className="h-4 w-4" />
+                          <ArrowRightOnRectangleIcon className="h-5 w-5" />
                           Sign Out
                         </button>
                       </div>
@@ -341,7 +341,7 @@ export function Header() {
 
               {/* Mobile menu button */}
               <button className="md:hidden p-2 text-gray-300 hover:text-orange-500 transition-colors">
-                <Bars3Icon className="h-6 w-6" />
+                <Bars3Icon className="h-7 w-7" />
               </button>
             </div>
           </div>

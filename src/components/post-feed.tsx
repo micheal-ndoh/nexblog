@@ -224,7 +224,10 @@ export function PostFeed() {
               {/* Post Content */}
               <div className="mb-4">
                 {post.imageUrl && (
-                  <div className="relative w-full" style={{ minHeight: "300px", maxHeight: "500px" }}>
+                  <div
+                    className="relative w-full"
+                    style={{ minHeight: "300px", maxHeight: "500px" }}
+                  >
                     <Image
                       src={post.imageUrl}
                       alt={post.title}
@@ -273,9 +276,9 @@ export function PostFeed() {
                   }`}
                 >
                   {isLiked ? (
-                    <HeartIconSolid className="h-5 w-5" />
+                    <HeartIconSolid className="h-6 w-6" />
                   ) : (
-                    <HeartIcon className="h-5 w-5" />
+                    <HeartIcon className="h-6 w-6" />
                   )}
                   <span className="text-sm font-medium">
                     {post._count.likes}
@@ -286,7 +289,7 @@ export function PostFeed() {
                   href={`/posts/${post.id}#comments`}
                   className="flex items-center gap-2 text-gray-500 dark:text-gray-400 hover:text-primary transition-colors"
                 >
-                  <ChatBubbleLeftIcon className="h-5 w-5" />
+                  <ChatBubbleLeftIcon className="h-6 w-6" />
                   <span className="text-sm font-medium">
                     {post._count.comments}
                   </span>
@@ -301,9 +304,9 @@ export function PostFeed() {
                   }`}
                 >
                   {isSaved ? (
-                    <BookmarkIconSolid className="h-5 w-5" />
+                    <BookmarkIconSolid className="h-6 w-6" />
                   ) : (
-                    <BookmarkIcon className="h-5 w-5" />
+                    <BookmarkIcon className="h-6 w-6" />
                   )}
                   <span className="text-sm font-medium">
                     {isSaved ? "Saved" : "Save"}

@@ -124,7 +124,7 @@ export default function SignUpPage() {
 
         {error && (
           <div className="mb-6 p-4 bg-red-900/20 border border-red-800 rounded-lg flex items-center gap-3">
-            <ExclamationTriangleIcon className="w-5 h-5 text-red-400" />
+            <ExclamationTriangleIcon className="w-6 h-6 text-red-400" />
             <p className="text-sm text-red-400">{error}</p>
           </div>
         )}
@@ -226,7 +226,7 @@ export default function SignUpPage() {
               </svg>
               <span>Continue with Google</span>
             </div>
-            <ArrowRightIcon className="w-5 h-5 text-gray-500" />
+            <ArrowRightIcon className="w-6 h-6 text-gray-500" />
           </button>
         </div>
 

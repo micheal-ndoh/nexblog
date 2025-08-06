@@ -23,6 +23,9 @@ export const authOptions: NextAuthOptions = {
         GoogleProvider({
             clientId: process.env.GOOGLE_CLIENT_ID!,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+            httpOptions: {
+                timeout: 30000,
+            },
             authorization: {
                 params: {
                     prompt: "consent",
@@ -91,14 +94,10 @@ export const authOptions: NextAuthOptions = {
             return session
         },
         async signIn({ user, account, profile }) {
-            // Log sign-in attempts for debugging
             console.log(`[NextAuth] Sign-in attempt for user: ${user.email}`);
-            console.log(`[NextAuth] Account type: ${account?.type}`);
-            console.log(`[NextAuth] Provider: ${account?.provider}`);
             return true;
         },
         async jwt({ token, user, account }) {
-            // Log JWT token creation for debugging
             if (user) {
                 console.log(`[NextAuth] JWT token created for user: ${user.email}`);
             }
@@ -106,9 +105,7 @@ export const authOptions: NextAuthOptions = {
         },
         async redirect({ url, baseUrl }) {
             console.log(`[NextAuth] Redirect called: ${url} -> ${baseUrl}`);
-            // Allows relative callback URLs
             if (url.startsWith("/")) return `${baseUrl}${url}`
-            // Allows callback URLs on the same origin
             else if (new URL(url).origin === baseUrl) return url
             return baseUrl
         }
