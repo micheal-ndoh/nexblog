@@ -8,10 +8,36 @@ import bcrypt from "bcryptjs"
 export const authOptions: NextAuthOptions = {
     debug: process.env.NODE_ENV === "development",
     adapter: PrismaAdapter(db),
+    logger: {
+        error(code, ...message) {
+            console.error(`[NextAuth Error] ${code}:`, ...message);
+        },
+        warn(code, ...message) {
+            console.warn(`[NextAuth Warning] ${code}:`, ...message);
+        },
+        debug(code, ...message) {
+            console.log(`[NextAuth Debug] ${code}:`, ...message);
+        },
+    },
     providers: [
         GoogleProvider({
             clientId: process.env.GOOGLE_CLIENT_ID!,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+            authorization: {
+                params: {
+                    prompt: "consent",
+                    access_type: "offline",
+                    response_type: "code"
+                }
+            },
+            profile(profile) {
+                return {
+                    id: profile.sub,
+                    name: profile.name,
+                    email: profile.email,
+                    image: profile.picture,
+                }
+            },
         }),
         CredentialsProvider({
             name: "credentials",
@@ -64,7 +90,22 @@ export const authOptions: NextAuthOptions = {
             }
             return session
         },
+        async signIn({ user, account, profile }) {
+            // Log sign-in attempts for debugging
+            console.log(`[NextAuth] Sign-in attempt for user: ${user.email}`);
+            console.log(`[NextAuth] Account type: ${account?.type}`);
+            console.log(`[NextAuth] Provider: ${account?.provider}`);
+            return true;
+        },
+        async jwt({ token, user, account }) {
+            // Log JWT token creation for debugging
+            if (user) {
+                console.log(`[NextAuth] JWT token created for user: ${user.email}`);
+            }
+            return token;
+        },
         async redirect({ url, baseUrl }) {
+            console.log(`[NextAuth] Redirect called: ${url} -> ${baseUrl}`);
             // Allows relative callback URLs
             if (url.startsWith("/")) return `${baseUrl}${url}`
             // Allows callback URLs on the same origin

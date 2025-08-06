@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { useSession, signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -21,6 +21,7 @@ import {
 import { useNotificationStore } from "@/lib/store";
 import { useThemeStore, applyTheme } from "@/lib/theme";
 import { useT, languages } from "@/lib/tolgee";
+import { SignoutModal } from "./signout-modal";
 
 export function Header() {
   const { data: session } = useSession();
@@ -32,6 +33,7 @@ export function Header() {
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isThemeMenuOpen, setIsThemeMenuOpen] = useState(false);
   const [isLanguageMenuOpen, setIsLanguageMenuOpen] = useState(false);
+  const [isSignoutModalOpen, setIsSignoutModalOpen] = useState(false);
   const themeMenuRef = useRef<HTMLDivElement>(null);
   const languageMenuRef = useRef<HTMLDivElement>(null);
 
@@ -66,7 +68,8 @@ export function Header() {
   };
 
   const handleSignOut = () => {
-    signOut({ callbackUrl: "/" });
+    setIsSignoutModalOpen(true);
+    setIsUserMenuOpen(false);
   };
 
   const handleThemeChange = (newTheme: "light" | "dark" | "system") => {
@@ -97,52 +100,11 @@ export function Header() {
     languages.find((lang) => lang.code === getLanguage()) || languages[1]; // Default to English
 
   return (
-    <header className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-40">
+    <header className="bg-black border-b border-gray-800 sticky top-0 z-40 ml-64">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          {/* Logo and Navigation */}
-          <div className="flex items-center gap-8">
-            <Link
-              href="/"
-              className="flex items-center gap-3 text-gray-900 dark:text-white"
-            >
-              <div className="w-8 h-8 text-primary">
-                <svg
-                  fill="currentColor"
-                  viewBox="0 0 48 48"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path d="M44 4H30.6666V17.3334H17.3334V30.6666H4V44H44V4Z" />
-                </svg>
-              </div>
-              <h1 className="text-xl font-bold tracking-tight">
-                {t("header.nexblog")}
-              </h1>
-            </Link>
-
-            <nav className="hidden md:flex items-center gap-6">
-              <Link
-                href="/"
-                className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary transition-colors"
-              >
-                {t("nav.home")}
-              </Link>
-              <Link
-                href="/explore"
-                className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary transition-colors"
-              >
-                {t("nav.explore")}
-              </Link>
-              {session?.user && (
-                <Link
-                  href="/notifications"
-                  className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary transition-colors"
-                >
-                  {t("nav.notifications")}
-                </Link>
-              )}
-            </nav>
-          </div>
+          {/* Spacer for sidebar */}
+          <div className="flex items-center gap-8"></div>
 
           {/* Search and Actions */}
           <div className="flex items-center gap-4">
@@ -152,10 +114,10 @@ export function Header() {
                 <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
                 <input
                   type="text"
-                  placeholder={t("header.searchPlaceholder")}
+                  placeholder="Search..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-64 pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-full bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                  className="w-64 pl-10 pr-4 py-2 border border-gray-700 rounded-full bg-gray-800 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                 />
               </div>
             </form>
@@ -166,7 +128,7 @@ export function Header() {
               <div className="relative" ref={languageMenuRef}>
                 <button
                   onClick={() => setIsLanguageMenuOpen(!isLanguageMenuOpen)}
-                  className="p-2 text-gray-600 dark:text-gray-300 hover:text-primary transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
+                  className="p-2 text-gray-300 hover:text-orange-500 transition-colors rounded-lg hover:bg-gray-800"
                   title="Change language"
                 >
                   <div className="flex items-center gap-1">
@@ -178,15 +140,15 @@ export function Header() {
                 </button>
 
                 {isLanguageMenuOpen && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1 z-50 max-h-64 overflow-y-auto">
+                  <div className="absolute right-0 mt-2 w-48 bg-gray-800 rounded-lg shadow-lg border border-gray-700 py-1 z-50 max-h-64 overflow-y-auto">
                     {languages.map((language) => (
                       <button
                         key={language.code}
                         onClick={() => handleLanguageChange(language.code)}
-                        className={`w-full flex items-center gap-3 px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors ${
+                        className={`w-full flex items-center gap-3 px-4 py-2 text-sm hover:bg-gray-700 transition-colors ${
                           getLanguage() === language.code
-                            ? "text-primary bg-primary/10"
-                            : "text-gray-700 dark:text-gray-300"
+                            ? "text-orange-500 bg-orange-500/10"
+                            : "text-gray-300"
                         }`}
                       >
                         <span className="text-lg">{language.flag}</span>
@@ -201,46 +163,46 @@ export function Header() {
               <div className="relative" ref={themeMenuRef}>
                 <button
                   onClick={() => setIsThemeMenuOpen(!isThemeMenuOpen)}
-                  className="p-2 text-gray-600 dark:text-gray-300 hover:text-primary transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
-                  title={t("header.toggleTheme")}
+                  className="p-2 text-gray-300 hover:text-orange-500 transition-colors rounded-lg hover:bg-gray-800"
+                  title="Toggle theme"
                 >
                   {getThemeIcon()}
                 </button>
 
                 {isThemeMenuOpen && (
-                  <div className="absolute right-0 mt-2 w-40 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1 z-50">
+                  <div className="absolute right-0 mt-2 w-40 bg-gray-800 rounded-lg shadow-lg border border-gray-700 py-1 z-50">
                     <button
                       onClick={() => handleThemeChange("light")}
-                      className={`w-full flex items-center gap-3 px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors ${
+                      className={`w-full flex items-center gap-3 px-4 py-2 text-sm hover:bg-gray-700 transition-colors ${
                         theme === "light"
-                          ? "text-primary bg-primary/10"
-                          : "text-gray-700 dark:text-gray-300"
+                          ? "text-orange-500 bg-orange-500/10"
+                          : "text-gray-300"
                       }`}
                     >
                       <SunIcon className="h-4 w-4" />
-                      {t("settings.light")}
+                      Light
                     </button>
                     <button
                       onClick={() => handleThemeChange("dark")}
-                      className={`w-full flex items-center gap-3 px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors ${
+                      className={`w-full flex items-center gap-3 px-4 py-2 text-sm hover:bg-gray-700 transition-colors ${
                         theme === "dark"
-                          ? "text-primary bg-primary/10"
-                          : "text-gray-700 dark:text-gray-300"
+                          ? "text-orange-500 bg-orange-500/10"
+                          : "text-gray-300"
                       }`}
                     >
                       <MoonIcon className="h-4 w-4" />
-                      {t("settings.dark")}
+                      Dark
                     </button>
                     <button
                       onClick={() => handleThemeChange("system")}
-                      className={`w-full flex items-center gap-3 px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors ${
+                      className={`w-full flex items-center gap-3 px-4 py-2 text-sm hover:bg-gray-700 transition-colors ${
                         theme === "system"
-                          ? "text-primary bg-primary/10"
-                          : "text-gray-700 dark:text-gray-300"
+                          ? "text-orange-500 bg-orange-500/10"
+                          : "text-gray-300"
                       }`}
                     >
                       <ComputerDesktopIcon className="h-4 w-4" />
-                      {t("settings.system")}
+                      System
                     </button>
                   </div>
                 )}
@@ -251,7 +213,7 @@ export function Header() {
                   {/* New Post Button */}
                   <Link
                     href="/posts/new"
-                    className="bg-blue-600 hover:bg-blue-700 text-white rounded-lg px-4 py-2 text-sm font-medium transition-colors flex items-center gap-2 shadow-sm"
+                    className="btn-primary rounded-lg px-4 py-2 text-sm font-medium transition-colors flex items-center gap-2 shadow-sm hover:bg-orange-600"
                   >
                     <svg
                       fill="currentColor"
@@ -261,15 +223,13 @@ export function Header() {
                     >
                       <path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z" />
                     </svg>
-                    <span className="hidden sm:inline">
-                      {t("header.newPost")}
-                    </span>
+                    <span className="hidden sm:inline">New Post</span>
                   </Link>
 
                   {/* Notifications */}
                   <Link
                     href="/notifications"
-                    className="relative p-2 text-gray-600 dark:text-gray-300 hover:text-primary transition-colors"
+                    className="relative p-2 text-gray-300 hover:text-orange-500 transition-colors"
                   >
                     <BellIcon className="h-6 w-6" />
                     {unreadCount > 0 && (
@@ -286,7 +246,7 @@ export function Header() {
                   <div className="relative">
                     <button
                       onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                      className="flex items-center gap-2 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                      className="flex items-center gap-2 p-2 rounded-full hover:bg-gray-800 transition-colors"
                     >
                       {session.user.image ? (
                         <Image
@@ -302,36 +262,36 @@ export function Header() {
                     </button>
 
                     {isUserMenuOpen && (
-                      <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1 z-50">
-                        <div className="px-4 py-2 border-b border-gray-200 dark:border-gray-700">
-                          <p className="text-sm font-medium text-gray-900 dark:text-white">
+                      <div className="absolute right-0 mt-2 w-48 bg-gray-800 rounded-lg shadow-lg border border-gray-700 py-1 z-50">
+                        <div className="px-4 py-2 border-b border-gray-700">
+                          <p className="text-sm font-medium text-white">
                             {session.user.name}
                           </p>
-                          <p className="text-sm text-gray-500 dark:text-gray-400">
+                          <p className="text-sm text-gray-400">
                             {session.user.email}
                           </p>
                         </div>
                         <Link
                           href="/profile"
-                          className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                          className="flex items-center gap-2 px-4 py-2 text-sm text-gray-300 hover:bg-gray-700"
                           onClick={() => setIsUserMenuOpen(false)}
                         >
                           <UserCircleIcon className="h-4 w-4" />
-                          {t("header.profile")}
+                          Profile
                         </Link>
                         <Link
                           href="/settings"
-                          className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                          className="flex items-center gap-2 px-4 py-2 text-sm text-gray-300 hover:bg-gray-700"
                           onClick={() => setIsUserMenuOpen(false)}
                         >
                           <Cog6ToothIcon className="h-4 w-4" />
-                          {t("nav.settings")}
+                          Settings
                         </Link>
                         {(session.user as { role?: string }).role ===
                           "ADMIN" && (
                           <Link
                             href="/admin"
-                            className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                            className="flex items-center gap-2 px-4 py-2 text-sm text-gray-300 hover:bg-gray-700"
                             onClick={() => setIsUserMenuOpen(false)}
                           >
                             <svg
@@ -341,15 +301,15 @@ export function Header() {
                             >
                               <path d="M12 2L2 7v10c0 5.55 3.84 9.74 9 11 5.16-1.26 9-5.45 9-11V7l-10-5z" />
                             </svg>
-                            {t("header.adminDashboard")}
+                            Admin Dashboard
                           </Link>
                         )}
                         <button
                           onClick={handleSignOut}
-                          className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                          className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-300 hover:bg-gray-700"
                         >
                           <ArrowRightOnRectangleIcon className="h-4 w-4" />
-                          {t("nav.signOut")}
+                          Sign Out
                         </button>
                       </div>
                     )}
@@ -359,27 +319,40 @@ export function Header() {
                 <div className="flex items-center gap-2">
                   <Link
                     href="/auth/signin"
-                    className="text-gray-700 dark:text-gray-300 hover:text-primary transition-colors"
+                    className="text-gray-300 hover:text-orange-500 transition-colors"
                   >
-                    {t("nav.signIn")}
+                    Sign In
                   </Link>
                   <Link
                     href="/auth/signup"
-                    className="bg-blue-600 hover:bg-blue-700 text-white rounded-lg px-4 py-2 text-sm font-medium transition-colors"
+                    className="btn-primary px-6 py-2 rounded-lg font-semibold flex items-center hover:bg-orange-600 transition-colors"
                   >
-                    {t("nav.signUp")}
+                    Get Started
+                    <svg
+                      className="w-5 h-5 ml-2"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8-8-8z" />
+                    </svg>
                   </Link>
                 </div>
               )}
 
               {/* Mobile menu button */}
-              <button className="md:hidden p-2 text-gray-600 dark:text-gray-300 hover:text-primary transition-colors">
+              <button className="md:hidden p-2 text-gray-300 hover:text-orange-500 transition-colors">
                 <Bars3Icon className="h-6 w-6" />
               </button>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Signout Modal */}
+      <SignoutModal
+        isOpen={isSignoutModalOpen}
+        onClose={() => setIsSignoutModalOpen(false)}
+      />
     </header>
   );
 }

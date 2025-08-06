@@ -3,10 +3,20 @@
 import { useState, useEffect, useRef } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { Header } from "@/components/header";
+import { Layout } from "@/components/layout";
 import { useThemeStore, applyTheme } from "@/lib/theme";
 import { useLanguageStore, languages, type Language } from "@/lib/language";
 import { FileUpload } from "@/components/file-upload";
+import {
+  UserIcon,
+  Cog6ToothIcon,
+  GlobeAltIcon,
+  SunIcon,
+  MoonIcon,
+  ComputerDesktopIcon,
+  ExclamationTriangleIcon,
+  CheckCircleIcon,
+} from "@heroicons/react/24/outline";
 
 interface UserSettings {
   name: string;
@@ -61,20 +71,19 @@ export default function SettingsPage() {
   // Redirect if not authenticated
   if (status === "loading") {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-        <Header />
-        <main className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <Layout>
+        <div className="max-w-4xl mx-auto px-4 py-8">
           <div className="animate-pulse">
-            <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-1/3 mb-4"></div>
-            <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/2 mb-8"></div>
+            <div className="h-8 bg-gray-800 rounded w-1/3 mb-4"></div>
+            <div className="h-4 bg-gray-800 rounded w-1/2 mb-8"></div>
             <div className="space-y-4">
-              <div className="h-12 bg-gray-200 dark:bg-gray-700 rounded"></div>
-              <div className="h-12 bg-gray-200 dark:bg-gray-700 rounded"></div>
-              <div className="h-12 bg-gray-200 dark:bg-gray-700 rounded"></div>
+              <div className="h-12 bg-gray-800 rounded"></div>
+              <div className="h-12 bg-gray-800 rounded"></div>
+              <div className="h-12 bg-gray-800 rounded"></div>
             </div>
           </div>
-        </main>
-      </div>
+        </div>
+      </Layout>
     );
   }
 
@@ -139,38 +148,43 @@ export default function SettingsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <Header />
-      <main className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <Layout>
+      <div className="max-w-4xl mx-auto px-4 py-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-            Settings
-          </h1>
-          <p className="text-gray-600 dark:text-gray-400">
+          <h1 className="text-4xl font-bold text-white mb-2">Settings</h1>
+          <p className="text-gray-400">
             Manage your account settings and preferences
           </p>
         </div>
 
         {error && (
-          <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-            <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
+          <div className="mb-6 p-4 bg-red-900/20 border border-red-800 rounded-lg flex items-center gap-3">
+            <ExclamationTriangleIcon className="w-5 h-5 text-red-400" />
+            <p className="text-sm text-red-400">{error}</p>
           </div>
         )}
 
         {success && (
-          <div className="mb-6 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
-            <p className="text-sm text-green-600 dark:text-green-400">
-              {success}
-            </p>
+          <div className="mb-6 p-4 bg-green-900/20 border border-green-800 rounded-lg flex items-center gap-3">
+            <CheckCircleIcon className="w-5 h-5 text-green-400" />
+            <p className="text-sm text-green-400">{success}</p>
           </div>
         )}
 
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6">
+        {/* Profile Settings */}
+        <div className="bg-custom-dark rounded-2xl shadow-lg border border-gray-700 p-8 mb-8">
+          <div className="flex items-center gap-3 mb-6">
+            <UserIcon className="w-6 h-6 text-orange-500" />
+            <h2 className="text-2xl font-semibold text-white">
+              Profile Settings
+            </h2>
+          </div>
+
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label
                 htmlFor="name"
-                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                className="block text-sm font-medium text-gray-300 mb-2"
               >
                 Display Name
               </label>
@@ -179,7 +193,7 @@ export default function SettingsPage() {
                 type="text"
                 value={settings.name}
                 onChange={(e) => handleChange("name", e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                className="w-full px-4 py-3 border border-gray-700 rounded-lg bg-gray-800 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                 placeholder="Enter your display name"
               />
             </div>
@@ -187,7 +201,7 @@ export default function SettingsPage() {
             <div>
               <label
                 htmlFor="email"
-                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                className="block text-sm font-medium text-gray-300 mb-2"
               >
                 Email Address
               </label>
@@ -196,13 +210,13 @@ export default function SettingsPage() {
                 type="email"
                 value={settings.email}
                 onChange={(e) => handleChange("email", e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                className="w-full px-4 py-3 border border-gray-700 rounded-lg bg-gray-800 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                 placeholder="Enter your email address"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-gray-300 mb-2">
                 Profile Picture
               </label>
               {settings.image ? (
@@ -211,13 +225,13 @@ export default function SettingsPage() {
                     <img
                       src={settings.image}
                       alt="Profile picture"
-                      className="w-20 h-20 rounded-full object-cover border-2 border-gray-300 dark:border-gray-600"
+                      className="w-20 h-20 rounded-full object-cover border-2 border-gray-600"
                     />
                     <div className="flex gap-2">
                       <button
                         type="button"
                         onClick={() => handleChange("image", "")}
-                        className="px-3 py-1 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded transition-colors"
+                        className="px-3 py-1 text-sm text-red-400 hover:bg-red-900/20 rounded transition-colors"
                       >
                         Remove
                       </button>
@@ -247,17 +261,17 @@ export default function SettingsPage() {
                   <span>Upload Profile Picture</span>
                 </FileUpload>
               )}
-              <p className="text-sm text-gray-500 dark:text-gray-400">
+              <p className="text-sm text-gray-400">
                 Upload a profile picture or leave empty to use your default
                 avatar
               </p>
             </div>
 
-            <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+            <div className="pt-4 border-t border-gray-700">
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="w-full px-6 py-3 btn-primary rounded-lg font-medium focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors hover:bg-orange-600"
               >
                 {loading ? "Saving..." : "Save Changes"}
               </button>
@@ -266,20 +280,26 @@ export default function SettingsPage() {
         </div>
 
         {/* Theme Settings */}
-        <div className="mt-8 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6">
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
-            Appearance
-          </h2>
+        <div className="bg-custom-dark rounded-2xl shadow-lg border border-gray-700 p-8 mb-8">
+          <div className="flex items-center gap-3 mb-6">
+            <Cog6ToothIcon className="w-6 h-6 text-orange-500" />
+            <h2 className="text-2xl font-semibold text-white">Appearance</h2>
+          </div>
+
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-gray-300 mb-4">
                 Theme
               </label>
-              <div className="grid grid-cols-3 gap-2">
+              <div className="grid grid-cols-3 gap-4">
                 {[
-                  { value: "light", label: "Light", icon: "☀️" },
-                  { value: "dark", label: "Dark", icon: "🌙" },
-                  { value: "system", label: "System", icon: "💻" },
+                  { value: "light", label: "Light", icon: SunIcon },
+                  { value: "dark", label: "Dark", icon: MoonIcon },
+                  {
+                    value: "system",
+                    label: "System",
+                    icon: ComputerDesktopIcon,
+                  },
                 ].map((option) => (
                   <button
                     key={option.value}
@@ -288,14 +308,16 @@ export default function SettingsPage() {
                         option.value as "light" | "dark" | "system"
                       )
                     }
-                    className={`p-3 rounded-lg border transition-colors ${
+                    className={`p-4 rounded-lg border transition-colors ${
                       theme === option.value
-                        ? "border-primary bg-primary/10 text-primary"
-                        : "border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700"
+                        ? "border-orange-500 bg-orange-500/10 text-orange-500"
+                        : "border-gray-700 hover:bg-gray-800 text-gray-300"
                     }`}
                   >
-                    <div className="text-lg mb-1">{option.icon}</div>
-                    <div className="text-sm font-medium">{option.label}</div>
+                    <div className="flex flex-col items-center gap-2">
+                      <option.icon className="w-6 h-6" />
+                      <div className="text-sm font-medium">{option.label}</div>
+                    </div>
                   </button>
                 ))}
               </div>
@@ -304,14 +326,16 @@ export default function SettingsPage() {
         </div>
 
         {/* Language Settings */}
-        <div className="mt-8 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6">
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
-            Language
-          </h2>
+        <div className="bg-custom-dark rounded-2xl shadow-lg border border-gray-700 p-8 mb-8">
+          <div className="flex items-center gap-3 mb-6">
+            <GlobeAltIcon className="w-6 h-6 text-orange-500" />
+            <h2 className="text-2xl font-semibold text-white">Language</h2>
+          </div>
+
           <div className="relative" ref={languageDropdownRef}>
             <button
               onClick={() => setShowLanguageDropdown(!showLanguageDropdown)}
-              className="w-full flex items-center justify-between p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
+              className="w-full flex items-center justify-between p-4 border border-gray-700 rounded-lg bg-gray-800 text-white hover:bg-gray-700 transition-colors"
             >
               <div className="flex items-center gap-3">
                 <span className="text-lg">{languages[language].flag}</span>
@@ -333,13 +357,15 @@ export default function SettingsPage() {
             </button>
 
             {showLanguageDropdown && (
-              <div className="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg z-10 max-h-60 overflow-y-auto">
+              <div className="absolute top-full left-0 right-0 mt-1 bg-gray-800 border border-gray-700 rounded-lg shadow-lg z-10 max-h-60 overflow-y-auto">
                 {Object.entries(languages).map(([code, lang]) => (
                   <button
                     key={code}
                     onClick={() => handleLanguageChange(code as Language)}
-                    className={`w-full flex items-center gap-3 p-3 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors ${
-                      language === code ? "bg-primary/10 text-primary" : ""
+                    className={`w-full flex items-center gap-3 p-3 hover:bg-gray-700 transition-colors ${
+                      language === code
+                        ? "bg-orange-500/10 text-orange-500"
+                        : "text-gray-300"
                     }`}
                   >
                     <span className="text-lg">{lang.flag}</span>
@@ -352,26 +378,26 @@ export default function SettingsPage() {
         </div>
 
         {/* Account Actions */}
-        <div className="mt-8 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6">
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+        <div className="bg-custom-dark rounded-2xl shadow-lg border border-gray-700 p-8">
+          <h2 className="text-2xl font-semibold text-white mb-6">
             Account Actions
           </h2>
           <div className="space-y-4">
             <button
               onClick={() => router.push("/auth/signin")}
-              className="w-full px-4 py-2 text-left text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors"
+              className="w-full px-4 py-3 text-left text-gray-300 hover:bg-gray-800 rounded-lg transition-colors"
             >
               Change Password
             </button>
             <button
               onClick={() => router.push("/auth/signin")}
-              className="w-full px-4 py-2 text-left text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+              className="w-full px-4 py-3 text-left text-red-400 hover:bg-red-900/20 rounded-lg transition-colors"
             >
               Delete Account
             </button>
           </div>
         </div>
-      </main>
-    </div>
+      </div>
+    </Layout>
   );
 }

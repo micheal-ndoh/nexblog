@@ -4,7 +4,13 @@ import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Header } from "@/components/header";
+import {
+  ExclamationTriangleIcon,
+  ArrowRightIcon,
+  UserIcon,
+  EnvelopeIcon,
+  LockClosedIcon,
+} from "@heroicons/react/24/outline";
 
 export default function SignUpPage() {
   const router = useRouter();
@@ -84,133 +90,123 @@ export default function SignUpPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <Header />
-      <main className="flex items-center justify-center min-h-[calc(100vh-4rem)] px-4">
-        <div className="w-full max-w-md">
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-8">
-            <div className="text-center mb-8">
-              <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-                Create your account
-              </h1>
-              <p className="text-gray-600 dark:text-gray-400">
-                Join us and start sharing your updates
-              </p>
-            </div>
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 flex items-center justify-center relative overflow-hidden">
+      {/* Animated background elements */}
+      <div className="absolute inset-0">
+        <div className="absolute top-0 left-0 w-72 h-72 bg-orange-500/10 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute top-0 right-0 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div className="absolute bottom-0 left-0 w-72 h-72 bg-orange-500/10 rounded-full blur-3xl animate-pulse delay-2000"></div>
+        <div className="absolute bottom-0 right-0 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl animate-pulse delay-3000"></div>
+      </div>
 
-            {error && (
-              <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-                <p className="text-sm text-red-600 dark:text-red-400">
-                  {error}
-                </p>
-              </div>
-            )}
+      <div className="relative w-full max-w-md p-8 rounded-3xl glassmorphism text-white shadow-2xl">
+        {/* Aurora Effect */}
+        <div className="aurora-effect"></div>
 
-            <form onSubmit={handleEmailSignUp} className="space-y-4">
-              <div>
-                <label
-                  htmlFor="name"
-                  className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
-                >
-                  Full Name
-                </label>
-                <input
-                  id="name"
-                  name="name"
-                  type="text"
-                  value={formData.name}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                  placeholder="Enter your full name"
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
-                >
-                  Email
-                </label>
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                  placeholder="Enter your email"
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="password"
-                  className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
-                >
-                  Password
-                </label>
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  value={formData.password}
-                  onChange={handleInputChange}
-                  required
-                  minLength={6}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                  placeholder="Create a password"
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="confirmPassword"
-                  className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
-                >
-                  Confirm Password
-                </label>
-                <input
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  type="password"
-                  value={formData.confirmPassword}
-                  onChange={handleInputChange}
-                  required
-                  minLength={6}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                  placeholder="Confirm your password"
-                />
-              </div>
-
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-lg px-4 py-2 font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        <div className="text-center mb-8">
+          <div className="flex items-center justify-center gap-3 mb-6">
+            <div className="w-10 h-10 text-orange-500">
+              <svg
+                fill="currentColor"
+                viewBox="0 0 48 48"
+                xmlns="http://www.w3.org/2000/svg"
               >
-                {loading ? "Creating account..." : "Create Account"}
-              </button>
-            </form>
-
-            <div className="relative my-6">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-300 dark:border-gray-600" />
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400">
-                  Or continue with
-                </span>
-              </div>
+                <path d="M44 4H30.6666V17.3334H17.3334V30.6666H4V44H44V4Z" />
+              </svg>
             </div>
+            <h1 className="text-2xl font-bold text-white">NexBlog</h1>
+          </div>
+          <h2 className="text-4xl font-bold mb-2">Create your account</h2>
+          <p className="text-gray-400">
+            Join us and start sharing your updates
+          </p>
+        </div>
 
-            <button
-              onClick={handleGoogleSignUp}
-              disabled={loading}
-              className="w-full flex items-center justify-center gap-3 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg px-4 py-2 font-medium hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-            >
-              <svg className="w-5 h-5" viewBox="0 0 24 24">
+        {error && (
+          <div className="mb-6 p-4 bg-red-900/20 border border-red-800 rounded-lg flex items-center gap-3">
+            <ExclamationTriangleIcon className="w-5 h-5 text-red-400" />
+            <p className="text-sm text-red-400">{error}</p>
+          </div>
+        )}
+
+        <form onSubmit={handleEmailSignUp}>
+          <div className="relative mb-6">
+            <input
+              id="name"
+              name="name"
+              type="text"
+              value={formData.name}
+              onChange={handleInputChange}
+              required
+              className="w-full bg-gray-800 border border-gray-700 rounded-full py-4 pl-4 pr-12 text-white focus:outline-none focus:ring-2 focus:ring-orange-500 placeholder-gray-400"
+              placeholder="Full Name"
+            />
+          </div>
+
+          <div className="relative mb-6">
+            <input
+              id="email"
+              name="email"
+              type="email"
+              value={formData.email}
+              onChange={handleInputChange}
+              required
+              className="w-full bg-gray-800 border border-gray-700 rounded-full py-4 pl-4 pr-12 text-white focus:outline-none focus:ring-2 focus:ring-orange-500 placeholder-gray-400"
+              placeholder="Email"
+            />
+          </div>
+
+          <div className="relative mb-6">
+            <input
+              id="password"
+              name="password"
+              type="password"
+              value={formData.password}
+              onChange={handleInputChange}
+              required
+              minLength={6}
+              className="w-full bg-gray-800 border border-gray-700 rounded-full py-4 pl-4 pr-12 text-white focus:outline-none focus:ring-2 focus:ring-orange-500 placeholder-gray-400"
+              placeholder="Password"
+            />
+          </div>
+
+          <div className="relative mb-6">
+            <input
+              id="confirmPassword"
+              name="confirmPassword"
+              type="password"
+              value={formData.confirmPassword}
+              onChange={handleInputChange}
+              required
+              minLength={6}
+              className="w-full bg-gray-800 border border-gray-700 rounded-full py-4 pl-4 pr-12 text-white focus:outline-none focus:ring-2 focus:ring-orange-500 placeholder-gray-400"
+              placeholder="Confirm Password"
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-orange-500 hover:bg-orange-600 text-white rounded-full py-4 font-medium focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          >
+            {loading ? "Creating account..." : "Create Account"}
+          </button>
+        </form>
+
+        <div className="flex items-center my-8">
+          <hr className="flex-grow border-gray-700" />
+          <span className="mx-4 text-gray-500 text-sm">OR</span>
+          <hr className="flex-grow border-gray-700" />
+        </div>
+
+        <div className="space-y-4">
+          <button
+            onClick={handleGoogleSignUp}
+            disabled={loading}
+            className="w-full flex items-center justify-between bg-gray-800 border border-gray-700 rounded-full p-3 text-white hover:bg-gray-700 transition-colors disabled:opacity-50"
+          >
+            <div className="flex items-center">
+              <svg className="w-6 h-6 mr-3" viewBox="0 0 24 24">
                 <path
                   fill="currentColor"
                   d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -228,23 +224,24 @@ export default function SignUpPage() {
                   d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
                 />
               </svg>
-              Continue with Google
-            </button>
-
-            <div className="mt-6 text-center">
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                Already have an account?{" "}
-                <Link
-                  href="/auth/signin"
-                  className="text-primary hover:text-primary/80 font-medium"
-                >
-                  Sign in
-                </Link>
-              </p>
+              <span>Continue with Google</span>
             </div>
-          </div>
+            <ArrowRightIcon className="w-5 h-5 text-gray-500" />
+          </button>
         </div>
-      </main>
+
+        <div className="text-center mt-8 text-sm">
+          <p className="text-gray-400">
+            Already have an account?{" "}
+            <Link
+              href="/auth/signin"
+              className="font-medium text-orange-400 hover:underline"
+            >
+              Sign in
+            </Link>
+          </p>
+        </div>
+      </div>
     </div>
   );
 }

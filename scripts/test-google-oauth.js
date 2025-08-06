@@ -3,82 +3,55 @@
 require('dotenv').config();
 
 const https = require('https');
-const http = require('http');
 
-console.log('🧪 Testing Google OAuth Configuration...\n');
+// Test Google OAuth endpoints
+const testEndpoints = [
+    'https://accounts.google.com/.well-known/openid-configuration',
+    'https://oauth2.googleapis.com/token',
+    'https://www.googleapis.com/oauth2/v1/userinfo'
+];
 
-// Load environment variables
-const envVars = {
-    GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
-    GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
-    NEXTAUTH_URL: process.env.NEXTAUTH_URL,
-    NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET
-};
-
-console.log('📋 Environment Variables Check:');
-Object.entries(envVars).forEach(([key, value]) => {
-    if (value) {
-        console.log(`✅ ${key}: ${key.includes('SECRET') ? '***' : value}`);
-    } else {
-        console.log(`❌ ${key}: Not set`);
-    }
-});
-
-console.log('\n🔗 OAuth URLs:');
-const baseUrl = envVars.NEXTAUTH_URL || 'http://localhost:3000';
-const callbackUrl = `${baseUrl}/api/auth/callback/google`;
-const signInUrl = `${baseUrl}/api/auth/signin/google`;
-
-console.log(`Base URL: ${baseUrl}`);
-console.log(`Callback URL: ${callbackUrl}`);
-console.log(`Sign-in URL: ${signInUrl}`);
-
-// Test if the server is running
-const testServer = (url, description) => {
+async function testEndpoint(url) {
     return new Promise((resolve) => {
-        const urlObj = new URL(url);
-        const client = urlObj.protocol === 'https:' ? https : http;
-
-        const req = client.get(urlObj, (res) => {
-            console.log(`${description}: ${res.statusCode}`);
-            resolve(res.statusCode);
+        const req = https.get(url, (res) => {
+            console.log(`✅ ${url} - Status: ${res.statusCode}`);
+            resolve({ url, status: res.statusCode, success: res.statusCode === 200 });
         });
 
         req.on('error', (err) => {
-            console.log(`${description}: Error - ${err.message}`);
-            resolve('error');
+            console.log(`❌ ${url} - Error: ${err.message}`);
+            resolve({ url, error: err.message, success: false });
         });
 
-        req.setTimeout(3000, () => {
-            console.log(`${description}: Timeout`);
+        req.setTimeout(10000, () => {
+            console.log(`⏰ ${url} - Timeout after 10 seconds`);
             req.destroy();
-            resolve('timeout');
+            resolve({ url, error: 'Timeout', success: false });
         });
     });
-};
+}
 
-console.log('\n🌐 Server Tests:');
-Promise.all([
-    testServer(baseUrl, 'Base URL'),
-    testServer(callbackUrl, 'Callback URL'),
-    testServer(signInUrl, 'Sign-in URL')
-]).then((results) => {
-    console.log('\n📊 Results Summary:');
-    console.log(`Base URL: ${results[0] === 200 ? '✅ OK' : '❌ Failed'}`);
-    console.log(`Callback URL: ${results[1] === 400 ? '⚠️  Expected 400 (no params)' : results[1] === 200 ? '✅ OK' : '❌ Failed'}`);
-    console.log(`Sign-in URL: ${results[2] === 200 ? '✅ OK' : '❌ Failed'}`);
+async function runTests() {
+    console.log('🔍 Testing Google OAuth connectivity...\n');
 
-    console.log('\n🔧 Next Steps:');
-    if (results[0] !== 200) {
-        console.log('1. Start your development server: npm run dev');
+    const results = await Promise.all(testEndpoints.map(testEndpoint));
+
+    console.log('\n📊 Results:');
+    const successful = results.filter(r => r.success).length;
+    const total = results.length;
+
+    console.log(`✅ Successful: ${successful}/${total}`);
+
+    if (successful === total) {
+        console.log('🎉 All Google OAuth endpoints are accessible!');
+    } else {
+        console.log('⚠️  Some endpoints are not accessible. This might be a network issue.');
+        console.log('\n💡 Troubleshooting tips:');
+        console.log('1. Check your internet connection');
+        console.log('2. Try using a VPN if you\'re in a restricted region');
+        console.log('3. Check if your firewall is blocking Google services');
+        console.log('4. Verify your Google OAuth credentials in .env file');
     }
-    if (results[1] === 400) {
-        console.log('2. The callback URL is working (400 is expected without OAuth parameters)');
-    }
-    console.log('3. Verify Google Cloud Console configuration:');
-    console.log('   - Go to https://console.cloud.google.com/');
-    console.log('   - Navigate to APIs & Services > Credentials');
-    console.log('   - Edit your OAuth 2.0 Client ID');
-    console.log('   - Add redirect URI: ' + callbackUrl);
-    console.log('   - Add JavaScript origin: ' + baseUrl);
-}); 
+}
+
+runTests().catch(console.error); 

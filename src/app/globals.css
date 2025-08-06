@@ -24,6 +24,56 @@
 body {
   background: var(--background);
   color: var(--foreground);
+  font-family: "Poppins", sans-serif;
+}
+
+/* Custom dark theme styles for the new design */
+.dark-theme {
+  background-color: #0d0d0d;
+  color: white;
+}
+
+.bg-custom-gradient {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.05) 0%,
+    rgba(255, 255, 255, 0) 100%
+  );
+}
+
+.bg-custom-dark {
+  background-color: #1a1a1a;
+}
+
+.btn-primary {
+  background-color: #ff7a45;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #e65a2e;
+}
+
+/* Glassmorphism effects */
+.glassmorphism {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.glassmorphism-dark {
+  background: rgba(26, 26, 26, 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Custom gradients */
+.gradient-orange-purple {
+  background: linear-gradient(135deg, #ff7a45 0%, #8b5cf6 100%);
+}
+
+.gradient-dark {
+  background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
 }
 
 /* Ensure proper text contrast in both themes */
@@ -136,4 +186,62 @@ body {
 /* Ensure primary button text is always visible */
 .bg-primary.text-primary-foreground {
   color: #ffffff !important;
+}
+
+/* Custom animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+/* Glassmorphism effects */
+.glassmorphism {
+  background: rgba(30, 30, 30, 0.7);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.aurora-effect {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+      circle at 10% 10%,
+      rgba(255, 122, 69, 0.2),
+      transparent 40%
+    ),
+    radial-gradient(circle at 90% 90%, rgba(139, 92, 246, 0.2), transparent 40%);
+  z-index: -1;
+  border-radius: 2rem;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1a1a1a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #ff7a45;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #e65a2e;
 }
