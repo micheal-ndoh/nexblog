@@ -154,7 +154,7 @@ export default function ProfilePage() {
         <div className="grid md:grid-cols-3 gap-8">
           {/* Profile Picture Section */}
           <div className="md:col-span-1">
-            <div className="bg-custom-dark rounded-2xl shadow-lg border border-gray-700 p-8 text-center">
+            <div className="glassmorphism-card rounded-2xl p-8 text-center">
               <div className="mb-6">
                 {profile.image ? (
                   <div className="relative inline-block">
@@ -206,7 +206,7 @@ export default function ProfilePage() {
 
           {/* Profile Information Section */}
           <div className="md:col-span-2">
-            <div className="bg-custom-dark rounded-2xl shadow-lg border border-gray-700 p-8">
+            <div className="glassmorphism-card rounded-2xl p-8">
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
                   <UserIcon className="w-6 h-6 text-orange-500" />
