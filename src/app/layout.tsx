@@ -36,7 +36,10 @@ function RootLayoutContent({ children }: { children: React.ReactNode }) {
         onClose={closeMobileNav}
       />
       {/* Header - Pass mobile nav controls */}
-      <Header onMobileNavToggle={toggleMobileNav} />
+      <Header
+        onMobileNavToggle={toggleMobileNav}
+        sidebarCollapsed={sidebarCollapsed}
+      />
       {/* Main Content - Responsive margins */}
       <main
         className={`lg:pt-16 min-h-screen transition-all duration-300 ${

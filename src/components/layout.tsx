@@ -3,6 +3,7 @@
 import { ReactNode, useState } from "react";
 import { Sidebar } from "./sidebar";
 import { MobileNav } from "./mobile-nav";
+import { Header } from "./header";
 
 interface LayoutProps {
   children: ReactNode;
@@ -33,7 +34,14 @@ export function Layout({ children }: LayoutProps) {
         onClose={() => setIsMobileNavOpen(false)}
       />
       {/* Main Content */}
-      <main className={`min-h-screen transition-all duration-300 ${sidebarCollapsed ? 'lg:ml-20' : 'lg:ml-64'}`}>{children}</main>
+      <Header sidebarCollapsed={sidebarCollapsed} />
+      <main
+        className={`min-h-screen transition-all duration-300 ${
+          sidebarCollapsed ? "lg:ml-20" : "lg:ml-64"
+        }`}
+      >
+        {children}
+      </main>
     </div>
   );
 }

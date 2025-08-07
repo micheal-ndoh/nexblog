@@ -104,17 +104,23 @@ export function Sidebar({
         </nav>
         {/* Footer with collapse/expand icon */}
         <div className="p-4 border-t border-gray-800 flex flex-col items-center">
-          <button
-            onClick={onToggle}
-            className="flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-700 transition"
-            aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-          >
-            {collapsed ? (
-              <ChevronRightIcon className="w-6 h-6 text-gray-400" />
-            ) : (
-              <ChevronLeftIcon className="w-6 h-6 text-gray-400" />
-            )}
-          </button>
+          {!collapsed ? (
+            <button
+              onClick={onToggle}
+              className="flex items-center justify-center w-12 h-12 rounded-full hover:bg-orange-500/20 transition"
+              aria-label="Collapse sidebar"
+            >
+              <ChevronLeftIcon className="w-8 h-8 text-orange-500" />
+            </button>
+          ) : (
+            <button
+              onClick={onToggle}
+              className="flex items-center justify-center w-12 h-12 rounded-full hover:bg-orange-500/20 transition"
+              aria-label="Expand sidebar"
+            >
+              <ChevronRightIcon className="w-8 h-8 text-orange-500" />
+            </button>
+          )}
           {!collapsed && (
             <div className="text-center text-gray-400 text-sm mt-2">
               <p>© 2024 NexBlog</p>

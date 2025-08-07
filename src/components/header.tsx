@@ -28,7 +28,13 @@ interface HeaderProps {
   onMobileNavToggle?: () => void;
 }
 
-export function Header({ onMobileNavToggle }: HeaderProps) {
+export function Header({
+  onMobileNavToggle,
+  sidebarCollapsed = false,
+}: {
+  onMobileNavToggle?: () => void;
+  sidebarCollapsed?: boolean;
+}) {
   const { data: session, status } = useSession();
   const router = useRouter();
   const { unreadCount } = useNotificationStore();
@@ -125,7 +131,11 @@ export function Header({ onMobileNavToggle }: HeaderProps) {
     languages.find((lang) => lang.code === getLanguage()) || languages[1]; // Default to English
 
   return (
-    <header className="bg-black/80 backdrop-blur-xl border-b border-gray-800/50 sticky top-0 z-40 lg:ml-64">
+    <header
+      className={`fixed top-0 left-0 right-0 z-40 h-16 bg-black border-b border-gray-800 flex items-center transition-all duration-300 ${
+        sidebarCollapsed ? "lg:ml-20" : "lg:ml-64"
+      }`}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Left Section: Mobile Menu + Logo + Search */}
