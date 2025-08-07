@@ -149,30 +149,32 @@ export default function SettingsPage() {
 
   return (
     <Layout>
-      <div className="max-w-4xl mx-auto px-4 py-8">
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-white mb-2">Settings</h1>
-          <p className="text-gray-400">
+      <div className="max-w-4xl mx-auto px-4 py-8 sm:px-6 sm:py-12">
+        <div className="mb-6 sm:mb-8">
+          <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2">
+            Settings
+          </h1>
+          <p className="text-gray-400 text-sm sm:text-base">
             Manage your account settings and preferences
           </p>
         </div>
 
         {error && (
-          <div className="mb-6 p-4 bg-red-900/20 border border-red-800 rounded-lg flex items-center gap-3">
-            <ExclamationTriangleIcon className="w-6 h-6 text-red-400" />
-            <p className="text-sm text-red-400">{error}</p>
+          <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-red-900/20 border border-red-800 rounded-lg flex items-center gap-3">
+            <ExclamationTriangleIcon className="w-5 h-5 sm:w-6 sm:h-6 text-red-400" />
+            <p className="text-xs sm:text-sm text-red-400">{error}</p>
           </div>
         )}
 
         {success && (
-          <div className="mb-6 p-4 bg-green-900/20 border border-green-800 rounded-lg flex items-center gap-3">
-            <CheckCircleIcon className="w-6 h-6 text-green-400" />
-            <p className="text-sm text-green-400">{success}</p>
+          <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-green-900/20 border border-green-800 rounded-lg flex items-center gap-3">
+            <CheckCircleIcon className="w-5 h-5 sm:w-6 sm:h-6 text-green-400" />
+            <p className="text-xs sm:text-sm text-green-400">{success}</p>
           </div>
         )}
 
         {/* Profile Settings */}
-        <div className="glassmorphism-card rounded-2xl p-8 mb-8">
+        <div className="glassmorphism-card rounded-2xl p-6 sm:p-8 mb-6 sm:mb-8">
           <div className="flex items-center gap-3 mb-6">
             <UserIcon className="w-6 h-6 text-orange-500" />
             <h2 className="text-2xl font-semibold text-white">
@@ -280,7 +282,7 @@ export default function SettingsPage() {
         </div>
 
         {/* Theme Settings */}
-        <div className="glassmorphism-card rounded-2xl p-8 mb-8">
+        <div className="glassmorphism-card rounded-2xl p-6 sm:p-8 mb-6 sm:mb-8">
           <div className="flex items-center gap-3 mb-6">
             <Cog6ToothIcon className="w-6 h-6 text-orange-500" />
             <h2 className="text-2xl font-semibold text-white">Appearance</h2>
@@ -326,7 +328,7 @@ export default function SettingsPage() {
         </div>
 
         {/* Language Settings */}
-        <div className="glassmorphism-card rounded-2xl p-8 mb-8">
+        <div className="glassmorphism-card rounded-2xl p-6 sm:p-8 mb-6 sm:mb-8">
           <div className="flex items-center gap-3 mb-6">
             <GlobeAltIcon className="w-6 h-6 text-orange-500" />
             <h2 className="text-2xl font-semibold text-white">Language</h2>
@@ -378,7 +380,7 @@ export default function SettingsPage() {
         </div>
 
         {/* Account Actions */}
-        <div className="glassmorphism-card rounded-2xl p-8">
+        <div className="glassmorphism-card rounded-2xl p-6 sm:p-8">
           <h2 className="text-2xl font-semibold text-white mb-6">
             Account Actions
           </h2>

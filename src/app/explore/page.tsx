@@ -104,28 +104,27 @@ export default function ExplorePage() {
 
   return (
     <div className="min-h-screen">
-      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         {/* Page Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-white mb-2">
+        <div className="mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2">
             {t("explore.title")}
           </h1>
-          <p className="text-gray-400">
+          <p className="text-gray-400 text-sm sm:text-base">
             {t("explore.subtitle")}
           </p>
         </div>
-
         {/* Tab Navigation */}
-        <div className="mb-8">
+        <div className="mb-6 sm:mb-8">
           <div className="border-b border-gray-700">
-            <nav className="-mb-px flex space-x-8">
+            <nav className="-mb-px flex flex-wrap space-x-4 sm:space-x-8 overflow-x-auto">
               {tabs.map((tab) => {
                 const Icon = tab.icon;
                 return (
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
-                    className={`flex items-center gap-2 py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
+                    className={`flex items-center gap-2 py-2 px-1 border-b-2 font-medium text-xs sm:text-sm transition-colors ${
                       activeTab === tab.id
                         ? "border-orange-500 text-orange-500"
                         : "border-transparent text-gray-400 hover:text-gray-300"
@@ -139,13 +138,12 @@ export default function ExplorePage() {
             </nav>
           </div>
         </div>
-
         {/* Content */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
           {/* Main Content */}
           <div className="lg:col-span-2">
-            <div className="glassmorphism-card rounded-xl p-6">
-              <div className="flex items-center gap-2 mb-6">
+            <div className="glassmorphism-card rounded-xl p-4 sm:p-6">
+              <div className="flex items-center gap-2 mb-4 sm:mb-6">
                 {(() => {
                   const activeTabData = tabs.find(
                     (tab) => tab.id === activeTab
@@ -153,7 +151,7 @@ export default function ExplorePage() {
                   const Icon = activeTabData?.icon || FireIcon;
                   return <Icon className="h-6 w-6 text-orange-500" />;
                 })()}
-                <h2 className="text-xl font-semibold text-white">
+                <h2 className="text-lg sm:text-xl font-semibold text-white">
                   {tabs.find((tab) => tab.id === activeTab)?.name}{" "}
                   {t("posts.title")}
                 </h2>
@@ -277,9 +275,7 @@ export default function ExplorePage() {
                     >
                       #{tag.name}
                     </span>
-                    <span className="text-sm text-gray-400">
-                      {tag.count}
-                    </span>
+                    <span className="text-sm text-gray-400">{tag.count}</span>
                   </div>
                 ))}
               </div>
@@ -328,33 +324,25 @@ export default function ExplorePage() {
                   <span className="text-sm text-gray-400">
                     {t("explore.totalPosts")}
                   </span>
-                  <span className="text-sm font-medium text-white">
-                    1,234
-                  </span>
+                  <span className="text-sm font-medium text-white">1,234</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-400">
                     {t("explore.activeUsers")}
                   </span>
-                  <span className="text-sm font-medium text-white">
-                    567
-                  </span>
+                  <span className="text-sm font-medium text-white">567</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-400">
                     {t("explore.totalLikes")}
                   </span>
-                  <span className="text-sm font-medium text-white">
-                    8,901
-                  </span>
+                  <span className="text-sm font-medium text-white">8,901</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-400">
                     {t("explore.comments")}
                   </span>
-                  <span className="text-sm font-medium text-white">
-                    2,345
-                  </span>
+                  <span className="text-sm font-medium text-white">2,345</span>
                 </div>
               </div>
             </div>

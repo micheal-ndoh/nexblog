@@ -85,21 +85,23 @@ export default function NewPostPage() {
 
   return (
     <Layout>
-      <div className="glassmorphism-card rounded-xl p-8">
-        <h1 className="text-3xl font-bold text-white mb-8">Create New Post</h1>
+      <div className="glassmorphism-card rounded-xl p-6 sm:p-8">
+        <h1 className="text-2xl sm:text-3xl font-bold text-white mb-6 sm:mb-8">
+          Create New Post
+        </h1>
 
         {error && (
-          <div className="mb-6 p-4 bg-red-500/20 border border-red-500/50 rounded-lg">
-            <p className="text-red-400">{error}</p>
+          <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-red-500/20 border border-red-500/50 rounded-lg">
+            <p className="text-red-400 text-sm sm:text-base">{error}</p>
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
           {/* Title */}
           <div>
             <label
               htmlFor="title"
-              className="block text-white text-sm font-medium mb-2"
+              className="block text-white text-xs sm:text-sm font-medium mb-1 sm:mb-2"
             >
               Title
             </label>
@@ -108,7 +110,7 @@ export default function NewPostPage() {
               id="title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500"
+              className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm sm:text-base"
               placeholder="Enter your post title..."
               required
             />
@@ -118,7 +120,7 @@ export default function NewPostPage() {
           <div>
             <label
               htmlFor="content"
-              className="block text-white text-sm font-medium mb-2"
+              className="block text-white text-xs sm:text-sm font-medium mb-1 sm:mb-2"
             >
               Content
             </label>
@@ -126,8 +128,8 @@ export default function NewPostPage() {
               id="content"
               value={content}
               onChange={(e) => setContent(e.target.value)}
-              rows={10}
-              className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 resize-vertical"
+              rows={8}
+              className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 resize-vertical text-sm sm:text-base"
               placeholder="Write your post content..."
               required
             />
@@ -135,7 +137,7 @@ export default function NewPostPage() {
 
           {/* Image Upload */}
           <div>
-            <label className="block text-white text-sm font-medium mb-2">
+            <label className="block text-white text-xs sm:text-sm font-medium mb-1 sm:mb-2">
               Featured Image (Optional)
             </label>
             <FileUpload
@@ -151,12 +153,12 @@ export default function NewPostPage() {
                 <img
                   src={imageUrl}
                   alt="Preview"
-                  className="w-32 h-32 object-cover rounded-lg"
+                  className="w-24 h-24 sm:w-32 sm:h-32 object-cover rounded-lg"
                 />
                 <button
                   type="button"
                   onClick={() => setImageUrl("")}
-                  className="mt-2 text-sm text-red-400 hover:text-red-300"
+                  className="mt-2 text-xs sm:text-sm text-red-400 hover:text-red-300"
                 >
                   Remove Image
                 </button>
@@ -166,7 +168,7 @@ export default function NewPostPage() {
 
           {/* Tags */}
           <div>
-            <label className="block text-white text-sm font-medium mb-2">
+            <label className="block text-white text-xs sm:text-sm font-medium mb-1 sm:mb-2">
               Tags (Optional)
             </label>
             <div className="flex gap-2 mb-2">
@@ -177,13 +179,13 @@ export default function NewPostPage() {
                 onKeyPress={(e) =>
                   e.key === "Enter" && (e.preventDefault(), handleAddTag())
                 }
-                className="flex-1 px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                className="flex-1 px-3 sm:px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm sm:text-base"
                 placeholder="Add a tag..."
               />
               <button
                 type="button"
                 onClick={handleAddTag}
-                className="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors"
+                className="px-3 sm:px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors text-xs sm:text-sm"
               >
                 Add
               </button>
@@ -193,7 +195,7 @@ export default function NewPostPage() {
                 {tags.map((tag) => (
                   <span
                     key={tag}
-                    className="inline-flex items-center gap-1 px-3 py-1 bg-orange-500/20 text-orange-400 rounded-full text-sm"
+                    className="inline-flex items-center gap-1 px-3 py-1 bg-orange-500/20 text-orange-400 rounded-full text-xs sm:text-sm"
                   >
                     #{tag}
                     <button
@@ -210,18 +212,18 @@ export default function NewPostPage() {
           </div>
 
           {/* Submit Button */}
-          <div className="flex gap-4">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
             <button
               type="submit"
               disabled={loading || !title.trim() || !content.trim()}
-              className="px-6 py-3 bg-orange-500 text-white rounded-lg font-semibold hover:bg-orange-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-4 sm:px-6 py-2 sm:py-3 bg-orange-500 text-white rounded-lg font-semibold hover:bg-orange-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
             >
               {loading ? "Creating..." : "Create Post"}
             </button>
             <button
               type="button"
               onClick={() => router.back()}
-              className="px-6 py-3 bg-gray-700 text-white rounded-lg font-semibold hover:bg-gray-600 transition-colors"
+              className="px-4 sm:px-6 py-2 sm:py-3 bg-gray-700 text-white rounded-lg font-semibold hover:bg-gray-600 transition-colors text-sm sm:text-base"
             >
               Cancel
             </button>

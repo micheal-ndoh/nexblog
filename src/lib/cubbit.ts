@@ -21,13 +21,14 @@ export async function uploadFile(
     contentType: string
 ): Promise<string> {
     try {
-        const objectName = `${Date.now()}-${fileName}`;
+        const objectName = fileName;
 
         const command = new PutObjectCommand({
             Bucket: BUCKET_NAME,
             Key: objectName,
             Body: file,
             ContentType: contentType,
+            // ACL: 'bucket-owner-full-control', // Removed for Cubbit compatibility
         });
 
         await cubbitClient.send(command);
@@ -66,11 +67,12 @@ export async function generatePresignedUrl(
     fileName: string
 ): Promise<string> {
     try {
-        const objectName = `${Date.now()}-${fileName}`;
+        const objectName = fileName;
 
         const command = new PutObjectCommand({
             Bucket: BUCKET_NAME,
             Key: objectName,
+            ACL: 'bucket-owner-full-control',
         });
 
         const presignedUrl = await getSignedUrl(cubbitClient, command, { expiresIn: 24 * 60 * 60 });

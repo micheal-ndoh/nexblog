@@ -9,6 +9,7 @@ import RootLayoutServer from "./layout.server"; // Import the server component
 
 function RootLayoutContent({ children }: { children: React.ReactNode }) {
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   const toggleMobileNav = () => {
     setIsMobileNavOpen(!isMobileNavOpen);
@@ -18,25 +19,30 @@ function RootLayoutContent({ children }: { children: React.ReactNode }) {
     setIsMobileNavOpen(false);
   };
 
+  const handleSidebarToggle = () => {
+    setSidebarCollapsed((prev) => !prev);
+  };
+
   return (
     <div className="min-h-screen dark-theme">
       {/* Desktop Sidebar - Hidden on mobile */}
       <div className="hidden lg:block">
-        <Sidebar />
+        <Sidebar collapsed={sidebarCollapsed} onToggle={handleSidebarToggle} />
       </div>
-
       {/* Mobile Navigation */}
       <MobileNav
         isOpen={isMobileNavOpen}
         onToggle={toggleMobileNav}
         onClose={closeMobileNav}
       />
-
       {/* Header - Pass mobile nav controls */}
       <Header onMobileNavToggle={toggleMobileNav} />
-
       {/* Main Content - Responsive margins */}
-      <main className="lg:ml-64 pt-16 min-h-screen">
+      <main
+        className={`lg:pt-16 min-h-screen transition-all duration-300 ${
+          sidebarCollapsed ? "lg:ml-20" : "lg:ml-64"
+        }`}
+      >
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
           {children}
         </div>

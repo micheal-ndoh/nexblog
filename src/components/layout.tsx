@@ -10,27 +10,30 @@ interface LayoutProps {
 
 export function Layout({ children }: LayoutProps) {
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   const toggleMobileNav = () => {
     setIsMobileNavOpen(!isMobileNavOpen);
+  };
+
+  const handleSidebarToggle = () => {
+    setSidebarCollapsed((prev) => !prev);
   };
 
   return (
     <div className="min-h-screen dark-theme">
       {/* Desktop Sidebar */}
       <div className="hidden lg:block">
-        <Sidebar />
+        <Sidebar collapsed={sidebarCollapsed} onToggle={handleSidebarToggle} />
       </div>
-
       {/* Mobile Navigation */}
       <MobileNav
         isOpen={isMobileNavOpen}
         onToggle={toggleMobileNav}
         onClose={() => setIsMobileNavOpen(false)}
       />
-
       {/* Main Content */}
-      <main className=" min-h-screen">{children}</main>
+      <main className={`min-h-screen transition-all duration-300 ${sidebarCollapsed ? 'lg:ml-20' : 'lg:ml-64'}`}>{children}</main>
     </div>
   );
 }

@@ -53,28 +53,27 @@ export function GlassmorphismDemo() {
       }`}
     >
       <motion.div
-        className="container mx-auto px-4 py-8"
+        className="container mx-auto px-4 py-8 sm:px-6 sm:py-12"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
       >
         {/* Header Demo */}
         <motion.header
-          className="glass rounded-2xl p-4 mb-8"
+          className="glass rounded-2xl p-4 mb-8 sm:p-6 sm:mb-10"
           variants={itemVariants}
           whileHover={cardHover}
         >
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div className="flex items-center gap-4">
               <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold">N</span>
               </div>
-              <h1 className="text-xl font-bold text-gray-900 dark:text-white">
+              <h1 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white">
                 NexBlog
               </h1>
             </div>
-
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
               <motion.div
                 className="glass-card p-2 rounded-lg cursor-pointer"
                 whileHover={{ scale: 1.05 }}
@@ -82,7 +81,6 @@ export function GlassmorphismDemo() {
               >
                 <MagnifyingGlassIcon className="h-5 w-5 text-gray-700 dark:text-gray-300" />
               </motion.div>
-
               <motion.div
                 className="glass-card p-2 rounded-lg cursor-pointer relative"
                 whileHover={{ scale: 1.05 }}
@@ -91,7 +89,6 @@ export function GlassmorphismDemo() {
                 <BellIcon className="h-5 w-5 text-gray-700 dark:text-gray-300" />
                 <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></span>
               </motion.div>
-
               <motion.button
                 onClick={toggleTheme}
                 className="glass-card p-2 rounded-lg cursor-pointer"
@@ -104,7 +101,6 @@ export function GlassmorphismDemo() {
                   <SunIcon className="h-5 w-5 text-gray-700 dark:text-gray-300" />
                 )}
               </motion.button>
-
               <motion.div
                 className="glass-card p-2 rounded-lg cursor-pointer"
                 whileHover={{ scale: 1.05 }}
@@ -115,28 +111,27 @@ export function GlassmorphismDemo() {
             </div>
           </div>
         </motion.header>
-
         {/* Content Demo */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {[1, 2, 3, 4, 5, 6].map((item) => (
             <motion.div
               key={item}
-              className="glass-card rounded-2xl p-6"
+              className="glass-card rounded-2xl p-4 sm:p-6"
               variants={itemVariants}
               whileHover={cardHover}
             >
-              <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center justify-between mb-2 sm:mb-4">
                 <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg flex items-center justify-center">
                   <PlusIcon className="h-5 w-5 text-white" />
                 </div>
-                <span className="text-sm text-gray-500 dark:text-gray-400">
+                <span className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
                   {item} min ago
                 </span>
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+              <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white mb-1 sm:mb-2">
                 Glassmorphism Card {item}
               </h3>
-              <p className="text-gray-600 dark:text-gray-300 text-sm">
+              <p className="text-gray-600 dark:text-gray-300 text-xs sm:text-sm">
                 This is a beautiful glassmorphism card with smooth animations
                 and hover effects.
               </p>

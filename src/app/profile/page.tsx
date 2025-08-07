@@ -130,11 +130,11 @@ export default function ProfilePage() {
   return (
     <Layout>
       <div className="max-w-4xl mx-auto px-4 py-4 sm:py-8">
-        <div className="mb-6 sm:mb-8">
+        <div className="mb-4 sm:mb-8">
           <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-2">
             Profile
           </h1>
-          <p className="text-gray-400 text-sm sm:text-base">
+          <p className="text-gray-400 text-xs sm:text-base">
             Manage your profile information and preferences
           </p>
         </div>
@@ -153,7 +153,7 @@ export default function ProfilePage() {
           </div>
         )}
 
-        <div className="grid lg:grid-cols-3 gap-6 sm:gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-8">
           {/* Profile Picture Section */}
           <div className="lg:col-span-1">
             <div className="glassmorphism-card rounded-2xl p-4 sm:p-6 lg:p-8 text-center">
@@ -344,7 +344,7 @@ export default function ProfilePage() {
             </div>
 
             {/* Account Statistics */}
-            <div className="mt-6 sm:mt-8 glassmorphism-card rounded-2xl p-4 sm:p-6 lg:p-8">
+            <div className="mt-4 sm:mt-8 glassmorphism-card rounded-2xl p-4 sm:p-6 lg:p-8">
               <h3 className="text-lg sm:text-xl font-semibold text-white mb-4 sm:mb-6">
                 Account Statistics
               </h3>

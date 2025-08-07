@@ -3,15 +3,17 @@ import { Layout } from "@/components/layout";
 export default function ContactPage() {
   return (
     <Layout>
-      <div className="max-w-4xl mx-auto px-4 py-8">
-        <h1 className="text-4xl font-bold text-white mb-8">Contact Us</h1>
+      <div className="max-w-4xl mx-auto px-4 py-8 sm:px-6 sm:py-12">
+        <h1 className="text-3xl sm:text-4xl font-bold text-white mb-6 sm:mb-8">
+          Contact Us
+        </h1>
 
-        <div className="grid md:grid-cols-2 gap-8">
-          <div className="glassmorphism-card p-8 rounded-2xl">
-            <h2 className="text-2xl font-semibold text-white mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+          <div className="glassmorphism-card p-6 sm:p-8 rounded-2xl">
+            <h2 className="text-xl sm:text-2xl font-semibold text-white mb-4 sm:mb-6">
               Get in Touch
             </h2>
-            <p className="text-gray-400 mb-8">
+            <p className="text-gray-400 mb-6 sm:mb-8">
               Have questions or need assistance? We'd love to hear from you.
               Send us a message and we'll respond as soon as possible.
             </p>
@@ -69,8 +71,8 @@ export default function ContactPage() {
             </div>
           </div>
 
-          <div className="glassmorphism-card p-8 rounded-2xl">
-            <h2 className="text-2xl font-semibold text-white mb-6">
+          <div className="glassmorphism-card p-6 sm:p-8 rounded-2xl">
+            <h2 className="text-xl sm:text-2xl font-semibold text-white mb-4 sm:mb-6">
               Send Message
             </h2>
             <form className="space-y-4">
@@ -109,7 +111,7 @@ export default function ContactPage() {
 
               <button
                 type="submit"
-                className="w-full btn-primary px-6 py-3 rounded-lg font-semibold hover:bg-orange-600 transition-colors"
+                className="w-full btn-primary px-6 py-3 rounded-lg font-semibold hover:bg-orange-600 transition-colors text-base sm:text-lg"
               >
                 Send Message
               </button>
