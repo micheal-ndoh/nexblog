@@ -30,7 +30,7 @@ export function Layout({ children }: LayoutProps) {
       />
 
       {/* Main Content */}
-      <main className="lg:ml-64 min-h-screen">{children}</main>
+      <main className=" min-h-screen">{children}</main>
     </div>
   );
 }
