@@ -192,11 +192,11 @@ export function PostFeed() {
 
   if (loading) {
     return (
-      <div className="space-y-6">
+      <div className="space-y-4 sm:space-y-6">
         {[...Array(3)].map((_, i) => (
-          <div key={i} className="post-container p-6 animate-pulse">
-            <div className="flex items-center gap-4 mb-4">
-              <div className="w-12 h-12 bg-gray-700 rounded-full"></div>
+          <div key={i} className="post-container p-4 sm:p-6 animate-pulse">
+            <div className="flex items-center gap-3 sm:gap-4 mb-4">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gray-700 rounded-full"></div>
               <div className="flex-1">
                 <div className="h-4 bg-gray-700 rounded w-1/3 mb-2"></div>
                 <div className="h-3 bg-gray-700 rounded w-1/4"></div>
@@ -211,7 +211,7 @@ export function PostFeed() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       {posts.slice(0, visiblePosts).map((post) => {
         const isLiked = post.likes.some(
           (like) => like.userId === session?.user?.id
@@ -221,7 +221,7 @@ export function PostFeed() {
         return (
           <article
             key={post.id}
-            className="post-container p-6 animate-fade-in-up cursor-pointer"
+            className="post-container p-4 sm:p-6 animate-fade-in-up cursor-pointer"
             tabIndex={0}
             role="button"
             aria-label={`Open post: ${post.title}`}
@@ -231,7 +231,7 @@ export function PostFeed() {
             }}
           >
             {/* Author Info */}
-            <div className="flex items-center gap-4 mb-6">
+            <div className="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
               <div className="relative">
                 {post.author.image ? (
                   <Image
@@ -239,50 +239,50 @@ export function PostFeed() {
                     alt={post.author.name}
                     width={48}
                     height={48}
-                    className="w-12 h-12 rounded-full border-2 border-gray-700"
+                    className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-gray-700"
                   />
                 ) : (
-                  <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-full flex items-center justify-center">
-                    <span className="text-white font-semibold text-lg">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-full flex items-center justify-center">
+                    <span className="text-white font-semibold text-base sm:text-lg">
                       {post.author.name.charAt(0)}
                     </span>
                   </div>
                 )}
               </div>
-              <div className="flex-1">
-                <h3 className="text-white font-semibold text-lg">
+              <div className="flex-1 min-w-0">
+                <h3 className="text-white font-semibold text-base sm:text-lg truncate">
                   {post.author.name}
                 </h3>
-                <p className="text-gray-400 text-sm">
+                <p className="text-gray-400 text-xs sm:text-sm">
                   {formatDate(post.createdAt)}
                 </p>
               </div>
               <button className="p-2 text-gray-400 hover:text-orange-500 transition-colors rounded-lg hover:bg-gray-800/50">
-                <ShareIcon className="h-5 w-5" />
+                <ShareIcon className="h-4 w-4 sm:h-5 sm:w-5" />
               </button>
             </div>
 
             {/* Post Content */}
-            <div className="mb-6">
-              <h2 className="text-white text-xl font-bold mb-3 hover:text-orange-400 transition-colors">
+            <div className="mb-4 sm:mb-6">
+              <h2 className="text-white text-lg sm:text-xl font-bold mb-2 sm:mb-3 hover:text-orange-400 transition-colors">
                 <Link href={`/posts/${post.id}`}>{post.title}</Link>
               </h2>
-              <div className="max-h-32 overflow-auto">
-                <p className="text-white text-base leading-relaxed mb-4">
-                  {truncateText(post.content, 200)}
+              <div className="max-h-24 sm:max-h-32 overflow-auto">
+                <p className="text-white text-sm sm:text-base leading-relaxed mb-3 sm:mb-4">
+                  {truncateText(post.content, 150)}
                 </p>
               </div>
 
               {/* Post Image */}
               {post.imageUrl && (
-                <div className="mb-4">
-                  <div className="relative w-full h-64 rounded-xl overflow-hidden">
+                <div className="mb-3 sm:mb-4">
+                  <div className="relative w-full h-48 sm:h-64 rounded-xl overflow-hidden">
                     <Image
                       src={post.imageUrl}
                       alt={post.title}
                       fill
                       className="object-cover"
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      sizes="(max-width: 640px) 100vw, (max-width: 768px) 90vw, (max-width: 1200px) 50vw, 33vw"
                     />
                   </div>
                 </div>
@@ -291,11 +291,11 @@ export function PostFeed() {
 
             {/* Tags */}
             {post.tags.length > 0 && (
-              <div className="flex flex-wrap gap-2 mb-6">
+              <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-4 sm:mb-6">
                 {post.tags.map((tag, index) => (
                   <span
                     key={tag.tag.name}
-                    className={`inline-flex items-center px-3 py-1.5 rounded-full text-base font-bold ${getTagColor(
+                    className={`inline-flex items-center px-2 sm:px-3 py-1 sm:py-1.5 rounded-full text-xs sm:text-sm font-bold ${getTagColor(
                       index
                     )} shadow-lg`}
                   >
@@ -306,50 +306,57 @@ export function PostFeed() {
             )}
 
             {/* Post Actions */}
-            <div className="flex items-center justify-between pt-4 border-t border-gray-700/50">
-              <div className="flex items-center gap-6">
+            <div className="flex items-center justify-between pt-3 sm:pt-4 border-t border-gray-700/50">
+              <div className="flex items-center gap-3 sm:gap-6">
                 <button
-                  onClick={() => handleLike(post.id)}
-                  className={`flex items-center gap-2 transition-all duration-200 ${
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleLike(post.id);
+                  }}
+                  className={`flex items-center gap-1.5 sm:gap-2 transition-all duration-200 ${
                     isLiked
                       ? "text-red-500 hover:text-red-400"
                       : "text-gray-400 hover:text-red-500"
                   }`}
                 >
                   {isLiked ? (
-                    <HeartIconSolid className="h-7 w-7" />
+                    <HeartIconSolid className="h-5 w-5 sm:h-7 sm:w-7" />
                   ) : (
-                    <HeartIcon className="h-7 w-7" />
+                    <HeartIcon className="h-5 w-5 sm:h-7 sm:w-7" />
                   )}
-                  <span className="text-sm font-medium text-white">
+                  <span className="text-xs sm:text-sm font-medium text-white">
                     {post._count.likes}
                   </span>
                 </button>
 
                 <Link
                   href={`/posts/${post.id}#comments`}
-                  className="flex items-center gap-2 text-gray-400 hover:text-orange-500 transition-colors"
+                  onClick={(e) => e.stopPropagation()}
+                  className="flex items-center gap-1.5 sm:gap-2 text-gray-400 hover:text-orange-500 transition-colors"
                 >
-                  <ChatBubbleLeftIcon className="h-7 w-7" />
-                  <span className="text-sm font-medium text-white">
+                  <ChatBubbleLeftIcon className="h-5 w-5 sm:h-7 sm:w-7" />
+                  <span className="text-xs sm:text-sm font-medium text-white">
                     {post._count.comments}
                   </span>
                 </Link>
 
                 <button
-                  onClick={() => handleSave(post.id)}
-                  className={`flex items-center gap-2 transition-colors ${
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleSave(post.id);
+                  }}
+                  className={`flex items-center gap-1.5 sm:gap-2 transition-colors ${
                     isSaved
                       ? "text-orange-500 hover:text-orange-400"
                       : "text-gray-400 hover:text-orange-500"
                   }`}
                 >
                   {isSaved ? (
-                    <BookmarkIconSolid className="h-7 w-7" />
+                    <BookmarkIconSolid className="h-5 w-5 sm:h-7 sm:w-7" />
                   ) : (
-                    <BookmarkIcon className="h-7 w-7" />
+                    <BookmarkIcon className="h-5 w-5 sm:h-7 sm:w-7" />
                   )}
-                  <span className="text-sm font-medium text-white">
+                  <span className="text-xs sm:text-sm font-medium text-white hidden sm:inline">
                     {isSaved ? "Saved" : "Save"}
                   </span>
                 </button>
@@ -357,10 +364,13 @@ export function PostFeed() {
 
               <Link
                 href={`/posts/${post.id}`}
-                className="flex items-center gap-2 text-gray-400 hover:text-orange-500 transition-colors"
+                onClick={(e) => e.stopPropagation()}
+                className="flex items-center gap-1.5 sm:gap-2 text-gray-400 hover:text-orange-500 transition-colors"
               >
-                <EyeIcon className="h-6 w-6" />
-                <span className="text-sm font-medium text-white">View</span>
+                <EyeIcon className="h-4 w-4 sm:h-6 sm:w-6" />
+                <span className="text-xs sm:text-sm font-medium text-white hidden sm:inline">
+                  View
+                </span>
               </Link>
             </div>
           </article>
@@ -369,15 +379,15 @@ export function PostFeed() {
 
       {/* Load More Button */}
       {visiblePosts < posts.length && (
-        <div className="text-center pt-6">
+        <div className="text-center pt-4 sm:pt-6">
           <button
             onClick={loadMorePosts}
             disabled={loadingMore}
-            className="btn-primary px-8 py-3 rounded-xl font-semibold text-lg transition-all duration-200 hover:scale-105"
+            className="btn-primary px-6 sm:px-8 py-2.5 sm:py-3 rounded-xl font-semibold text-base sm:text-lg transition-all duration-200 hover:scale-105"
           >
             {loadingMore ? (
               <div className="flex items-center gap-2">
-                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                <div className="w-4 h-4 sm:w-5 sm:h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                 Loading...
               </div>
             ) : (
@@ -388,10 +398,10 @@ export function PostFeed() {
       )}
 
       {posts.length === 0 && (
-        <div className="text-center py-12">
+        <div className="text-center py-8 sm:py-12">
           <div className="text-gray-400 mb-4">
             <svg
-              className="mx-auto h-16 w-16"
+              className="mx-auto h-12 w-12 sm:h-16 sm:w-16"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -404,10 +414,10 @@ export function PostFeed() {
               />
             </svg>
           </div>
-          <h3 className="text-xl font-semibold text-white mb-2">
+          <h3 className="text-lg sm:text-xl font-semibold text-white mb-2">
             No posts yet
           </h3>
-          <p className="text-gray-400 text-lg">
+          <p className="text-gray-400 text-base sm:text-lg">
             Be the first to share an update!
           </p>
         </div>

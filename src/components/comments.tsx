@@ -107,10 +107,10 @@ export function Comments({ postId, initialComments }: CommentsProps) {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       {/* Comment Form */}
       {session?.user && (
-        <div className="glassmorphism-card rounded-lg p-4">
+        <div className="glassmorphism-card rounded-lg p-3 sm:p-4">
           <form onSubmit={handleSubmitComment} className="space-y-3">
             <div className="relative">
               <textarea
@@ -119,12 +119,12 @@ export function Comments({ postId, initialComments }: CommentsProps) {
                 onChange={(e) => setNewComment(e.target.value)}
                 placeholder={t("comments.placeholder")}
                 rows={3}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-vertical"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-vertical text-sm sm:text-base"
                 disabled={loading}
               />
               <button
                 type="button"
-                className="absolute right-2 bottom-2 text-xl"
+                className="absolute right-2 bottom-2 text-lg sm:text-xl"
                 onClick={() => setShowEmojiPicker((v) => !v)}
                 tabIndex={-1}
                 aria-label="Add emoji"
@@ -160,13 +160,15 @@ export function Comments({ postId, initialComments }: CommentsProps) {
               )}
             </div>
             {error && (
-              <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
+              <p className="text-xs sm:text-sm text-red-600 dark:text-red-400">
+                {error}
+              </p>
             )}
             <div className="flex justify-end">
               <button
                 type="submit"
                 disabled={loading || !newComment.trim()}
-                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="px-3 sm:px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs sm:text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
                 {loading ? t("comments.posting") : t("comments.post")}
               </button>
@@ -176,15 +178,18 @@ export function Comments({ postId, initialComments }: CommentsProps) {
       )}
 
       {/* Comments List */}
-      <div className="space-y-4">
+      <div className="space-y-3 sm:space-y-4">
         {comments.length === 0 ? (
-          <p className="text-gray-500 dark:text-gray-400 text-center py-8">
+          <p className="text-gray-500 dark:text-gray-400 text-center py-6 sm:py-8 text-sm sm:text-base">
             {t("comments.noCommentsMessage")}
           </p>
         ) : (
           comments.map((comment) => (
-            <div key={comment.id} className="glassmorphism-card rounded-lg p-4">
-              <div className="flex items-start gap-3">
+            <div
+              key={comment.id}
+              className="glassmorphism-card rounded-lg p-3 sm:p-4"
+            >
+              <div className="flex items-start gap-2 sm:gap-3">
                 <Link
                   href={`/users/${comment.author.id}`}
                   className="hover:opacity-80 transition-opacity flex-shrink-0"
@@ -193,19 +198,19 @@ export function Comments({ postId, initialComments }: CommentsProps) {
                     <img
                       src={comment.author.image}
                       alt={comment.author.name || "User"}
-                      className="w-8 h-8 rounded-full object-cover"
+                      className="w-7 h-7 sm:w-8 sm:h-8 rounded-full object-cover"
                     />
                   ) : (
-                    <div className="w-8 h-8 rounded-full bg-primary text-primary-content flex items-center justify-center text-xs font-bold">
+                    <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-primary text-primary-content flex items-center justify-center text-xs font-bold">
                       {comment.author.name?.[0]?.toUpperCase() || "U"}
                     </div>
                   )}
                 </Link>
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-1">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:gap-2 mb-1">
                     <Link
                       href={`/users/${comment.author.id}`}
-                      className="font-medium text-gray-900 dark:text-white text-sm hover:text-primary transition-colors"
+                      className="font-medium text-gray-900 dark:text-white text-xs sm:text-sm hover:text-primary transition-colors truncate"
                     >
                       {comment.author.name || "Anonymous"}
                     </Link>
@@ -215,18 +220,18 @@ export function Comments({ postId, initialComments }: CommentsProps) {
                       })}
                     </span>
                   </div>
-                  <p className="text-gray-700 dark:text-gray-300 text-sm whitespace-pre-wrap">
+                  <p className="text-gray-700 dark:text-gray-300 text-xs sm:text-sm whitespace-pre-wrap">
                     {comment.content}
                   </p>
                 </div>
                 {(session?.user as SessionUser)?.id === comment.author.id && (
                   <button
                     onClick={() => handleDeleteComment(comment.id)}
-                    className="text-gray-400 hover:text-red-500 transition-colors p-1"
+                    className="text-gray-400 hover:text-red-500 transition-colors p-1 flex-shrink-0"
                     title={t("comments.delete")}
                   >
                     <svg
-                      className="w-4 h-4"
+                      className="w-3 h-3 sm:w-4 sm:h-4"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"

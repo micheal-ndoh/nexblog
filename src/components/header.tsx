@@ -24,7 +24,11 @@ import { useThemeStore, applyTheme } from "@/lib/theme";
 import { useT, languages } from "@/lib/tolgee";
 import { SignoutModal } from "./signout-modal";
 
-export function Header() {
+interface HeaderProps {
+  onMobileNavToggle?: () => void;
+}
+
+export function Header({ onMobileNavToggle }: HeaderProps) {
   const { data: session, status } = useSession();
   const router = useRouter();
   const { unreadCount } = useNotificationStore();
@@ -107,13 +111,13 @@ export function Header() {
   const getThemeIcon = () => {
     switch (theme) {
       case "light":
-        return <SunIcon className="h-6 w-6" />;
+        return <SunIcon className="h-5 w-5 lg:h-6 lg:w-6" />;
       case "dark":
-        return <MoonIcon className="h-6 w-6" />;
+        return <MoonIcon className="h-5 w-5 lg:h-6 lg:w-6" />;
       case "system":
-        return <ComputerDesktopIcon className="h-6 w-6" />;
+        return <ComputerDesktopIcon className="h-5 w-5 lg:h-6 lg:w-6" />;
       default:
-        return <SunIcon className="h-6 w-6" />;
+        return <SunIcon className="h-5 w-5 lg:h-6 lg:w-6" />;
     }
   };
 
@@ -121,66 +125,77 @@ export function Header() {
     languages.find((lang) => lang.code === getLanguage()) || languages[1]; // Default to English
 
   return (
-    <header className="bg-black/80 backdrop-blur-xl border-b border-gray-800/50 sticky top-0 z-40 ml-64">
+    <header className="bg-black/80 backdrop-blur-xl border-b border-gray-800/50 sticky top-0 z-40 lg:ml-64">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          {/* Logo and Search */}
-          <div className="flex items-center gap-6">
+          {/* Left Section: Mobile Menu + Logo + Search */}
+          <div className="flex items-center gap-3 lg:gap-6">
+            {/* Mobile Menu Button */}
+            <button
+              onClick={onMobileNavToggle}
+              className="lg:hidden p-2 text-gray-300 hover:text-orange-500 transition-colors rounded-lg hover:bg-gray-800/50"
+              aria-label="Open mobile menu"
+            >
+              <Bars3Icon className="h-6 w-6" />
+            </button>
+
             {/* NexBlog Logo */}
-            <div className="flex items-center gap-3">
-              <Link href="/" className="flex items-center gap-3 group">
-                <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
+            <div className="flex items-center gap-2 lg:gap-3">
+              <Link href="/" className="flex items-center gap-2 lg:gap-3 group">
+                <div className="w-8 h-8 lg:w-10 lg:h-10 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
                   <svg
                     fill="currentColor"
                     viewBox="0 0 48 48"
-                    className="w-6 h-6 text-white"
+                    className="w-5 h-5 lg:w-6 lg:h-6 text-white"
                     xmlns="http://www.w3.org/2000/svg"
                   >
                     <path d="M44 4H30.6666V17.3334H17.3334V30.6666H4V44H44V4Z" />
                   </svg>
                 </div>
-                <h1 className="text-xl font-bold tracking-tight text-white group-hover:text-orange-400 transition-colors">
+                <h1 className="text-lg lg:text-xl font-bold tracking-tight text-white group-hover:text-orange-400 transition-colors">
                   NexBlog
                 </h1>
               </Link>
             </div>
 
-            {/* Search */}
-            <form onSubmit={handleSearch} className="hidden md:block">
+            {/* Search - Hidden on mobile, shown on tablet and up */}
+            <form onSubmit={handleSearch} className="hidden sm:block">
               <div className="relative">
-                <MagnifyingGlassIcon className="absolute left-4 top-1/2 transform -translate-y-1/2 h-6 w-6 text-gray-400" />
+                <MagnifyingGlassIcon className="absolute left-3 lg:left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 lg:h-6 lg:w-6 text-gray-400" />
                 <input
                   type="text"
                   placeholder="Search posts, users, tags..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-80 pl-12 pr-4 py-3 border border-gray-700/50 rounded-xl bg-gray-800/50 backdrop-blur-sm text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-200"
+                  className="w-48 lg:w-80 pl-10 lg:pl-12 pr-4 py-2 lg:py-3 border border-gray-700/50 rounded-xl bg-gray-800/50 backdrop-blur-sm text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-200 text-sm lg:text-base"
                 />
               </div>
             </form>
+          </div>
+
+          {/* Right Section: Actions */}
+          <div className="flex items-center gap-1 lg:gap-3">
+            {/* Add Post Button - Hidden on mobile, shown on tablet and up */}
             <button
               type="button"
               onClick={() => router.push("/posts/new")}
-              className="ml-2 p-2 rounded-xl bg-orange-500 hover:bg-orange-600 text-white flex items-center justify-center transition-colors"
+              className="hidden sm:flex p-2 lg:p-3 rounded-xl bg-orange-500 hover:bg-orange-600 text-white items-center justify-center transition-colors"
               title="Add new post"
               aria-label="Add new post"
             >
-              <PlusIcon className="h-6 w-6" />
+              <PlusIcon className="h-5 w-5 lg:h-6 lg:w-6" />
             </button>
-          </div>
 
-          {/* Actions */}
-          <div className="flex items-center gap-3">
             {/* Language Toggle */}
             <div className="relative" ref={languageMenuRef}>
               <button
                 onClick={() => setIsLanguageMenuOpen(!isLanguageMenuOpen)}
-                className="p-3 text-gray-300 hover:text-orange-500 transition-colors rounded-xl hover:bg-gray-800/50 backdrop-blur-sm"
+                className="p-2 lg:p-3 text-gray-300 hover:text-orange-500 transition-colors rounded-xl hover:bg-gray-800/50 backdrop-blur-sm"
                 title="Change language"
               >
-                <div className="flex items-center gap-2">
-                  <GlobeAltIcon className="h-7 w-7" />
-                  <span className="text-sm hidden sm:inline font-medium">
+                <div className="flex items-center gap-1 lg:gap-2">
+                  <GlobeAltIcon className="h-5 w-5 lg:h-6 lg:w-6" />
+                  <span className="text-sm hidden xl:inline font-medium">
                     {currentLanguage.flag}
                   </span>
                 </div>
@@ -212,7 +227,7 @@ export function Header() {
             <div className="relative" ref={themeMenuRef}>
               <button
                 onClick={() => setIsThemeMenuOpen(!isThemeMenuOpen)}
-                className="p-3 text-gray-300 hover:text-orange-500 transition-colors rounded-xl hover:bg-gray-800/50 backdrop-blur-sm"
+                className="p-2 lg:p-3 text-gray-300 hover:text-orange-500 transition-colors rounded-xl hover:bg-gray-800/50 backdrop-blur-sm"
                 title="Toggle theme"
               >
                 {getThemeIcon()}
@@ -260,13 +275,13 @@ export function Header() {
             {/* Notifications */}
             <Link
               href="/notifications"
-              className="relative p-3 text-gray-300 hover:text-orange-500 transition-colors rounded-xl hover:bg-gray-800/50 backdrop-blur-sm"
+              className="relative p-2 lg:p-3 text-gray-300 hover:text-orange-500 transition-colors rounded-xl hover:bg-gray-800/50 backdrop-blur-sm"
             >
-              <BellIcon className="h-7 w-7" />
+              <BellIcon className="h-5 w-5 lg:h-6 lg:w-6" />
               {unreadCount > 0 && (
-                <span className="absolute -top-1 -right-1 flex h-6 w-6">
+                <span className="absolute -top-1 -right-1 flex h-5 w-5 lg:h-6 lg:w-6">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-6 w-6 bg-orange-500 text-white text-xs font-bold items-center justify-center">
+                  <span className="relative inline-flex rounded-full h-5 w-5 lg:h-6 lg:w-6 bg-orange-500 text-white text-xs font-bold items-center justify-center">
                     {unreadCount > 99 ? "99+" : unreadCount}
                   </span>
                 </span>
@@ -278,7 +293,7 @@ export function Header() {
               <div className="relative" ref={userMenuRef}>
                 <button
                   onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                  className="flex items-center gap-3 p-2 rounded-xl hover:bg-gray-800/50 backdrop-blur-sm transition-colors"
+                  className="flex items-center gap-2 lg:gap-3 p-2 rounded-xl hover:bg-gray-800/50 backdrop-blur-sm transition-colors"
                 >
                   {session.user.image ? (
                     <Image
@@ -286,10 +301,10 @@ export function Header() {
                       alt="Profile"
                       width={40}
                       height={40}
-                      className="w-10 h-10 rounded-full border-2 border-gray-700"
+                      className="w-8 h-8 lg:w-10 lg:h-10 rounded-full border-2 border-gray-700"
                     />
                   ) : (
-                    <UserCircleIcon className="w-12 h-12 text-gray-400" />
+                    <UserCircleIcon className="w-8 h-8 lg:w-10 lg:h-10 text-gray-400" />
                   )}
                 </button>
                 {isUserMenuOpen && (
@@ -331,26 +346,21 @@ export function Header() {
                 )}
               </div>
             ) : (
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2 lg:gap-3">
                 <Link
                   href="/auth/signin"
-                  className="btn-primary px-6 py-2 rounded-xl font-semibold flex items-center hover:bg-orange-600 transition-colors"
+                  className="btn-primary px-3 lg:px-6 py-2 rounded-xl font-semibold flex items-center hover:bg-orange-600 transition-colors text-sm lg:text-base"
                 >
                   Sign In
                 </Link>
                 <Link
                   href="/auth/signup"
-                  className="glassmorphism-dark px-6 py-2 rounded-xl font-semibold flex items-center text-white hover:bg-gray-800/50 transition-all duration-200"
+                  className="glassmorphism-dark px-3 lg:px-6 py-2 rounded-xl font-semibold flex items-center text-white hover:bg-gray-800/50 transition-all duration-200 text-sm lg:text-base"
                 >
                   Sign Up
                 </Link>
               </div>
             )}
-
-            {/* Mobile menu button */}
-            <button className="md:hidden p-3 text-gray-300 hover:text-orange-500 transition-colors rounded-xl hover:bg-gray-800/50 backdrop-blur-sm">
-              <Bars3Icon className="h-7 w-7" />
-            </button>
           </div>
         </div>
       </div>
