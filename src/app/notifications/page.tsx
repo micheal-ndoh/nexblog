@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { formatDate } from "@/lib/utils";
 import { useNotificationStore } from "@/lib/store";
-import { Layout } from "@/components/layout";
 import Link from "next/link";
 import {
   Cog6ToothIcon,
@@ -112,18 +111,16 @@ export default function NotificationsPage() {
 
   if (!session?.user) {
     return (
-      <Layout>
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-white mb-4">
-            Sign in to view notifications
-          </h1>
-        </div>
-      </Layout>
+      <div className="text-center">
+        <h1 className="text-2xl font-bold text-white mb-4">
+          Sign in to view notifications
+        </h1>
+      </div>
     );
   }
 
   return (
-    <Layout>
+    <div>
       <div className="flex flex-wrap justify-between items-center gap-4 mb-8">
         <h1 className="text-3xl font-bold text-white">Notifications</h1>
         <div className="relative flex gap-2">
@@ -278,6 +275,6 @@ export default function NotificationsPage() {
           )}
         </div>
       )}
-    </Layout>
+    </div>
   );
 }

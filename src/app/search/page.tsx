@@ -3,7 +3,6 @@
 import { useEffect, useState, useCallback, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { PostFeedSkeleton } from "@/components/post-feed-skeleton";
-import { Layout } from "@/components/layout";
 
 // Define the post type structure
 interface Post {
@@ -61,9 +60,7 @@ function SearchResults() {
   return (
     <div>
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-white mb-2">
-          Search Results
-        </h1>
+        <h1 className="text-3xl font-bold text-white mb-2">Search Results</h1>
         {query && (
           <p className="text-gray-400">
             Showing results for &quot;{query}&quot;
@@ -195,9 +192,7 @@ function SearchResultsFallback() {
   return (
     <div>
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-white mb-2">
-          Search Results
-        </h1>
+        <h1 className="text-3xl font-bold text-white mb-2">Search Results</h1>
         <div className="h-4 bg-gray-700 rounded animate-pulse w-64"></div>
       </div>
       <PostFeedSkeleton />
@@ -208,10 +203,8 @@ function SearchResultsFallback() {
 // Main page component with Suspense boundary
 export default function SearchPage() {
   return (
-    <Layout>
-      <Suspense fallback={<SearchResultsFallback />}>
-        <SearchResults />
-      </Suspense>
-    </Layout>
+    <Suspense fallback={<SearchResultsFallback />}>
+      <SearchResults />
+    </Suspense>
   );
 }
