@@ -30,7 +30,7 @@ const teamMembers = [
 export default function TeamPage() {
   return (
     <Layout>
-      <div className="max-w-6xl mx-auto px-4 py-8">
+      <div className="max-w-6xl mx-auto px-0 sm:px-4 lg:px-8 py-8">
         <h1 className="text-4xl font-bold text-white mb-8">Our Team</h1>
 
         <div className="glassmorphism-card p-8 rounded-2xl mb-8">

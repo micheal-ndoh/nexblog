@@ -38,7 +38,7 @@ export function Sidebar({
 
   return (
     <div
-      className={`fixed left-0 top-0 h-full z-30 bg-black border-r border-gray-800 transition-all duration-300 ${
+      className={`fixed left-0 top-16 h-[calc(100vh-4rem)] z-30 bg-black border-r border-gray-800 transition-all duration-300 ${
         collapsed ? "w-20" : "w-64"
       }`}
     >

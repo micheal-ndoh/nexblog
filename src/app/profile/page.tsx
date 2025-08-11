@@ -129,7 +129,7 @@ export default function ProfilePage() {
 
   return (
     <Layout>
-      <div className="max-w-4xl mx-auto px-4 py-4 sm:py-8">
+      <div className="max-w-4xl mx-auto px-0 sm:px-4 lg:px-8 py-4 sm:py-8">
         <div className="mb-4 sm:mb-8">
           <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-2">
             Profile

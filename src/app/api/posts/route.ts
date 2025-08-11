@@ -25,6 +25,8 @@ export async function GET(request: NextRequest) {
             where.OR = [
                 { title: { contains: search, mode: "insensitive" } },
                 { content: { contains: search, mode: "insensitive" } },
+                { author: { name: { contains: search, mode: "insensitive" } } },
+                { tags: { some: { tag: { name: { contains: search, mode: "insensitive" } } } } },
             ]
         }
 
@@ -32,7 +34,7 @@ export async function GET(request: NextRequest) {
             where.tags = {
                 some: {
                     tag: {
-                        name: { equals: tag, mode: "insensitive" }
+                        name: { contains: tag, mode: "insensitive" }
                     }
                 }
             }
@@ -57,13 +59,14 @@ export async function GET(request: NextRequest) {
                 // we'll order by creation date for now and handle sorting in the frontend
                 orderBy = { createdAt: "desc" }
                 break
-            case "trending":
+            case "trending": {
                 // Posts with high engagement in the last 7 days
-                const sevenDaysAgo = new Date()
-                sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7)
-                where.createdAt = { gte: sevenDaysAgo }
-                orderBy = { createdAt: "desc" }
-                break
+                const sevenDaysAgo = new Date();
+                sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+                where.createdAt = { gte: sevenDaysAgo };
+                orderBy = { createdAt: "desc" };
+                break;
+            }
             case "interested":
                 // For interested posts, order by when they were saved (most recent first)
                 orderBy = { createdAt: "desc" }
@@ -114,7 +117,7 @@ export async function GET(request: NextRequest) {
         // Sort posts by engagement for viral posts
         let sortedPosts = posts;
         if (sort === "viral") {
-            sortedPosts = posts.sort((a, b) => {
+            sortedPosts = posts.slice().sort((a, b) => {
                 const aEngagement = a._count.likes + a._count.comments;
                 const bEngagement = b._count.likes + b._count.comments;
                 return bEngagement - aEngagement;

@@ -3,13 +3,13 @@ import { Layout } from "@/components/layout";
 export default function ContactPage() {
   return (
     <Layout>
-      <div className="max-w-4xl mx-auto px-4 py-8 sm:px-6 sm:py-12">
+      <div className="max-w-4xl mx-auto px-0 sm:px-4 lg:px-8 py-8 sm:py-12">
         <h1 className="text-3xl sm:text-4xl font-bold text-white mb-6 sm:mb-8">
           Contact Us
         </h1>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
-          <div className="glassmorphism-card p-6 sm:p-8 rounded-2xl">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
+          <div className="glassmorphism-card p-4 sm:p-6 lg:p-8 rounded-2xl">
             <h2 className="text-xl sm:text-2xl font-semibold text-white mb-4 sm:mb-6">
               Get in Touch
             </h2>
@@ -71,7 +71,7 @@ export default function ContactPage() {
             </div>
           </div>
 
-          <div className="glassmorphism-card p-6 sm:p-8 rounded-2xl">
+          <div className="glassmorphism-card p-4 sm:p-6 lg:p-8 rounded-2xl">
             <h2 className="text-xl sm:text-2xl font-semibold text-white mb-4 sm:mb-6">
               Send Message
             </h2>

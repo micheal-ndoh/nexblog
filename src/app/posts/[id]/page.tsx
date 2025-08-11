@@ -71,7 +71,7 @@ export default async function PostPage({ params }: PostPageProps) {
 
   return (
     <div className="min-h-screen">
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
+      <main className="max-w-4xl mx-auto px-0 sm:px-4 lg:px-8 py-4 sm:py-6 lg:py-8">
         <article className="glassmorphism-card rounded-xl overflow-hidden">
           {/* Post Header */}
           <div className="p-4 sm:p-6 border-b border-gray-700">
@@ -151,7 +151,7 @@ export default async function PostPage({ params }: PostPageProps) {
           </div>
 
           {/* Post Footer */}
-          <div className="px-4 sm:px-6 py-3 sm:py-4 border-t border-gray-700 bg-gray-800/50">
+          <div className="px-0 sm:px-4 lg:px-6 py-3 sm:py-4 border-t border-gray-700 bg-gray-800/50">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0">
               <div className="flex items-center gap-4 sm:gap-6">
                 <div className="flex items-center gap-1.5 sm:gap-2 text-gray-400">

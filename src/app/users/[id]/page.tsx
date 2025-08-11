@@ -71,7 +71,7 @@ export default async function UserProfilePage({
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-4xl">
+    <div className="container mx-auto px-0 sm:px-4 lg:px-8 py-8 max-w-4xl">
       {/* User Profile Header */}
       <div className="bg-base-100 rounded-lg shadow-lg p-6 mb-8">
         <div className="flex items-center space-x-6">

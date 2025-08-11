@@ -104,7 +104,7 @@ export default function ExplorePage() {
 
   return (
     <div className="min-h-screen">
-      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+      <main className="max-w-6xl mx-auto px-0 sm:px-4 lg:px-8 py-6 sm:py-8">
         {/* Page Header */}
         <div className="mb-6 sm:mb-8">
           <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2">

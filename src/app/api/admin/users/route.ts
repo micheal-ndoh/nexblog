@@ -4,8 +4,10 @@ import type { Session } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { db } from "@/lib/db"
 
-export async function GET() {
+export async function GET(request: Request) {
     try {
+        const { searchParams } = new URL(request.url);
+        const search = searchParams.get("search") || "";
         const session = await getServerSession(authOptions) as Session;
 
         if (!session?.user || session.user.role !== "ADMIN") {
@@ -15,7 +17,16 @@ export async function GET() {
             )
         }
 
+        const where: any = {};
+        if (search) {
+            where.OR = [
+                { name: { contains: search, mode: "insensitive" } },
+                { email: { contains: search, mode: "insensitive" } }
+            ];
+        }
+
         const users = await db.user.findMany({
+            where,
             select: {
                 id: true,
                 name: true,

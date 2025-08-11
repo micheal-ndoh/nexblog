@@ -36,8 +36,8 @@ export function Layout({ children }: LayoutProps) {
       {/* Main Content */}
       <Header sidebarCollapsed={sidebarCollapsed} />
       <main
-        className={`min-h-screen transition-all duration-300 ${
-          sidebarCollapsed ? "lg:ml-20" : ""
+        className={`min-h-screen transition-all duration-300 pt-16 ${
+          sidebarCollapsed ? "lg:ml-20" : "lg:ml-64"
         }`}
       >
         {children}

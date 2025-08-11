@@ -3,12 +3,12 @@ import { Layout } from "@/components/layout";
 export default function AboutPage() {
   return (
     <Layout>
-      <div className="max-w-4xl mx-auto px-4 py-8 sm:px-6 sm:py-12 text-left">
+      <div className="max-w-4xl mx-auto px-0 sm:px-4 lg:px-8 py-8 sm:py-12 text-left">
         <h1 className="text-3xl sm:text-4xl font-bold text-white mb-6 sm:mb-8 text-left">
           About Us
         </h1>
 
-        <div className="glassmorphism-card p-6 sm:p-8 rounded-2xl mb-6 sm:mb-8">
+        <div className="glassmorphism-card p-4 sm:p-6 lg:p-8 rounded-2xl mb-6 sm:mb-8">
           <h2 className="text-xl sm:text-2xl font-semibold text-white mb-3 sm:mb-4">
             Our Story
           </h2>
@@ -25,7 +25,7 @@ export default function AboutPage() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
           <div className="glassmorphism-card p-4 sm:p-6 rounded-2xl">
             <h3 className="text-lg sm:text-xl font-semibold text-white mb-3 sm:mb-4">
               Our Mission
