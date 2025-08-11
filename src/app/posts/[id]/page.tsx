@@ -4,6 +4,7 @@ import { db } from "@/lib/db";
 import { formatDistanceToNow } from "date-fns";
 import Link from "next/link";
 import Image from "next/image";
+import Markdown from "@/components/markdown";
 
 interface PostPageProps {
   params: Promise<{ id: string }>;
@@ -143,10 +144,8 @@ export default async function PostPage({ params }: PostPageProps) {
 
           {/* Post Content */}
           <div className="p-4 sm:p-6">
-            <div className="prose max-w-none max-h-[50vh] sm:max-h-[60vh] overflow-auto">
-              <div className="whitespace-pre-wrap text-white leading-relaxed text-sm sm:text-base">
-                {post.content}
-              </div>
+            <div className="max-h-[50vh] sm:max-h-[60vh] overflow-auto">
+              <Markdown content={post.content} />
             </div>
           </div>
 
@@ -206,7 +205,19 @@ export default async function PostPage({ params }: PostPageProps) {
           <h2 className="text-lg sm:text-xl font-semibold text-white mb-3 sm:mb-4">
             Comments ({post._count.comments})
           </h2>
-          <Comments postId={post.id} initialComments={post.comments} />
+          <Comments
+            postId={post.id}
+            initialComments={post.comments.map((c) => ({
+              id: c.id,
+              content: c.content,
+              createdAt: new Date(c.createdAt).toISOString(),
+              author: {
+                id: c.author.id,
+                name: c.author.name ?? "Anonymous",
+                image: c.author.image,
+              },
+            }))}
+          />
         </div>
       </main>
     </div>

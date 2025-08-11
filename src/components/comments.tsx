@@ -7,7 +7,7 @@ import Link from "next/link";
 import { useT } from "@/lib/tolgee";
 import EmojiPicker from "emoji-picker-react";
 
-interface Comment {
+export interface Comment {
   id: string;
   content: string;
   createdAt: string;
@@ -18,7 +18,7 @@ interface Comment {
   };
 }
 
-interface CommentsProps {
+export interface CommentsProps {
   postId: string;
   initialComments: Comment[];
 }

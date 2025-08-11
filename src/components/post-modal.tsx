@@ -2,6 +2,7 @@
 import { useEffect, useRef } from "react";
 import Image from "next/image";
 import { XMarkIcon } from "@heroicons/react/24/outline";
+import Markdown from "@/components/markdown";
 
 export function PostModal({ post, comments, isOpen, onClose }) {
   const modalRef = useRef(null);
@@ -55,7 +56,9 @@ export function PostModal({ post, comments, isOpen, onClose }) {
         </button>
         <div className="mb-6">
           <h2 className="text-2xl font-bold text-white mb-2">{post.title}</h2>
-          <p className="text-white mb-4">{post.content}</p>
+          <div className="mb-4 max-h-[50vh] overflow-auto">
+            <Markdown content={post.content} />
+          </div>
           {post.imageUrl && (
             <div className="relative w-full aspect-[16/9] rounded-xl overflow-hidden mb-4">
               <Image

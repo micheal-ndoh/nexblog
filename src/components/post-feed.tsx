@@ -15,6 +15,7 @@ import { BookmarkIcon as BookmarkIconSolid } from "@heroicons/react/24/solid";
 import { formatDate, truncateText } from "@/lib/utils";
 import { useSession } from "next-auth/react";
 import { PostModal } from "@/components/post-modal";
+import Markdown from "@/components/markdown";
 
 interface Post {
   id: string;
@@ -268,9 +269,9 @@ export function PostFeed() {
                 <Link href={`/posts/${post.id}`}>{post.title}</Link>
               </h2>
               <div className="max-h-24 sm:max-h-32 overflow-auto">
-                <p className="text-white text-sm sm:text-base leading-relaxed mb-3 sm:mb-4">
-                  {truncateText(post.content, 150)}
-                </p>
+                <div className="line-clamp-4">
+                  <Markdown content={truncateText(post.content, 400)} />
+                </div>
               </div>
 
               {/* Post Image */}

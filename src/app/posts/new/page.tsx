@@ -4,6 +4,9 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { FileUpload } from "@/components/file-upload";
+import dynamic from "next/dynamic";
+
+const Markdown = dynamic(() => import("@/components/markdown"), { ssr: false });
 
 export default function NewPostPage() {
   const router = useRouter();
@@ -129,14 +132,23 @@ export default function NewPostPage() {
             placeholder="Write your post content..."
             required
           />
+          {content.trim() && (
+            <div className="mt-4 border-t border-gray-700 pt-4">
+              <p className="text-white/80 text-sm mb-2">Preview</p>
+              <div className="max-h-64 overflow-auto rounded-lg p-3 bg-black/30">
+                <Markdown content={content} />
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Image Upload */}
         <div>
-          <label className="block text-white text-xs sm:text-sm font-medium mb-1 sm:mb-2">
+          <label htmlFor="featured-image" className="block text-white text-xs sm:text-sm font-medium mb-1 sm:mb-2">
             Featured Image (Optional)
           </label>
           <FileUpload
+            id="featured-image"
             type="post"
             onUpload={setImageUrl}
             onError={setError}
@@ -172,9 +184,12 @@ export default function NewPostPage() {
               type="text"
               value={tagInput}
               onChange={(e) => setTagInput(e.target.value)}
-              onKeyPress={(e) =>
-                e.key === "Enter" && (e.preventDefault(), handleAddTag())
-              }
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  handleAddTag();
+                }
+              }}
               className="flex-1 px-3 sm:px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm sm:text-base"
               placeholder="Add a tag..."
             />
