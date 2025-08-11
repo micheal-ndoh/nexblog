@@ -9,7 +9,7 @@ interface LayoutProps {
   children: ReactNode;
 }
 
-export function Layout({ children }: LayoutProps) {
+export function Layout({ children }: Readonly<LayoutProps>) {
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
@@ -35,11 +35,7 @@ export function Layout({ children }: LayoutProps) {
       />
       {/* Main Content */}
       <Header sidebarCollapsed={sidebarCollapsed} />
-      <main
-        className={`min-h-screen transition-all duration-300 pt-16 ${
-          sidebarCollapsed ? "lg:" : "lg:"
-        }`}
-      >
+      <main className="min-h-screen transition-all duration-300 pt-20">
         {children}
       </main>
     </div>

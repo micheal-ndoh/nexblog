@@ -7,7 +7,9 @@ import { MobileNav } from "@/components/mobile-nav";
 import { useState } from "react";
 import RootLayoutServer from "./layout.server"; // Import the server component
 
-function RootLayoutContent({ children }: { children: React.ReactNode }) {
+function RootLayoutContent({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
@@ -42,7 +44,7 @@ function RootLayoutContent({ children }: { children: React.ReactNode }) {
       />
       {/* Main Content - Responsive margins */}
       <main
-        className={`lg:pt-16 min-h-screen transition-all duration-300 ${
+        className={`pt-20 lg:pt-20 min-h-screen transition-all duration-300 ${
           sidebarCollapsed ? "lg:ml-20" : "lg:ml-64"
         }`}
       >
@@ -56,9 +58,9 @@ function RootLayoutContent({ children }: { children: React.ReactNode }) {
 
 export default function RootLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
+}>) {
   return (
     <RootLayoutServer>
       <RootLayoutContent>{children}</RootLayoutContent>
