@@ -46,7 +46,7 @@ function RootLayoutContent({ children }: { children: React.ReactNode }) {
           sidebarCollapsed ? "lg:ml-20" : "lg:ml-64"
         }`}
       >
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
+        <div className="max-w-6xl mx-auto full sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
           {children}
         </div>
       </main>

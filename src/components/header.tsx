@@ -133,7 +133,7 @@ export function Header({
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-40 h-16 bg-black border-b border-gray-800 flex items-center transition-all duration-300 ${
-        sidebarCollapsed ? "lg:ml-20" : "lg:ml-64"
+        sidebarCollapsed ? "lg:" : "lg:"
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
