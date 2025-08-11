@@ -12,21 +12,16 @@ import {
   UserCircleIcon,
   Cog6ToothIcon,
   ArrowLeftOnRectangleIcon,
+  PlusIcon,
   SunIcon,
   MoonIcon,
   ComputerDesktopIcon,
   GlobeAltIcon,
-  PlusIcon,
 } from "@heroicons/react/24/outline";
-// Removed unused import
 import { useNotificationStore } from "@/lib/store";
+import { SignoutModal } from "./signout-modal";
 import { useThemeStore, applyTheme } from "@/lib/theme";
 import { useT, languages } from "@/lib/tolgee";
-import { SignoutModal } from "./signout-modal";
-
-interface HeaderProps {
-  onMobileNavToggle?: () => void;
-}
 
 export function Header({
   onMobileNavToggle,
@@ -38,18 +33,35 @@ export function Header({
   const { data: session, status } = useSession();
   const router = useRouter();
   const { unreadCount } = useNotificationStore();
-  const { theme, setTheme } = useThemeStore();
-  const { changeLanguage, getLanguage } = useT();
   const [searchQuery, setSearchQuery] = useState("");
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [isSignoutModalOpen, setIsSignoutModalOpen] = useState(false);
+  const userMenuRef = useRef<HTMLDivElement>(null);
+  const { theme, setTheme } = useThemeStore();
+  const { changeLanguage, getLanguage } = useT();
   const [isThemeMenuOpen, setIsThemeMenuOpen] = useState(false);
   const [isLanguageMenuOpen, setIsLanguageMenuOpen] = useState(false);
-  const [isSignoutModalOpen, setIsSignoutModalOpen] = useState(false);
   const themeMenuRef = useRef<HTMLDivElement>(null);
   const languageMenuRef = useRef<HTMLDivElement>(null);
-  const userMenuRef = useRef<HTMLDivElement>(null);
 
   // Close menus when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        userMenuRef.current &&
+        !userMenuRef.current.contains(event.target as Node)
+      ) {
+        setIsUserMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  // Add back useEffect for closing theme/language menus
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -65,31 +77,11 @@ export function Header({
         setIsLanguageMenuOpen(false);
       }
     };
-
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (
-        userMenuRef.current &&
-        !userMenuRef.current.contains(event.target as Node)
-      ) {
-        setIsUserMenuOpen(false);
-      }
-    }
-    if (isUserMenuOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-    } else {
-      document.removeEventListener("mousedown", handleClickOutside);
-    }
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [isUserMenuOpen]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -108,12 +100,10 @@ export function Header({
     applyTheme(newTheme);
     setIsThemeMenuOpen(false);
   };
-
   const handleLanguageChange = (langCode: string) => {
     changeLanguage(langCode);
     setIsLanguageMenuOpen(false);
   };
-
   const getThemeIcon = () => {
     switch (theme) {
       case "light":
@@ -126,9 +116,8 @@ export function Header({
         return <SunIcon className="h-5 w-5 lg:h-6 lg:w-6" />;
     }
   };
-
   const currentLanguage =
-    languages.find((lang) => lang.code === getLanguage()) || languages[1]; // Default to English
+    languages.find((lang) => lang.code === getLanguage()) || languages[1];
 
   return (
     <header
@@ -185,19 +174,35 @@ export function Header({
 
           {/* Right Section: Actions */}
           <div className="flex items-center gap-1 lg:gap-3">
-            {/* Add Post Button - Hidden on mobile, shown on tablet and up */}
+            {/* Notifications */}
+            <Link
+              href="/notifications"
+              className="relative p-2 lg:p-3 text-gray-300 hover:text-orange-500 transition-colors rounded-xl hover:bg-gray-800/50 backdrop-blur-sm"
+            >
+              <BellIcon className="h-5 w-5 lg:h-6 lg:w-6" />
+              {unreadCount > 0 && (
+                <span className="absolute -top-1 -right-1 flex h-5 w-5 lg:h-6 lg:w-6">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-5 w-5 lg:h-6 lg:w-6 bg-orange-500 text-white text-xs font-bold items-center justify-center">
+                    {unreadCount > 99 ? "99+" : unreadCount}
+                  </span>
+                </span>
+              )}
+            </Link>
+
+            {/* Add Post Button - Only on small screens */}
             <button
               type="button"
               onClick={() => router.push("/posts/new")}
-              className="hidden sm:flex p-2 lg:p-3 rounded-xl bg-orange-500 hover:bg-orange-600 text-white items-center justify-center transition-colors"
+              className="flex sm:hidden p-2 rounded-xl bg-orange-500 hover:bg-orange-600 text-white items-center justify-center transition-colors"
               title="Add new post"
               aria-label="Add new post"
             >
-              <PlusIcon className="h-5 w-5 lg:h-6 lg:w-6" />
+              <PlusIcon className="h-5 w-5" />
             </button>
 
-            {/* Language Toggle */}
-            <div className="relative" ref={languageMenuRef}>
+            {/* Language Toggle - Only on large screens */}
+            <div className="relative hidden sm:block" ref={languageMenuRef}>
               <button
                 onClick={() => setIsLanguageMenuOpen(!isLanguageMenuOpen)}
                 className="p-2 lg:p-3 text-gray-300 hover:text-orange-500 transition-colors rounded-xl hover:bg-gray-800/50 backdrop-blur-sm"
@@ -210,7 +215,6 @@ export function Header({
                   </span>
                 </div>
               </button>
-
               {isLanguageMenuOpen && (
                 <div className="absolute right-0 mt-2 w-48 bg-gray-800/90 backdrop-blur-xl rounded-xl shadow-lg border border-gray-700/50 py-2 z-50 max-h-64 overflow-y-auto">
                   {languages.map((language) => (
@@ -233,8 +237,8 @@ export function Header({
               )}
             </div>
 
-            {/* Theme Toggle */}
-            <div className="relative" ref={themeMenuRef}>
+            {/* Theme Toggle - Only on large screens */}
+            <div className="relative hidden sm:block" ref={themeMenuRef}>
               <button
                 onClick={() => setIsThemeMenuOpen(!isThemeMenuOpen)}
                 className="p-2 lg:p-3 text-gray-300 hover:text-orange-500 transition-colors rounded-xl hover:bg-gray-800/50 backdrop-blur-sm"
@@ -242,7 +246,6 @@ export function Header({
               >
                 {getThemeIcon()}
               </button>
-
               {isThemeMenuOpen && (
                 <div className="absolute right-0 mt-2 w-40 bg-gray-800/90 backdrop-blur-xl rounded-xl shadow-lg border border-gray-700/50 py-2 z-50">
                   <button
@@ -282,21 +285,16 @@ export function Header({
               )}
             </div>
 
-            {/* Notifications */}
-            <Link
-              href="/notifications"
-              className="relative p-2 lg:p-3 text-gray-300 hover:text-orange-500 transition-colors rounded-xl hover:bg-gray-800/50 backdrop-blur-sm"
+            {/* Add Post Button - Only on large screens */}
+            <button
+              type="button"
+              onClick={() => router.push("/posts/new")}
+              className="hidden sm:flex p-2 lg:p-3 rounded-xl bg-orange-500 hover:bg-orange-600 text-white items-center justify-center transition-colors"
+              title="Add new post"
+              aria-label="Add new post"
             >
-              <BellIcon className="h-5 w-5 lg:h-6 lg:w-6" />
-              {unreadCount > 0 && (
-                <span className="absolute -top-1 -right-1 flex h-5 w-5 lg:h-6 lg:w-6">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-5 w-5 lg:h-6 lg:w-6 bg-orange-500 text-white text-xs font-bold items-center justify-center">
-                    {unreadCount > 99 ? "99+" : unreadCount}
-                  </span>
-                </span>
-              )}
-            </Link>
+              <PlusIcon className="h-5 w-5 lg:h-6 lg:w-6" />
+            </button>
 
             {/* User Menu */}
             {status === "loading" ? null : session?.user ? (
